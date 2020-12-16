@@ -1,0 +1,44 @@
+start -> stmts .
+stmts -> stmts stmt | stmt .
+stmt -> var_declaration SEMICOLON .
+stmt -> const_declaration SEMICOLON .
+stmt -> function_declaration | container_declaration .
+
+container_declaration -> CONTAINER IDENTIFIER OPEN_BRACE container_body CLOSE_BRACE.
+
+container_body -> container_elements | container_body container_elements .
+
+container_elements -> var_declaration SEMICOLON | function_declaration .
+
+function_declaration ->FUN return_type IDENTIFIER OPEN_P fun_params CLOSE_P OPEN_BRACE fun_body CLOSE_BRACE.
+
+
+return_type -> types | VOID .
+
+fun_params -> parameter | fun_params COMMA paramter .
+
+parameter -> types IDENTIFIER | .
+
+types -> INT | FLOAT | CHAR | STRING | BOOL .
+
+fun_body -> code_block | fun_body code_block .
+
+code_block -> var_declarations SEMICOLON | const_declaration SEMICOLON | call_function | var_assignment | eval_function SEMICOLON.
+
+var_assignment -> IDENTIFIER EQUAL constants | IDENTIFIER EQUAL expression .
+
+eval_function -> EVAL OPEN_P expression CLOSE_P .
+
+var_declaration -> VAR types IDENTIFIER | types IDENTIFIER EQUAL expression | types IDENTIFIER EQUAL constants .
+
+const_declaration -> CONST types IDENTIFIER EQUAL expression | CONST types IDENTIFIER EQUAL constants.
+
+call_function -> IDENTIFIER OPEN_P call_params CLOSE_P .
+
+call_params -> call_param | call_params call_param .
+
+call_param -> IDENTIFIER | call_function | expression | constants .
+ 
+constants -> INT_CONST | FLOAT_CONST | CHAR_CONST | STR_CONST | bool_const .
+
+bool_const -> TRUE | FALSE .

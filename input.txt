@@ -1,0 +1,3 @@
+Var:int mama = 1;
+Var:bool ok = true;
+Fun:int sum (){Var:int m;}
