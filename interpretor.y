@@ -5,7 +5,7 @@
 %}
 %define parse.error verbose
 %start s
-%token SMB
+%token SMB TRUE FALSE
 %union {
     int intVal;
     float floatVal;
