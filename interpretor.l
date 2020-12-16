@@ -5,6 +5,8 @@
 %option noyywrap
 %%
 [0-9]+ {yylval.intVal=atoi(yytext); return SMB;}
+true {yylval.boolVa=1; return TRUE;}
+false {yylval.boolVa=0; return FALSE;}
 [ \t] ;
 \n {return 0;}
 . {return yytext[0];}
