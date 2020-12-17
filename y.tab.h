@@ -49,25 +49,90 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    SMB = 258
+    SEMICOLON = 258,
+    CONTAINER = 259,
+    OPEN_BRACE = 260,
+    CLOSE_BRACE = 261,
+    OPEN_P = 262,
+    CLOSE_P = 263,
+    VOID = 264,
+    EQUAL = 265,
+    EVAL = 266,
+    CONST = 267,
+    COMMA = 268,
+    FUN = 269,
+    VAR = 270,
+    UNARY = 271,
+    CALL = 272,
+    IF = 273,
+    ELSE = 274,
+    WHILE = 275,
+    FOR = 276,
+    THEN = 277,
+    DO = 278,
+    IDENTIFIER = 279,
+    INT_CONST = 280,
+    FLOAT_CONST = 281,
+    CHAR_CONST = 282,
+    STR_CONST = 283,
+    TRUE = 284,
+    FALSE = 285,
+    INT = 286,
+    FLOAT = 287,
+    CHAR = 288,
+    STRING = 289,
+    BOOL = 290
   };
 #endif
 /* Tokens.  */
-#define SMB 258
+#define SEMICOLON 258
+#define CONTAINER 259
+#define OPEN_BRACE 260
+#define CLOSE_BRACE 261
+#define OPEN_P 262
+#define CLOSE_P 263
+#define VOID 264
+#define EQUAL 265
+#define EVAL 266
+#define CONST 267
+#define COMMA 268
+#define FUN 269
+#define VAR 270
+#define UNARY 271
+#define CALL 272
+#define IF 273
+#define ELSE 274
+#define WHILE 275
+#define FOR 276
+#define THEN 277
+#define DO 278
+#define IDENTIFIER 279
+#define INT_CONST 280
+#define FLOAT_CONST 281
+#define CHAR_CONST 282
+#define STR_CONST 283
+#define TRUE 284
+#define FALSE 285
+#define INT 286
+#define FLOAT 287
+#define CHAR 288
+#define STRING 289
+#define BOOL 290
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 9 "interpretor.y"
+#line 10 "interpretor.y"
 
     int intVal;
     float floatVal;
     char charVal;
+    char* dataType;
     char* stringVal;
     short boolVal : 1;
 
-#line 71 "y.tab.h"
+#line 136 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
