@@ -7,14 +7,6 @@
     extern FILE* yyin;
     extern char* yytext;
 %}
-%define parse.lac full
-%define parse.error verbose
-%start start
-%token SEMICOLON CONTAINER IDENTIFIER OPEN_BRACE CLOSE_BRACE OPEN_P CLOSE_P INT FLOAT CHAR STRING BOOL VOID EQUAL
-INT_CONST FLOAT_CONST CHAR_CONST STR_CONST TRUE FALSE EVAL CONST COMMA FUN VAR PLUS MINUS TIMES DIV
-
-%left TIMES DIV
-%left PLUS MINUS
 %union {
     int intVal;
     float floatVal;
@@ -23,6 +15,24 @@ INT_CONST FLOAT_CONST CHAR_CONST STR_CONST TRUE FALSE EVAL CONST COMMA FUN VAR P
     char* stringVal;
     short boolVal : 1;
 }
+%define parse.lac full
+%define parse.error verbose
+%start start
+%token SEMICOLON CONTAINER OPEN_BRACE CLOSE_BRACE OPEN_P CLOSE_P VOID EQUAL EVAL CONST COMMA FUN VAR UNARY
+%token <stringVal> IDENTIFIER
+%token <intVal> INT_CONST
+%token <floatVal> FLOAT_CONST
+%token <charVal> CHAR_CONST
+%token <stringVal> STR_CONST
+%token <boolVal> TRUE FALSE
+%token <dataType> INT FLOAT CHAR STRING BOOL
+%type <boolVal> bool_const
+
+%right EQUAL
+%left '+' '-'
+%left '*' '/'
+%right UNARY
+
 %%
 start : stmts ;
 stmts : stmts stmt | stmt {}
@@ -107,28 +117,31 @@ call_params : call_param {}
     | call_params call_param {}
     ;
 
-call_param :call_function {}
+call_param : call_function {}
     | expression {}
     ;
  
-constants : INT_CONST {$<intVal>$=$<intVal>1;}
-    | FLOAT_CONST {$<floatVal>$=$<floatVal>1;}
-    | CHAR_CONST {$<charVal>$=$<charVal>1;}
-    | STR_CONST {$<stringVal>$=$<stringVal>1;}
-    | bool_const {$<boolVal>$=$<boolVal>1;}
+constants : INT_CONST {}
+    | FLOAT_CONST {}
+    | CHAR_CONST {}
+    | STR_CONST {}
+    | bool_const {}
     ;
 
-bool_const : TRUE {$<boolVal>$=$<boolVal>1;}
-    | FALSE {$<boolVal>$=$<boolVal>1;}
+bool_const : TRUE {$$=$1;}
+    | FALSE {$$=$1;}
     ;
 
-expression : expression PLUS expression {}
-    | expression MINUS expression {}
-    | expression TIMES expression {}
-    | expression DIV expression {}
-    | IDENTIFIER {}
+expression : IDENTIFIER {}
     | constants {}
     | get_container_elem {}
+    | '(' expression ')' {}
+    | expression '+' expression {}
+    | expression '-' expression {}
+    | expression '*' expression {}
+    | expression '/' expression {}
+    | '-' expression  %prec UNARY {}
+    | '+' expression  %prec UNARY {}
     ;
 
 %%

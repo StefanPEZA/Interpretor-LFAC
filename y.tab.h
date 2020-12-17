@@ -51,71 +51,65 @@ extern int yydebug;
   {
     SEMICOLON = 258,
     CONTAINER = 259,
-    IDENTIFIER = 260,
-    OPEN_BRACE = 261,
-    CLOSE_BRACE = 262,
-    OPEN_P = 263,
-    CLOSE_P = 264,
-    INT = 265,
-    FLOAT = 266,
-    CHAR = 267,
-    STRING = 268,
-    BOOL = 269,
-    VOID = 270,
-    EQUAL = 271,
-    INT_CONST = 272,
-    FLOAT_CONST = 273,
-    CHAR_CONST = 274,
-    STR_CONST = 275,
-    TRUE = 276,
-    FALSE = 277,
-    EVAL = 278,
-    CONST = 279,
-    COMMA = 280,
-    FUN = 281,
-    VAR = 282,
-    PLUS = 283,
-    MINUS = 284,
-    TIMES = 285,
-    DIV = 286
+    OPEN_BRACE = 260,
+    CLOSE_BRACE = 261,
+    OPEN_P = 262,
+    CLOSE_P = 263,
+    VOID = 264,
+    EQUAL = 265,
+    EVAL = 266,
+    CONST = 267,
+    COMMA = 268,
+    FUN = 269,
+    VAR = 270,
+    UNARY = 271,
+    IDENTIFIER = 272,
+    INT_CONST = 273,
+    FLOAT_CONST = 274,
+    CHAR_CONST = 275,
+    STR_CONST = 276,
+    TRUE = 277,
+    FALSE = 278,
+    INT = 279,
+    FLOAT = 280,
+    CHAR = 281,
+    STRING = 282,
+    BOOL = 283
   };
 #endif
 /* Tokens.  */
 #define SEMICOLON 258
 #define CONTAINER 259
-#define IDENTIFIER 260
-#define OPEN_BRACE 261
-#define CLOSE_BRACE 262
-#define OPEN_P 263
-#define CLOSE_P 264
-#define INT 265
-#define FLOAT 266
-#define CHAR 267
-#define STRING 268
-#define BOOL 269
-#define VOID 270
-#define EQUAL 271
-#define INT_CONST 272
-#define FLOAT_CONST 273
-#define CHAR_CONST 274
-#define STR_CONST 275
-#define TRUE 276
-#define FALSE 277
-#define EVAL 278
-#define CONST 279
-#define COMMA 280
-#define FUN 281
-#define VAR 282
-#define PLUS 283
-#define MINUS 284
-#define TIMES 285
-#define DIV 286
+#define OPEN_BRACE 260
+#define CLOSE_BRACE 261
+#define OPEN_P 262
+#define CLOSE_P 263
+#define VOID 264
+#define EQUAL 265
+#define EVAL 266
+#define CONST 267
+#define COMMA 268
+#define FUN 269
+#define VAR 270
+#define UNARY 271
+#define IDENTIFIER 272
+#define INT_CONST 273
+#define FLOAT_CONST 274
+#define CHAR_CONST 275
+#define STR_CONST 276
+#define TRUE 277
+#define FALSE 278
+#define INT 279
+#define FLOAT 280
+#define CHAR 281
+#define STRING 282
+#define BOOL 283
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 18 "interpretor.y"
+#line 10 "interpretor.y"
 
     int intVal;
     float floatVal;
@@ -124,7 +118,7 @@ union YYSTYPE
     char* stringVal;
     short boolVal : 1;
 
-#line 128 "y.tab.h"
+#line 122 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
