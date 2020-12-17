@@ -5,13 +5,17 @@
 int nr_lines = 1;
 int nr_word = 0;
 %}
-integer ([+-]?[1-9][0-9]*)|0
+integer ([-]?[1-9][0-9]*)|0
 id [a-zA-Z_][0-9a-zA-Z_]*
-float (([+-]?[1-9][0-9]*)|0)?\.([0-9]+)
+float (([-]?[1-9][0-9]*)|0)?\.([0-9]+)
 char '.'
 string \".*\"
 %option noyywrap
 %%
+\+ {nr_word++;return PLUS;}
+- {nr_word++;return MINUS;}
+\* {nr_word++;return TIMES;}
+\/ {nr_word++;return DIV;}
 = {nr_word++;return EQUAL;}
 container {nr_word++; return CONTAINER;}
 const {nr_word++; return CONST;}
@@ -39,4 +43,5 @@ false {nr_word++;yylval.boolVal=0; return FALSE;}
 {string} {nr_word++;yylval.stringVal=strndup(yytext+1, strlen(yytext)-2); return STR_CONST;}
 [ \r\t]+ ;
 [\n] {nr_lines++; nr_word = 0;}
+. ;
 %%

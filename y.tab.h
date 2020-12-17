@@ -73,7 +73,11 @@ extern int yydebug;
     CONST = 279,
     COMMA = 280,
     FUN = 281,
-    VAR = 282
+    VAR = 282,
+    PLUS = 283,
+    MINUS = 284,
+    TIMES = 285,
+    DIV = 286
   };
 #endif
 /* Tokens.  */
@@ -102,12 +106,16 @@ extern int yydebug;
 #define COMMA 280
 #define FUN 281
 #define VAR 282
+#define PLUS 283
+#define MINUS 284
+#define TIMES 285
+#define DIV 286
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 15 "interpretor.y"
+#line 18 "interpretor.y"
 
     int intVal;
     float floatVal;
@@ -116,7 +124,7 @@ union YYSTYPE
     char* stringVal;
     short boolVal : 1;
 
-#line 120 "y.tab.h"
+#line 128 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
