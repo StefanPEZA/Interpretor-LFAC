@@ -81,8 +81,8 @@ fun_body : code_block {}
 
 code_block : var_declaration SEMICOLON {}
     | const_declaration SEMICOLON {}
-    | call_function {}
-    | var_assignment {}
+    | call_function SEMICOLON {}
+    | var_assignment SEMICOLON{}
     | container_assignment {}
     | container_function {}
     | eval_function SEMICOLON {}
@@ -140,9 +140,11 @@ expression : IDENTIFIER {}
     | expression '-' expression {}
     | expression '*' expression {}
     | expression '/' expression {}
-    | '-' expression  %prec UNARY {}
-    | '+' expression  %prec UNARY {}
+    | unary_expression {}
     ;
+
+unary_expression : '-' expression  %prec UNARY {}
+    | '+' expression  %prec UNARY {}
 
 %%
 int check = 1;

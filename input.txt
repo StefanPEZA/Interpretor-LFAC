@@ -1,4 +1,4 @@
 Var:int mama = 1;
 Var:bool ok = true;
-Fun:int sum (){Var:int m;}
+Fun:int sum (){Var:int m; Var:m = (12+12); }
 Var:int test = -(12+12)/2*7-3;

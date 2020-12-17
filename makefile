@@ -11,5 +11,5 @@ clean:
 
 push:
 	git add .
-	git commit -m "Second test"
+	git commit -m "Versiunea 0.1"
 	git push origin second
