@@ -13,6 +13,12 @@ string \".*\"
 %option noyywrap
 %%
 = {nr_word++;return EQUAL;}
+if {nr_word++;return IF;}
+else {nr_word++;return ELSE;}
+for {nr_word++;return FOR;}
+while {nr_word++;return WHILE;}
+then {nr_word++;return THEN;}
+do {nr_word++;return DO;}
 container {nr_word++; return CONTAINER;}
 const {nr_word++; return CONST;}
 int {nr_word++; return INT;}

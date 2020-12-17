@@ -14,4 +14,10 @@ Fun:int sum ()
     Var:int m; 
     m = (12+12);
     Eval(test);
+    if (12) then
+    {
+        Var:int m;
+    } else {
+        m = 12;
+    }
 }

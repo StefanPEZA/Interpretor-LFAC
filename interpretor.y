@@ -18,7 +18,7 @@
 %define parse.lac full
 %define parse.error verbose
 %start start
-%token SEMICOLON CONTAINER OPEN_BRACE CLOSE_BRACE OPEN_P CLOSE_P VOID EQUAL EVAL CONST COMMA FUN VAR UNARY CALL
+%token SEMICOLON CONTAINER OPEN_BRACE CLOSE_BRACE OPEN_P CLOSE_P VOID EQUAL EVAL CONST COMMA FUN VAR UNARY CALL IF ELSE WHILE FOR THEN DO
 %token <stringVal> IDENTIFIER
 %token <intVal> INT_CONST
 %token <floatVal> FLOAT_CONST
@@ -86,6 +86,19 @@ code_block : var_declaration SEMICOLON {}
     | container_assignment {}
     | container_function {}
     | eval_function SEMICOLON {}
+    | if_statement {}
+    | while_statement {}
+    | for_statement {}
+    ;
+
+if_statement : IF OPEN_P bool_exp CLOSE_P THEN OPEN_BRACE code_block CLOSE_BRACE {}
+    | IF OPEN_P bool_exp CLOSE_P THEN OPEN_BRACE code_block CLOSE_BRACE ELSE OPEN_BRACE code_block CLOSE_BRACE {}
+    ;
+
+while_statement : WHILE OPEN_P bool_exp CLOSE_P DO OPEN_BRACE code_block CLOSE_BRACE {}
+    ;
+
+for_statement : FOR OPEN_P nr_exp SEMICOLON bool_exp SEMICOLON var_assignment CLOSE_P DO OPEN_BRACE code_block CLOSE_BRACE {}
     ;
 
 var_assignment : IDENTIFIER EQUAL expression {}
@@ -133,6 +146,8 @@ bool_const : TRUE {$$=$1;}
     ;
 
 expression : nr_exp {}
+    | bool_exp {}
+    ;
 
 nr_exp: IDENTIFIER {}
     | constants {}
@@ -146,6 +161,10 @@ nr_exp: IDENTIFIER {}
     | '+' nr_exp  %prec UNARY {}
     ;
 
+bool_exp : IDENTIFIER {}
+    | constants {}
+    | get_container_elem {}
+    ;
 %%
 int check = 1;
 void yyerror(char *s)
