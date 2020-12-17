@@ -18,7 +18,7 @@
 %define parse.lac full
 %define parse.error verbose
 %start start
-%token SEMICOLON CONTAINER OPEN_BRACE CLOSE_BRACE OPEN_P CLOSE_P VOID EQUAL EVAL CONST COMMA FUN VAR UNARY
+%token SEMICOLON CONTAINER OPEN_BRACE CLOSE_BRACE OPEN_P CLOSE_P VOID EQUAL EVAL CONST COMMA FUN VAR UNARY CALL
 %token <stringVal> IDENTIFIER
 %token <intVal> INT_CONST
 %token <floatVal> FLOAT_CONST
@@ -42,7 +42,7 @@ stmt : var_declaration SEMICOLON {}
     | container_declaration {}
     ;
 
-container_declaration : CONTAINER IDENTIFIER OPEN_BRACE container_body CLOSE_BRACE {}
+container_declaration : CONTAINER OPEN_BRACE container_body CLOSE_BRACE IDENTIFIER SEMICOLON{}
     ;
 
 container_body : container_elements {}
@@ -88,7 +88,7 @@ code_block : var_declaration SEMICOLON {}
     | eval_function SEMICOLON {}
     ;
 
-var_assignment : VAR IDENTIFIER EQUAL expression {}
+var_assignment : IDENTIFIER EQUAL expression {}
     ;
 
 get_container_elem : IDENTIFIER'.'IDENTIFIER {}
@@ -100,7 +100,7 @@ container_assignment : get_container_elem EQUAL expression {}
 container_function : get_container_elem OPEN_P call_params CLOSE_P {}
     ;
 
-eval_function : EVAL OPEN_P expression CLOSE_P {} 
+eval_function : EVAL OPEN_P nr_exp CLOSE_P {} 
     ;
 
 var_declaration : VAR types IDENTIFIER {}
@@ -110,7 +110,7 @@ var_declaration : VAR types IDENTIFIER {}
 const_declaration : CONST types IDENTIFIER EQUAL expression {}
     ;
 
-call_function : IDENTIFIER OPEN_P call_params CLOSE_P {}
+call_function : CALL IDENTIFIER OPEN_P call_params CLOSE_P {}
     ;
 
 call_params : call_param {}
@@ -132,19 +132,19 @@ bool_const : TRUE {$$=$1;}
     | FALSE {$$=$1;}
     ;
 
-expression : IDENTIFIER {}
+expression : nr_exp {}
+
+nr_exp: IDENTIFIER {}
     | constants {}
     | get_container_elem {}
-    | OPEN_P expression CLOSE_P {}
-    | expression '+' expression {}
-    | expression '-' expression {}
-    | expression '*' expression {}
-    | expression '/' expression {}
-    | unary_expression {}
+    | OPEN_P nr_exp CLOSE_P {}
+    | nr_exp '+' nr_exp {}
+    | nr_exp '-' nr_exp {}
+    | nr_exp '*' nr_exp {}
+    | nr_exp '/' nr_exp {}
+    | '-' nr_exp  %prec UNARY {}
+    | '+' nr_exp  %prec UNARY {}
     ;
-
-unary_expression : '-' expression  %prec UNARY {}
-    | '+' expression  %prec UNARY {}
 
 %%
 int check = 1;

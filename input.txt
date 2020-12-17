@@ -1,4 +1,17 @@
 Var:int mama = 1;
 Var:bool ok = true;
-Fun:int sum (){Var:int m; Var:m = (12+12); }
+
+container { 
+    Var:int m; 
+    Var:bool ok;
+    Fun:void functie(){ok = true;} 
+} var;
+
 Var:int test = -(12+12)/2*7-3;
+
+Fun:int sum ()
+{
+    Var:int m; 
+    m = (12+12);
+    Eval(test);
+}

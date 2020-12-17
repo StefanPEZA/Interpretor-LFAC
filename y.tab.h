@@ -63,18 +63,19 @@ extern int yydebug;
     FUN = 269,
     VAR = 270,
     UNARY = 271,
-    IDENTIFIER = 272,
-    INT_CONST = 273,
-    FLOAT_CONST = 274,
-    CHAR_CONST = 275,
-    STR_CONST = 276,
-    TRUE = 277,
-    FALSE = 278,
-    INT = 279,
-    FLOAT = 280,
-    CHAR = 281,
-    STRING = 282,
-    BOOL = 283
+    CALL = 272,
+    IDENTIFIER = 273,
+    INT_CONST = 274,
+    FLOAT_CONST = 275,
+    CHAR_CONST = 276,
+    STR_CONST = 277,
+    TRUE = 278,
+    FALSE = 279,
+    INT = 280,
+    FLOAT = 281,
+    CHAR = 282,
+    STRING = 283,
+    BOOL = 284
   };
 #endif
 /* Tokens.  */
@@ -92,18 +93,19 @@ extern int yydebug;
 #define FUN 269
 #define VAR 270
 #define UNARY 271
-#define IDENTIFIER 272
-#define INT_CONST 273
-#define FLOAT_CONST 274
-#define CHAR_CONST 275
-#define STR_CONST 276
-#define TRUE 277
-#define FALSE 278
-#define INT 279
-#define FLOAT 280
-#define CHAR 281
-#define STRING 282
-#define BOOL 283
+#define CALL 272
+#define IDENTIFIER 273
+#define INT_CONST 274
+#define FLOAT_CONST 275
+#define CHAR_CONST 276
+#define STR_CONST 277
+#define TRUE 278
+#define FALSE 279
+#define INT 280
+#define FLOAT 281
+#define CHAR 282
+#define STRING 283
+#define BOOL 284
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -118,7 +120,7 @@ union YYSTYPE
     char* stringVal;
     short boolVal : 1;
 
-#line 122 "y.tab.h"
+#line 124 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

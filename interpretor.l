@@ -22,6 +22,7 @@ string {nr_word++; return STRING;}
 bool {nr_word++;return BOOL;}
 void {nr_word++;return VOID;}
 Fun: {nr_word++;return FUN;}
+Call: {nr_word++; return CALL;}
 Var: {nr_word++;return VAR;}
 Eval {nr_word++;return EVAL;}
 true {nr_word++;yylval.boolVal=1; return TRUE;}
