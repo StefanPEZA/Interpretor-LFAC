@@ -135,7 +135,7 @@ bool_const : TRUE {$$=$1;}
 expression : IDENTIFIER {}
     | constants {}
     | get_container_elem {}
-    | '(' expression ')' {}
+    | OPEN_P expression CLOSE_P {}
     | expression '+' expression {}
     | expression '-' expression {}
     | expression '*' expression {}
