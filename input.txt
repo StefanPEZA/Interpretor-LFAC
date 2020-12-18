@@ -1,22 +1,23 @@
-Var:int mama = 1;
-Var:bool ok = true;
+VAR:int mama = 1;
+VAR:bool ok = true;
 
 container { 
-    Var:int m; 
-    Var:bool ok;
-    Fun:void functie(){ok = true;} 
+    VAR:int m; 
+    VAR:bool ok;
+    FUN:void functie(){ok = true;} 
 } var;
 
-Var:int test = -(12+12)/2*7-3;
+VAR:int test = -(-(12+12)/2*7-3);
 
-Fun:int sum ()
+FUN:int sum ()
 {
-    Var:int m; 
+    var->ok = true;
+    VAR:int m;
     m = (12+12);
-    Eval(test);
-    if (12) then
+    CALL:Eval(test);
+    if (true)
     {
-        Var:int m;
+        VAR:int m;
     } else {
         m = 12;
     }

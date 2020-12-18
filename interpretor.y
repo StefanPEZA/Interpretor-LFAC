@@ -8,52 +8,56 @@
     extern char* yytext;
 %}
 %union {
+    short boolVal : 1;
     int intVal;
     float floatVal;
     char charVal;
-    char* dataType;
     char* stringVal;
-    short boolVal : 1;
+    char* varId;
 }
 %define parse.lac full
 %define parse.error verbose
-%start start
-%token SEMICOLON CONTAINER OPEN_BRACE CLOSE_BRACE OPEN_P CLOSE_P VOID EQUAL EVAL CONST COMMA FUN VAR UNARY CALL IF ELSE WHILE FOR THEN DO
-%token <stringVal> IDENTIFIER
+
+%token CONTAINER EVAL CONST FUN VAR CALL IF ELSE WHILE FOR INT FLOAT CHAR STRING BOOL VOID
+%token <varId> IDENTIFIER
 %token <intVal> INT_CONST
 %token <floatVal> FLOAT_CONST
 %token <charVal> CHAR_CONST
 %token <stringVal> STR_CONST
 %token <boolVal> TRUE FALSE
-%token <dataType> INT FLOAT CHAR STRING BOOL
-%type <boolVal> bool_const
 
-%right EQUAL
+%left AND
+%left OR
+%left EQUALITY INEQUALITY
+%left LT GT LTE GTE
+%right '='
 %left '+' '-'
-%left '*' '/'
-%right UNARY
+%left '*' '/' '%'
+%right NEG '!'
+%left '(' ')' ACCES
 
+%start start
 %%
 start : stmts ;
 stmts : stmts stmt | stmt {}
-stmt : var_declaration SEMICOLON {}
-    | const_declaration SEMICOLON {}
+stmt : var_declaration ';' {}
+    | const_declaration ';' {}
     | function_declaration {}
     | container_declaration {}
     ;
 
-container_declaration : CONTAINER OPEN_BRACE container_body CLOSE_BRACE IDENTIFIER SEMICOLON{}
+container_declaration : CONTAINER '{' container_body '}' IDENTIFIER ';' {}
     ;
 
 container_body : container_elements {}
     | container_body container_elements {}
     ;
 
-container_elements : var_declaration SEMICOLON {}
+container_elements : var_declaration ';' {}
     | function_declaration {}
     ;
 
-function_declaration : FUN return_type IDENTIFIER OPEN_P fun_params CLOSE_P OPEN_BRACE fun_body CLOSE_BRACE {}
+function_declaration : FUN return_type IDENTIFIER '(' fun_params ')' '{' fun_body '}' {}
     ;
 
 return_type : types {}
@@ -61,7 +65,7 @@ return_type : types {}
     ;
 
 fun_params : parameter ;
-    | fun_params COMMA parameter {}
+    | fun_params ',' parameter {}
     ;
 
 parameter : types IDENTIFIER {}
@@ -79,51 +83,51 @@ fun_body : code_block {}
     | fun_body code_block {}
     ;
 
-code_block : var_declaration SEMICOLON {}
-    | const_declaration SEMICOLON {}
-    | call_function SEMICOLON {}
-    | var_assignment SEMICOLON{}
-    | container_assignment {}
-    | container_function {}
-    | eval_function SEMICOLON {}
+code_block : var_declaration ';' {}
+    | const_declaration ';' {}
+    | call_function ';' {}
+    | var_assignment ';' {}
+    | container_assignment ';' {}
+    | container_function ';' {}
     | if_statement {}
     | while_statement {}
     | for_statement {}
     ;
 
-if_statement : IF OPEN_P bool_exp CLOSE_P THEN OPEN_BRACE code_block CLOSE_BRACE {}
-    | IF OPEN_P bool_exp CLOSE_P THEN OPEN_BRACE code_block CLOSE_BRACE ELSE OPEN_BRACE code_block CLOSE_BRACE {}
+if_statement : IF '(' bool_exp ')' '{' code_block '}' {}
+    | IF '(' bool_exp ')' '{' code_block '}' ELSE '{' code_block '}'{}
     ;
 
-while_statement : WHILE OPEN_P bool_exp CLOSE_P DO OPEN_BRACE code_block CLOSE_BRACE {}
+while_statement : WHILE '(' bool_exp ')' '{' code_block '}' {}
     ;
 
-for_statement : FOR OPEN_P nr_exp SEMICOLON bool_exp SEMICOLON var_assignment CLOSE_P DO OPEN_BRACE code_block CLOSE_BRACE {}
+for_statement : FOR '(' var_assignment ';' bool_exp ';' var_assignment ')' '{' code_block '}' {}
     ;
 
-var_assignment : IDENTIFIER EQUAL expression {}
+var_assignment : IDENTIFIER '=' expression {}
     ;
 
-get_container_elem : IDENTIFIER'.'IDENTIFIER {}
+get_container_elem : IDENTIFIER ACCES IDENTIFIER {}
     ;
 
-container_assignment : get_container_elem EQUAL expression {}
+container_assignment : get_container_elem '=' expression {}
     ;
 
-container_function : get_container_elem OPEN_P call_params CLOSE_P {}
-    ;
-
-eval_function : EVAL OPEN_P nr_exp CLOSE_P {} 
+container_function : get_container_elem '(' call_params ')' {}
     ;
 
 var_declaration : VAR types IDENTIFIER {}
-    | VAR types IDENTIFIER EQUAL expression {}
+    | VAR types IDENTIFIER '=' expression {}
     ;
 
-const_declaration : CONST types IDENTIFIER EQUAL expression {}
+const_declaration : CONST types IDENTIFIER '=' expression {}
     ;
 
-call_function : CALL IDENTIFIER OPEN_P call_params CLOSE_P {}
+call_function : CALL IDENTIFIER '(' call_params ')' {}
+    | CALL eval_function {}
+    ;
+
+eval_function : EVAL '(' nr_exp ')' {} 
     ;
 
 call_params : call_param {}
@@ -133,16 +137,13 @@ call_params : call_param {}
 call_param : call_function {}
     | expression {}
     ;
- 
+
 constants : INT_CONST {}
     | FLOAT_CONST {}
     | CHAR_CONST {}
     | STR_CONST {}
-    | bool_const {}
-    ;
-
-bool_const : TRUE {$$=$1;}
-    | FALSE {$$=$1;}
+    | TRUE {}
+    | FALSE {}
     ;
 
 expression : nr_exp {}
@@ -150,20 +151,32 @@ expression : nr_exp {}
     ;
 
 nr_exp: IDENTIFIER {}
-    | constants {}
+    | INT_CONST {}
+    | FLOAT_CONST {}
     | get_container_elem {}
-    | OPEN_P nr_exp CLOSE_P {}
+    | '(' nr_exp ')' {}
     | nr_exp '+' nr_exp {}
     | nr_exp '-' nr_exp {}
     | nr_exp '*' nr_exp {}
     | nr_exp '/' nr_exp {}
-    | '-' nr_exp  %prec UNARY {}
-    | '+' nr_exp  %prec UNARY {}
-    ;
+    | nr_exp '%' nr_exp {}
+    | '-' nr_exp %prec NEG {}
+    ; 
 
 bool_exp : IDENTIFIER {}
-    | constants {}
+    | TRUE {}
+    | FALSE {}
     | get_container_elem {}
+    | '(' bool_exp ')' {}
+    | nr_exp LT nr_exp {}
+    | nr_exp GT nr_exp {}
+    | nr_exp LTE nr_exp {}
+    | nr_exp GTE nr_exp {}
+    | nr_exp EQUALITY nr_exp {}
+    | nr_exp INEQUALITY {}
+    | bool_exp AND bool_exp {}
+    | bool_exp OR bool_exp {}
+    | '!' bool_exp {}
     ;
 %%
 int check = 1;
