@@ -18,7 +18,7 @@
 %define parse.lac full
 %define parse.error verbose
 
-%token CONTAINER EVAL CONST FUN VAR CALL IF ELSE WHILE FOR INT FLOAT CHAR STRING BOOL VOID
+%token CONTAINER EVAL CONST FUN VAR CALL IF ELSE WHILE FOR INT FLOAT CHAR STRING BOOL VOID ARR 
 %token <varId> IDENTIFIER
 %token <intVal> INT_CONST
 %token <floatVal> FLOAT_CONST
@@ -35,12 +35,14 @@
 %left '*' '/' '%'
 %right NEG '!'
 %left '(' ')' ACCES
-
+%nonassoc THEN
+%nonassoc ELSE
 %start start
 %%
 start : stmts ;
 stmts : stmts stmt | stmt {}
 stmt : var_declaration ';' {}
+    | array_declaration ';' {}
     | const_declaration ';' {}
     | function_declaration {}
     | container_declaration {}
@@ -84,6 +86,8 @@ fun_body : code_block {}
     ;
 
 code_block : var_declaration ';' {}
+    | array_declaration ';' {}
+    | array_assignment ';' {}
     | const_declaration ';' {}
     | call_function ';' {}
     | var_assignment ';' {}
@@ -94,8 +98,8 @@ code_block : var_declaration ';' {}
     | for_statement {}
     ;
 
-if_statement : IF '(' bool_exp ')' '{' code_block '}' {}
-    | IF '(' bool_exp ')' '{' code_block '}' ELSE '{' code_block '}'{}
+if_statement : IF '(' expression')' '{' code_block '}' %prec THEN {}
+    | IF '(' expression ')' '{' code_block '}' ELSE '{' code_block '}' {}
     ;
 
 while_statement : WHILE '(' bool_exp ')' '{' code_block '}' {}
@@ -106,6 +110,38 @@ for_statement : FOR '(' var_assignment ';' bool_exp ';' var_assignment ')' '{' c
 
 var_assignment : IDENTIFIER '=' expression {}
     ;
+
+array_declaration : ARR types IDENTIFIER '[' INT_CONST ']' '=' '{' array_list '}' {}
+    | ARR types IDENTIFIER '[' INT_CONST ']' {}
+    ;
+array_list : array_list_int {}
+    | array_list_float {}
+    | array_list_char {}
+    | array_list_string {}
+    | array_list_bool {}
+    | 
+    ;
+array_assignment : array_val'=' expression {}  
+    ;
+
+array_list_int : array_list_int ',' INT_CONST {}
+    | INT_CONST {}
+    ;
+array_list_float : array_list_float ',' FLOAT_CONST {}
+    | FLOAT_CONST {}
+    ;    
+array_list_char : array_list_char ',' CHAR_CONST {}
+    | CHAR_CONST {}
+    ;
+array_list_string : array_list_string ',' STR_CONST {}
+    | STR_CONST {} 
+    ;
+array_list_bool : array_list_bool ',' TRUE {}
+    | array_list_bool ',' FALSE {}
+    | TRUE {}
+    | FALSE {}
+    ;
+array_val : IDENTIFIER '[' INT_CONST ']';
 
 get_container_elem : IDENTIFIER ACCES IDENTIFIER {}
     ;
@@ -138,22 +174,16 @@ call_param : call_function {}
     | expression {}
     ;
 
-constants : INT_CONST {}
-    | FLOAT_CONST {}
-    | CHAR_CONST {}
-    | STR_CONST {}
-    | TRUE {}
-    | FALSE {}
-    ;
-
 expression : nr_exp {}
     | bool_exp {}
+    | string_exp {}
     ;
 
-nr_exp: IDENTIFIER {}
+nr_exp:IDENTIFIER {}
+    | get_container_elem {}
+    | array_val {}
     | INT_CONST {}
     | FLOAT_CONST {}
-    | get_container_elem {}
     | '(' nr_exp ')' {}
     | nr_exp '+' nr_exp {}
     | nr_exp '-' nr_exp {}
@@ -163,10 +193,11 @@ nr_exp: IDENTIFIER {}
     | '-' nr_exp %prec NEG {}
     ; 
 
-bool_exp : IDENTIFIER {}
+bool_exp :IDENTIFIER {}
+    | get_container_elem {}
+    | array_val {}
     | TRUE {}
     | FALSE {}
-    | get_container_elem {}
     | '(' bool_exp ')' {}
     | nr_exp LT nr_exp {}
     | nr_exp GT nr_exp {}
@@ -178,6 +209,15 @@ bool_exp : IDENTIFIER {}
     | bool_exp OR bool_exp {}
     | '!' bool_exp {}
     ;
+
+string_exp :IDENTIFIER {}
+    | get_container_elem {}
+    | array_val {} 
+    | CHAR_CONST {}
+    | STR_CONST {}
+    | string_exp '+' string_exp {}
+    ;
+
 %%
 int check = 1;
 void yyerror(char *s)

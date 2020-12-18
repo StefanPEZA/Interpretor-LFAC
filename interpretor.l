@@ -20,6 +20,8 @@ string \".*\"
 ")" {nr_word++; return *yytext;}
 "{" {nr_word++; return *yytext;}
 "}" {nr_word++; return *yytext;}
+"[" {nr_word++; return *yytext;}
+"]" {nr_word++; return *yytext;}
 "," {nr_word++; return *yytext;}
 "->" {nr_word++; return ACCES;}
 "&&" {nr_word++; return AND;}
@@ -44,11 +46,12 @@ void {nr_word++;return VOID;}
 FUN: {nr_word++;return FUN;}
 CALL: {nr_word++; return CALL;}
 VAR: {nr_word++;return VAR;}
+ARR: {nr_word++;return ARR;}
 Eval {nr_word++;return EVAL;}
 true {nr_word++;yylval.boolVal=1; return TRUE;}
 false {nr_word++;yylval.boolVal=0; return FALSE;}
 
-{id} {nr_word++;return IDENTIFIER;}
+{id} {nr_word++;yylval.varId=strdup(yytext); return IDENTIFIER;}
 {float} {nr_word++;yylval.floatVal=atof(yytext); return FLOAT_CONST;}
 {integer} {nr_word++;yylval.intVal=atoi(yytext); return INT_CONST;}
 {char} {nr_word++;yylval.charVal=yytext[1]; return CHAR_CONST;}
