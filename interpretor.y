@@ -25,7 +25,6 @@
 %token <charVal> CHAR_CONST
 %token <stringVal> STR_CONST
 %token <boolVal> TRUE FALSE
-%type <boolVal> bool_constants
 
 %left AND
 %left OR
@@ -139,19 +138,12 @@ call_param : call_function {}
     | expression {}
     ;
 
-constants : number_constants | string_constants | bool_constants {}
-    ;
-
-number_constants : INT_CONST {}
+constants : INT_CONST {}
     | FLOAT_CONST {}
-    ;
-
-string_constants : CHAR_CONST {}
+    | CHAR_CONST {}
     | STR_CONST {}
-    ;
-
-bool_constants : TRUE {$$=$1;}
-    | FALSE {$$=$1;}
+    | TRUE {}
+    | FALSE {}
     ;
 
 expression : nr_exp {}
@@ -159,7 +151,8 @@ expression : nr_exp {}
     ;
 
 nr_exp: IDENTIFIER {}
-    | constants {}
+    | INT_CONST {}
+    | FLOAT_CONST {}
     | get_container_elem {}
     | '(' nr_exp ')' {}
     | nr_exp '+' nr_exp {}
@@ -171,13 +164,16 @@ nr_exp: IDENTIFIER {}
     ; 
 
 bool_exp : IDENTIFIER {}
-    | constants {}
+    | TRUE {}
+    | FALSE {}
     | get_container_elem {}
     | '(' bool_exp ')' {}
     | nr_exp LT nr_exp {}
     | nr_exp GT nr_exp {}
     | nr_exp LTE nr_exp {}
     | nr_exp GTE nr_exp {}
+    | nr_exp EQUALITY nr_exp {}
+    | nr_exp INEQUALITY {}
     | bool_exp AND bool_exp {}
     | bool_exp OR bool_exp {}
     | '!' bool_exp {}

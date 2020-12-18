@@ -12,6 +12,8 @@ char '.'
 string \".*\"
 %option noyywrap
 %%
+"!=" {nr_word++; return INEQUALITY;}
+"==" {nr_word++; return EQUALITY;}
 "=" {nr_word++; return *yytext;}
 ";" {nr_word++; return *yytext;}
 "(" {nr_word++; return *yytext;}
@@ -26,7 +28,7 @@ string \".*\"
 "<=" {nr_word++; return LTE;}
 "<" {nr_word++; return LT;}
 ">" {nr_word++; return GT;}
-[-+*/%!#] {nr_word++; return *yytext;}
+[-+*/%!] {nr_word++; return *yytext;}
 if {nr_word++;return IF;}
 else {nr_word++;return ELSE;}
 for {nr_word++;return FOR;}
