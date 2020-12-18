@@ -14,8 +14,9 @@ FUN:int sum ()
     var->ok = true;
     VAR:int m;
     m = (12+12);
+    ARR: int k [ 50 ] = { 1 , 2 , 3 };
     CALL:Eval(test);
-    if (true)
+    if (a+b)
     {
         VAR:int m;
     } else {

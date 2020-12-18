@@ -1,0 +1,2977 @@
+State 47 conflicts: 14 reduce/reduce
+State 57 conflicts: 14 reduce/reduce
+State 58 conflicts: 14 reduce/reduce
+State 60 conflicts: 1 shift/reduce
+State 76 conflicts: 2 reduce/reduce
+State 77 conflicts: 2 reduce/reduce
+State 78 conflicts: 2 reduce/reduce
+
+
+Grammar
+
+    0 $accept: start $end
+
+    1 start: stmts
+
+    2 stmts: stmts stmt
+    3      | stmt
+
+    4 stmt: var_declaration ';'
+    5     | array_declaration ';'
+    6     | const_declaration ';'
+    7     | function_declaration
+    8     | container_declaration
+
+    9 container_declaration: CONTAINER '{' container_body '}' IDENTIFIER ';'
+
+   10 container_body: container_elements
+   11               | container_body container_elements
+
+   12 container_elements: var_declaration ';'
+   13                   | function_declaration
+
+   14 function_declaration: FUN return_type IDENTIFIER '(' fun_params ')' '{' fun_body '}'
+
+   15 return_type: types
+   16            | VOID
+
+   17 fun_params: parameter
+   18           | fun_params ',' parameter
+
+   19 parameter: types IDENTIFIER
+   20          | %empty
+
+   21 types: INT
+   22      | FLOAT
+   23      | CHAR
+   24      | STRING
+   25      | BOOL
+
+   26 fun_body: code_block
+   27         | fun_body code_block
+
+   28 code_block: var_declaration ';'
+   29           | array_declaration ';'
+   30           | array_assignment ';'
+   31           | const_declaration ';'
+   32           | call_function ';'
+   33           | var_assignment ';'
+   34           | container_assignment ';'
+   35           | container_function ';'
+   36           | if_statement
+   37           | while_statement
+   38           | for_statement
+
+   39 if_statement: IF '(' expression ')' '{' code_block '}'
+   40             | IF '(' expression ')' '{' code_block '}' ELSE '{' code_block '}'
+
+   41 while_statement: WHILE '(' bool_exp ')' '{' code_block '}'
+
+   42 for_statement: FOR '(' var_assignment ';' bool_exp ';' var_assignment ')' '{' code_block '}'
+
+   43 var_assignment: IDENTIFIER '=' expression
+
+   44 array_declaration: ARR types IDENTIFIER '[' INT_CONST ']' '=' '{' array_list '}'
+   45                  | ARR types IDENTIFIER '[' INT_CONST ']'
+
+   46 array_list: array_list_int
+   47           | array_list_float
+   48           | array_list_char
+   49           | array_list_string
+   50           | array_list_bool
+   51           | %empty
+
+   52 array_assignment: array_val '=' expression
+
+   53 array_list_int: array_list_int ',' INT_CONST
+   54               | INT_CONST
+
+   55 array_list_float: array_list_float ',' FLOAT_CONST
+   56                 | FLOAT_CONST
+
+   57 array_list_char: array_list_char ',' CHAR_CONST
+   58                | CHAR_CONST
+
+   59 array_list_string: array_list_string ',' STR_CONST
+   60                  | STR_CONST
+
+   61 array_list_bool: array_list_bool ',' TRUE
+   62                | array_list_bool ',' FALSE
+   63                | TRUE
+   64                | FALSE
+
+   65 array_val: IDENTIFIER '[' INT_CONST ']'
+
+   66 get_container_elem: IDENTIFIER ACCES IDENTIFIER
+
+   67 container_assignment: get_container_elem '=' expression
+
+   68 container_function: get_container_elem '(' call_params ')'
+
+   69 var_declaration: VAR types IDENTIFIER
+   70                | VAR types IDENTIFIER '=' expression
+
+   71 const_declaration: CONST types IDENTIFIER '=' expression
+
+   72 call_function: CALL IDENTIFIER '(' call_params ')'
+   73              | CALL eval_function
+
+   74 eval_function: EVAL '(' nr_exp ')'
+
+   75 call_params: call_param
+   76            | call_params call_param
+
+   77 call_param: call_function
+   78           | expression
+
+   79 expression: nr_exp
+   80           | bool_exp
+   81           | string_exp
+
+   82 nr_exp: IDENTIFIER
+   83       | get_container_elem
+   84       | array_val
+   85       | INT_CONST
+   86       | FLOAT_CONST
+   87       | '(' nr_exp ')'
+   88       | nr_exp '+' nr_exp
+   89       | nr_exp '-' nr_exp
+   90       | nr_exp '*' nr_exp
+   91       | nr_exp '/' nr_exp
+   92       | nr_exp '%' nr_exp
+   93       | '-' nr_exp
+
+   94 bool_exp: IDENTIFIER
+   95         | get_container_elem
+   96         | array_val
+   97         | TRUE
+   98         | FALSE
+   99         | '(' bool_exp ')'
+  100         | nr_exp LT nr_exp
+  101         | nr_exp GT nr_exp
+  102         | nr_exp LTE nr_exp
+  103         | nr_exp GTE nr_exp
+  104         | nr_exp EQUALITY nr_exp
+  105         | nr_exp INEQUALITY
+  106         | bool_exp AND bool_exp
+  107         | bool_exp OR bool_exp
+  108         | '!' bool_exp
+
+  109 string_exp: IDENTIFIER
+  110           | get_container_elem
+  111           | array_val
+  112           | CHAR_CONST
+  113           | STR_CONST
+  114           | string_exp '+' string_exp
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'!' (33) 108
+'%' (37) 92
+'(' (40) 14 39 40 41 42 68 72 74 87 99
+')' (41) 14 39 40 41 42 68 72 74 87 99
+'*' (42) 90
+'+' (43) 88 114
+',' (44) 18 53 55 57 59 61 62
+'-' (45) 89 93
+'/' (47) 91
+';' (59) 4 5 6 9 12 28 29 30 31 32 33 34 35 42
+'=' (61) 43 44 52 67 70 71
+'[' (91) 44 45 65
+']' (93) 44 45 65
+'{' (123) 9 14 39 40 41 42 44
+'}' (125) 9 14 39 40 41 42 44
+error (256)
+CONTAINER (258) 9
+EVAL (259) 74
+CONST (260) 71
+FUN (261) 14
+VAR (262) 69 70
+CALL (263) 72 73
+IF (264) 39 40
+ELSE (265) 40
+WHILE (266) 41
+FOR (267) 42
+INT (268) 21
+FLOAT (269) 22
+CHAR (270) 23
+STRING (271) 24
+BOOL (272) 25
+VOID (273) 16
+ARR (274) 44 45
+IDENTIFIER (275) 9 14 19 43 44 45 65 66 69 70 71 72 82 94 109
+INT_CONST (276) 44 45 53 54 65 85
+FLOAT_CONST (277) 55 56 86
+CHAR_CONST (278) 57 58 112
+STR_CONST (279) 59 60 113
+TRUE (280) 61 63 97
+FALSE (281) 62 64 98
+AND (282) 106
+OR (283) 107
+EQUALITY (284) 104
+INEQUALITY (285) 105
+LT (286) 100
+GT (287) 101
+LTE (288) 102
+GTE (289) 103
+NEG (290)
+ACCES (291) 66
+THEN (292)
+
+
+Nonterminals, with rules where they appear
+
+$accept (53)
+    on left: 0
+start (54)
+    on left: 1, on right: 0
+stmts (55)
+    on left: 2 3, on right: 1 2
+stmt (56)
+    on left: 4 5 6 7 8, on right: 2 3
+container_declaration (57)
+    on left: 9, on right: 8
+container_body (58)
+    on left: 10 11, on right: 9 11
+container_elements (59)
+    on left: 12 13, on right: 10 11
+function_declaration (60)
+    on left: 14, on right: 7 13
+return_type (61)
+    on left: 15 16, on right: 14
+fun_params (62)
+    on left: 17 18, on right: 14 18
+parameter (63)
+    on left: 19 20, on right: 17 18
+types (64)
+    on left: 21 22 23 24 25, on right: 15 19 44 45 69 70 71
+fun_body (65)
+    on left: 26 27, on right: 14 27
+code_block (66)
+    on left: 28 29 30 31 32 33 34 35 36 37 38, on right: 26 27 39 40
+    41 42
+if_statement (67)
+    on left: 39 40, on right: 36
+while_statement (68)
+    on left: 41, on right: 37
+for_statement (69)
+    on left: 42, on right: 38
+var_assignment (70)
+    on left: 43, on right: 33 42
+array_declaration (71)
+    on left: 44 45, on right: 5 29
+array_list (72)
+    on left: 46 47 48 49 50 51, on right: 44
+array_assignment (73)
+    on left: 52, on right: 30
+array_list_int (74)
+    on left: 53 54, on right: 46 53
+array_list_float (75)
+    on left: 55 56, on right: 47 55
+array_list_char (76)
+    on left: 57 58, on right: 48 57
+array_list_string (77)
+    on left: 59 60, on right: 49 59
+array_list_bool (78)
+    on left: 61 62 63 64, on right: 50 61 62
+array_val (79)
+    on left: 65, on right: 52 84 96 111
+get_container_elem (80)
+    on left: 66, on right: 67 68 83 95 110
+container_assignment (81)
+    on left: 67, on right: 34
+container_function (82)
+    on left: 68, on right: 35
+var_declaration (83)
+    on left: 69 70, on right: 4 12 28
+const_declaration (84)
+    on left: 71, on right: 6 31
+call_function (85)
+    on left: 72 73, on right: 32 77
+eval_function (86)
+    on left: 74, on right: 73
+call_params (87)
+    on left: 75 76, on right: 68 72 76
+call_param (88)
+    on left: 77 78, on right: 75 76
+expression (89)
+    on left: 79 80 81, on right: 39 40 43 52 67 70 71 78
+nr_exp (90)
+    on left: 82 83 84 85 86 87 88 89 90 91 92 93, on right: 74 79 87
+    88 89 90 91 92 93 100 101 102 103 104 105
+bool_exp (91)
+    on left: 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108,
+    on right: 41 42 80 99 106 107 108
+string_exp (92)
+    on left: 109 110 111 112 113 114, on right: 81 114
+
+
+State 0
+
+    0 $accept: . start $end
+
+    CONTAINER  shift, and go to state 1
+    CONST      shift, and go to state 2
+    FUN        shift, and go to state 3
+    VAR        shift, and go to state 4
+    ARR        shift, and go to state 5
+
+    start                  go to state 6
+    stmts                  go to state 7
+    stmt                   go to state 8
+    container_declaration  go to state 9
+    function_declaration   go to state 10
+    array_declaration      go to state 11
+    var_declaration        go to state 12
+    const_declaration      go to state 13
+
+
+State 1
+
+    9 container_declaration: CONTAINER . '{' container_body '}' IDENTIFIER ';'
+
+    '{'  shift, and go to state 14
+
+
+State 2
+
+   71 const_declaration: CONST . types IDENTIFIER '=' expression
+
+    INT     shift, and go to state 15
+    FLOAT   shift, and go to state 16
+    CHAR    shift, and go to state 17
+    STRING  shift, and go to state 18
+    BOOL    shift, and go to state 19
+
+    types  go to state 20
+
+
+State 3
+
+   14 function_declaration: FUN . return_type IDENTIFIER '(' fun_params ')' '{' fun_body '}'
+
+    INT     shift, and go to state 15
+    FLOAT   shift, and go to state 16
+    CHAR    shift, and go to state 17
+    STRING  shift, and go to state 18
+    BOOL    shift, and go to state 19
+    VOID    shift, and go to state 21
+
+    return_type  go to state 22
+    types        go to state 23
+
+
+State 4
+
+   69 var_declaration: VAR . types IDENTIFIER
+   70                | VAR . types IDENTIFIER '=' expression
+
+    INT     shift, and go to state 15
+    FLOAT   shift, and go to state 16
+    CHAR    shift, and go to state 17
+    STRING  shift, and go to state 18
+    BOOL    shift, and go to state 19
+
+    types  go to state 24
+
+
+State 5
+
+   44 array_declaration: ARR . types IDENTIFIER '[' INT_CONST ']' '=' '{' array_list '}'
+   45                  | ARR . types IDENTIFIER '[' INT_CONST ']'
+
+    INT     shift, and go to state 15
+    FLOAT   shift, and go to state 16
+    CHAR    shift, and go to state 17
+    STRING  shift, and go to state 18
+    BOOL    shift, and go to state 19
+
+    types  go to state 25
+
+
+State 6
+
+    0 $accept: start . $end
+
+    $end  shift, and go to state 26
+
+
+State 7
+
+    1 start: stmts .
+    2 stmts: stmts . stmt
+
+    CONTAINER  shift, and go to state 1
+    CONST      shift, and go to state 2
+    FUN        shift, and go to state 3
+    VAR        shift, and go to state 4
+    ARR        shift, and go to state 5
+
+    $default  reduce using rule 1 (start)
+
+    stmt                   go to state 27
+    container_declaration  go to state 9
+    function_declaration   go to state 10
+    array_declaration      go to state 11
+    var_declaration        go to state 12
+    const_declaration      go to state 13
+
+
+State 8
+
+    3 stmts: stmt .
+
+    $default  reduce using rule 3 (stmts)
+
+
+State 9
+
+    8 stmt: container_declaration .
+
+    $default  reduce using rule 8 (stmt)
+
+
+State 10
+
+    7 stmt: function_declaration .
+
+    $default  reduce using rule 7 (stmt)
+
+
+State 11
+
+    5 stmt: array_declaration . ';'
+
+    ';'  shift, and go to state 28
+
+
+State 12
+
+    4 stmt: var_declaration . ';'
+
+    ';'  shift, and go to state 29
+
+
+State 13
+
+    6 stmt: const_declaration . ';'
+
+    ';'  shift, and go to state 30
+
+
+State 14
+
+    9 container_declaration: CONTAINER '{' . container_body '}' IDENTIFIER ';'
+
+    FUN  shift, and go to state 3
+    VAR  shift, and go to state 4
+
+    container_body        go to state 31
+    container_elements    go to state 32
+    function_declaration  go to state 33
+    var_declaration       go to state 34
+
+
+State 15
+
+   21 types: INT .
+
+    $default  reduce using rule 21 (types)
+
+
+State 16
+
+   22 types: FLOAT .
+
+    $default  reduce using rule 22 (types)
+
+
+State 17
+
+   23 types: CHAR .
+
+    $default  reduce using rule 23 (types)
+
+
+State 18
+
+   24 types: STRING .
+
+    $default  reduce using rule 24 (types)
+
+
+State 19
+
+   25 types: BOOL .
+
+    $default  reduce using rule 25 (types)
+
+
+State 20
+
+   71 const_declaration: CONST types . IDENTIFIER '=' expression
+
+    IDENTIFIER  shift, and go to state 35
+
+
+State 21
+
+   16 return_type: VOID .
+
+    $default  reduce using rule 16 (return_type)
+
+
+State 22
+
+   14 function_declaration: FUN return_type . IDENTIFIER '(' fun_params ')' '{' fun_body '}'
+
+    IDENTIFIER  shift, and go to state 36
+
+
+State 23
+
+   15 return_type: types .
+
+    $default  reduce using rule 15 (return_type)
+
+
+State 24
+
+   69 var_declaration: VAR types . IDENTIFIER
+   70                | VAR types . IDENTIFIER '=' expression
+
+    IDENTIFIER  shift, and go to state 37
+
+
+State 25
+
+   44 array_declaration: ARR types . IDENTIFIER '[' INT_CONST ']' '=' '{' array_list '}'
+   45                  | ARR types . IDENTIFIER '[' INT_CONST ']'
+
+    IDENTIFIER  shift, and go to state 38
+
+
+State 26
+
+    0 $accept: start $end .
+
+    $default  accept
+
+
+State 27
+
+    2 stmts: stmts stmt .
+
+    $default  reduce using rule 2 (stmts)
+
+
+State 28
+
+    5 stmt: array_declaration ';' .
+
+    $default  reduce using rule 5 (stmt)
+
+
+State 29
+
+    4 stmt: var_declaration ';' .
+
+    $default  reduce using rule 4 (stmt)
+
+
+State 30
+
+    6 stmt: const_declaration ';' .
+
+    $default  reduce using rule 6 (stmt)
+
+
+State 31
+
+    9 container_declaration: CONTAINER '{' container_body . '}' IDENTIFIER ';'
+   11 container_body: container_body . container_elements
+
+    FUN  shift, and go to state 3
+    VAR  shift, and go to state 4
+    '}'  shift, and go to state 39
+
+    container_elements    go to state 40
+    function_declaration  go to state 33
+    var_declaration       go to state 34
+
+
+State 32
+
+   10 container_body: container_elements .
+
+    $default  reduce using rule 10 (container_body)
+
+
+State 33
+
+   13 container_elements: function_declaration .
+
+    $default  reduce using rule 13 (container_elements)
+
+
+State 34
+
+   12 container_elements: var_declaration . ';'
+
+    ';'  shift, and go to state 41
+
+
+State 35
+
+   71 const_declaration: CONST types IDENTIFIER . '=' expression
+
+    '='  shift, and go to state 42
+
+
+State 36
+
+   14 function_declaration: FUN return_type IDENTIFIER . '(' fun_params ')' '{' fun_body '}'
+
+    '('  shift, and go to state 43
+
+
+State 37
+
+   69 var_declaration: VAR types IDENTIFIER .
+   70                | VAR types IDENTIFIER . '=' expression
+
+    '='  shift, and go to state 44
+
+    $default  reduce using rule 69 (var_declaration)
+
+
+State 38
+
+   44 array_declaration: ARR types IDENTIFIER . '[' INT_CONST ']' '=' '{' array_list '}'
+   45                  | ARR types IDENTIFIER . '[' INT_CONST ']'
+
+    '['  shift, and go to state 45
+
+
+State 39
+
+    9 container_declaration: CONTAINER '{' container_body '}' . IDENTIFIER ';'
+
+    IDENTIFIER  shift, and go to state 46
+
+
+State 40
+
+   11 container_body: container_body container_elements .
+
+    $default  reduce using rule 11 (container_body)
+
+
+State 41
+
+   12 container_elements: var_declaration ';' .
+
+    $default  reduce using rule 12 (container_elements)
+
+
+State 42
+
+   71 const_declaration: CONST types IDENTIFIER '=' . expression
+
+    IDENTIFIER   shift, and go to state 47
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    CHAR_CONST   shift, and go to state 50
+    STR_CONST    shift, and go to state 51
+    TRUE         shift, and go to state 52
+    FALSE        shift, and go to state 53
+    '-'          shift, and go to state 54
+    '!'          shift, and go to state 55
+    '('          shift, and go to state 56
+
+    array_val           go to state 57
+    get_container_elem  go to state 58
+    expression          go to state 59
+    nr_exp              go to state 60
+    bool_exp            go to state 61
+    string_exp          go to state 62
+
+
+State 43
+
+   14 function_declaration: FUN return_type IDENTIFIER '(' . fun_params ')' '{' fun_body '}'
+
+    INT     shift, and go to state 15
+    FLOAT   shift, and go to state 16
+    CHAR    shift, and go to state 17
+    STRING  shift, and go to state 18
+    BOOL    shift, and go to state 19
+
+    $default  reduce using rule 20 (parameter)
+
+    fun_params  go to state 63
+    parameter   go to state 64
+    types       go to state 65
+
+
+State 44
+
+   70 var_declaration: VAR types IDENTIFIER '=' . expression
+
+    IDENTIFIER   shift, and go to state 47
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    CHAR_CONST   shift, and go to state 50
+    STR_CONST    shift, and go to state 51
+    TRUE         shift, and go to state 52
+    FALSE        shift, and go to state 53
+    '-'          shift, and go to state 54
+    '!'          shift, and go to state 55
+    '('          shift, and go to state 56
+
+    array_val           go to state 57
+    get_container_elem  go to state 58
+    expression          go to state 66
+    nr_exp              go to state 60
+    bool_exp            go to state 61
+    string_exp          go to state 62
+
+
+State 45
+
+   44 array_declaration: ARR types IDENTIFIER '[' . INT_CONST ']' '=' '{' array_list '}'
+   45                  | ARR types IDENTIFIER '[' . INT_CONST ']'
+
+    INT_CONST  shift, and go to state 67
+
+
+State 46
+
+    9 container_declaration: CONTAINER '{' container_body '}' IDENTIFIER . ';'
+
+    ';'  shift, and go to state 68
+
+
+State 47
+
+   65 array_val: IDENTIFIER . '[' INT_CONST ']'
+   66 get_container_elem: IDENTIFIER . ACCES IDENTIFIER
+   82 nr_exp: IDENTIFIER .
+   94 bool_exp: IDENTIFIER .
+  109 string_exp: IDENTIFIER .
+
+    ACCES  shift, and go to state 69
+    '['    shift, and go to state 70
+
+    CALL         reduce using rule 82 (nr_exp)
+    CALL         [reduce using rule 94 (bool_exp)]
+    CALL         [reduce using rule 109 (string_exp)]
+    IDENTIFIER   reduce using rule 82 (nr_exp)
+    IDENTIFIER   [reduce using rule 94 (bool_exp)]
+    IDENTIFIER   [reduce using rule 109 (string_exp)]
+    INT_CONST    reduce using rule 82 (nr_exp)
+    INT_CONST    [reduce using rule 94 (bool_exp)]
+    INT_CONST    [reduce using rule 109 (string_exp)]
+    FLOAT_CONST  reduce using rule 82 (nr_exp)
+    FLOAT_CONST  [reduce using rule 94 (bool_exp)]
+    FLOAT_CONST  [reduce using rule 109 (string_exp)]
+    CHAR_CONST   reduce using rule 82 (nr_exp)
+    CHAR_CONST   [reduce using rule 94 (bool_exp)]
+    CHAR_CONST   [reduce using rule 109 (string_exp)]
+    STR_CONST    reduce using rule 82 (nr_exp)
+    STR_CONST    [reduce using rule 94 (bool_exp)]
+    STR_CONST    [reduce using rule 109 (string_exp)]
+    TRUE         reduce using rule 82 (nr_exp)
+    TRUE         [reduce using rule 94 (bool_exp)]
+    TRUE         [reduce using rule 109 (string_exp)]
+    FALSE        reduce using rule 82 (nr_exp)
+    FALSE        [reduce using rule 94 (bool_exp)]
+    FALSE        [reduce using rule 109 (string_exp)]
+    AND          reduce using rule 94 (bool_exp)
+    OR           reduce using rule 94 (bool_exp)
+    '+'          reduce using rule 82 (nr_exp)
+    '+'          [reduce using rule 109 (string_exp)]
+    '-'          reduce using rule 82 (nr_exp)
+    '-'          [reduce using rule 94 (bool_exp)]
+    '-'          [reduce using rule 109 (string_exp)]
+    '!'          reduce using rule 82 (nr_exp)
+    '!'          [reduce using rule 94 (bool_exp)]
+    '!'          [reduce using rule 109 (string_exp)]
+    '('          reduce using rule 82 (nr_exp)
+    '('          [reduce using rule 94 (bool_exp)]
+    '('          [reduce using rule 109 (string_exp)]
+    ')'          reduce using rule 82 (nr_exp)
+    ')'          [reduce using rule 94 (bool_exp)]
+    ')'          [reduce using rule 109 (string_exp)]
+    ';'          reduce using rule 82 (nr_exp)
+    ';'          [reduce using rule 94 (bool_exp)]
+    ';'          [reduce using rule 109 (string_exp)]
+    $default     reduce using rule 82 (nr_exp)
+
+
+State 48
+
+   85 nr_exp: INT_CONST .
+
+    $default  reduce using rule 85 (nr_exp)
+
+
+State 49
+
+   86 nr_exp: FLOAT_CONST .
+
+    $default  reduce using rule 86 (nr_exp)
+
+
+State 50
+
+  112 string_exp: CHAR_CONST .
+
+    $default  reduce using rule 112 (string_exp)
+
+
+State 51
+
+  113 string_exp: STR_CONST .
+
+    $default  reduce using rule 113 (string_exp)
+
+
+State 52
+
+   97 bool_exp: TRUE .
+
+    $default  reduce using rule 97 (bool_exp)
+
+
+State 53
+
+   98 bool_exp: FALSE .
+
+    $default  reduce using rule 98 (bool_exp)
+
+
+State 54
+
+   93 nr_exp: '-' . nr_exp
+
+    IDENTIFIER   shift, and go to state 71
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    '-'          shift, and go to state 54
+    '('          shift, and go to state 72
+
+    array_val           go to state 73
+    get_container_elem  go to state 74
+    nr_exp              go to state 75
+
+
+State 55
+
+  108 bool_exp: '!' . bool_exp
+
+    IDENTIFIER   shift, and go to state 76
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    TRUE         shift, and go to state 52
+    FALSE        shift, and go to state 53
+    '-'          shift, and go to state 54
+    '!'          shift, and go to state 55
+    '('          shift, and go to state 56
+
+    array_val           go to state 77
+    get_container_elem  go to state 78
+    nr_exp              go to state 79
+    bool_exp            go to state 80
+
+
+State 56
+
+   87 nr_exp: '(' . nr_exp ')'
+   99 bool_exp: '(' . bool_exp ')'
+
+    IDENTIFIER   shift, and go to state 76
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    TRUE         shift, and go to state 52
+    FALSE        shift, and go to state 53
+    '-'          shift, and go to state 54
+    '!'          shift, and go to state 55
+    '('          shift, and go to state 56
+
+    array_val           go to state 77
+    get_container_elem  go to state 78
+    nr_exp              go to state 81
+    bool_exp            go to state 82
+
+
+State 57
+
+   84 nr_exp: array_val .
+   96 bool_exp: array_val .
+  111 string_exp: array_val .
+
+    CALL         reduce using rule 84 (nr_exp)
+    CALL         [reduce using rule 96 (bool_exp)]
+    CALL         [reduce using rule 111 (string_exp)]
+    IDENTIFIER   reduce using rule 84 (nr_exp)
+    IDENTIFIER   [reduce using rule 96 (bool_exp)]
+    IDENTIFIER   [reduce using rule 111 (string_exp)]
+    INT_CONST    reduce using rule 84 (nr_exp)
+    INT_CONST    [reduce using rule 96 (bool_exp)]
+    INT_CONST    [reduce using rule 111 (string_exp)]
+    FLOAT_CONST  reduce using rule 84 (nr_exp)
+    FLOAT_CONST  [reduce using rule 96 (bool_exp)]
+    FLOAT_CONST  [reduce using rule 111 (string_exp)]
+    CHAR_CONST   reduce using rule 84 (nr_exp)
+    CHAR_CONST   [reduce using rule 96 (bool_exp)]
+    CHAR_CONST   [reduce using rule 111 (string_exp)]
+    STR_CONST    reduce using rule 84 (nr_exp)
+    STR_CONST    [reduce using rule 96 (bool_exp)]
+    STR_CONST    [reduce using rule 111 (string_exp)]
+    TRUE         reduce using rule 84 (nr_exp)
+    TRUE         [reduce using rule 96 (bool_exp)]
+    TRUE         [reduce using rule 111 (string_exp)]
+    FALSE        reduce using rule 84 (nr_exp)
+    FALSE        [reduce using rule 96 (bool_exp)]
+    FALSE        [reduce using rule 111 (string_exp)]
+    AND          reduce using rule 96 (bool_exp)
+    OR           reduce using rule 96 (bool_exp)
+    '+'          reduce using rule 84 (nr_exp)
+    '+'          [reduce using rule 111 (string_exp)]
+    '-'          reduce using rule 84 (nr_exp)
+    '-'          [reduce using rule 96 (bool_exp)]
+    '-'          [reduce using rule 111 (string_exp)]
+    '!'          reduce using rule 84 (nr_exp)
+    '!'          [reduce using rule 96 (bool_exp)]
+    '!'          [reduce using rule 111 (string_exp)]
+    '('          reduce using rule 84 (nr_exp)
+    '('          [reduce using rule 96 (bool_exp)]
+    '('          [reduce using rule 111 (string_exp)]
+    ')'          reduce using rule 84 (nr_exp)
+    ')'          [reduce using rule 96 (bool_exp)]
+    ')'          [reduce using rule 111 (string_exp)]
+    ';'          reduce using rule 84 (nr_exp)
+    ';'          [reduce using rule 96 (bool_exp)]
+    ';'          [reduce using rule 111 (string_exp)]
+    $default     reduce using rule 84 (nr_exp)
+
+
+State 58
+
+   83 nr_exp: get_container_elem .
+   95 bool_exp: get_container_elem .
+  110 string_exp: get_container_elem .
+
+    CALL         reduce using rule 83 (nr_exp)
+    CALL         [reduce using rule 95 (bool_exp)]
+    CALL         [reduce using rule 110 (string_exp)]
+    IDENTIFIER   reduce using rule 83 (nr_exp)
+    IDENTIFIER   [reduce using rule 95 (bool_exp)]
+    IDENTIFIER   [reduce using rule 110 (string_exp)]
+    INT_CONST    reduce using rule 83 (nr_exp)
+    INT_CONST    [reduce using rule 95 (bool_exp)]
+    INT_CONST    [reduce using rule 110 (string_exp)]
+    FLOAT_CONST  reduce using rule 83 (nr_exp)
+    FLOAT_CONST  [reduce using rule 95 (bool_exp)]
+    FLOAT_CONST  [reduce using rule 110 (string_exp)]
+    CHAR_CONST   reduce using rule 83 (nr_exp)
+    CHAR_CONST   [reduce using rule 95 (bool_exp)]
+    CHAR_CONST   [reduce using rule 110 (string_exp)]
+    STR_CONST    reduce using rule 83 (nr_exp)
+    STR_CONST    [reduce using rule 95 (bool_exp)]
+    STR_CONST    [reduce using rule 110 (string_exp)]
+    TRUE         reduce using rule 83 (nr_exp)
+    TRUE         [reduce using rule 95 (bool_exp)]
+    TRUE         [reduce using rule 110 (string_exp)]
+    FALSE        reduce using rule 83 (nr_exp)
+    FALSE        [reduce using rule 95 (bool_exp)]
+    FALSE        [reduce using rule 110 (string_exp)]
+    AND          reduce using rule 95 (bool_exp)
+    OR           reduce using rule 95 (bool_exp)
+    '+'          reduce using rule 83 (nr_exp)
+    '+'          [reduce using rule 110 (string_exp)]
+    '-'          reduce using rule 83 (nr_exp)
+    '-'          [reduce using rule 95 (bool_exp)]
+    '-'          [reduce using rule 110 (string_exp)]
+    '!'          reduce using rule 83 (nr_exp)
+    '!'          [reduce using rule 95 (bool_exp)]
+    '!'          [reduce using rule 110 (string_exp)]
+    '('          reduce using rule 83 (nr_exp)
+    '('          [reduce using rule 95 (bool_exp)]
+    '('          [reduce using rule 110 (string_exp)]
+    ')'          reduce using rule 83 (nr_exp)
+    ')'          [reduce using rule 95 (bool_exp)]
+    ')'          [reduce using rule 110 (string_exp)]
+    ';'          reduce using rule 83 (nr_exp)
+    ';'          [reduce using rule 95 (bool_exp)]
+    ';'          [reduce using rule 110 (string_exp)]
+    $default     reduce using rule 83 (nr_exp)
+
+
+State 59
+
+   71 const_declaration: CONST types IDENTIFIER '=' expression .
+
+    $default  reduce using rule 71 (const_declaration)
+
+
+State 60
+
+   79 expression: nr_exp .
+   88 nr_exp: nr_exp . '+' nr_exp
+   89       | nr_exp . '-' nr_exp
+   90       | nr_exp . '*' nr_exp
+   91       | nr_exp . '/' nr_exp
+   92       | nr_exp . '%' nr_exp
+  100 bool_exp: nr_exp . LT nr_exp
+  101         | nr_exp . GT nr_exp
+  102         | nr_exp . LTE nr_exp
+  103         | nr_exp . GTE nr_exp
+  104         | nr_exp . EQUALITY nr_exp
+  105         | nr_exp . INEQUALITY
+
+    EQUALITY    shift, and go to state 83
+    INEQUALITY  shift, and go to state 84
+    LT          shift, and go to state 85
+    GT          shift, and go to state 86
+    LTE         shift, and go to state 87
+    GTE         shift, and go to state 88
+    '+'         shift, and go to state 89
+    '-'         shift, and go to state 90
+    '*'         shift, and go to state 91
+    '/'         shift, and go to state 92
+    '%'         shift, and go to state 93
+
+    '-'       [reduce using rule 79 (expression)]
+    $default  reduce using rule 79 (expression)
+
+
+State 61
+
+   80 expression: bool_exp .
+  106 bool_exp: bool_exp . AND bool_exp
+  107         | bool_exp . OR bool_exp
+
+    AND  shift, and go to state 94
+    OR   shift, and go to state 95
+
+    $default  reduce using rule 80 (expression)
+
+
+State 62
+
+   81 expression: string_exp .
+  114 string_exp: string_exp . '+' string_exp
+
+    '+'  shift, and go to state 96
+
+    $default  reduce using rule 81 (expression)
+
+
+State 63
+
+   14 function_declaration: FUN return_type IDENTIFIER '(' fun_params . ')' '{' fun_body '}'
+   18 fun_params: fun_params . ',' parameter
+
+    ')'  shift, and go to state 97
+    ','  shift, and go to state 98
+
+
+State 64
+
+   17 fun_params: parameter .
+
+    $default  reduce using rule 17 (fun_params)
+
+
+State 65
+
+   19 parameter: types . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 99
+
+
+State 66
+
+   70 var_declaration: VAR types IDENTIFIER '=' expression .
+
+    $default  reduce using rule 70 (var_declaration)
+
+
+State 67
+
+   44 array_declaration: ARR types IDENTIFIER '[' INT_CONST . ']' '=' '{' array_list '}'
+   45                  | ARR types IDENTIFIER '[' INT_CONST . ']'
+
+    ']'  shift, and go to state 100
+
+
+State 68
+
+    9 container_declaration: CONTAINER '{' container_body '}' IDENTIFIER ';' .
+
+    $default  reduce using rule 9 (container_declaration)
+
+
+State 69
+
+   66 get_container_elem: IDENTIFIER ACCES . IDENTIFIER
+
+    IDENTIFIER  shift, and go to state 101
+
+
+State 70
+
+   65 array_val: IDENTIFIER '[' . INT_CONST ']'
+
+    INT_CONST  shift, and go to state 102
+
+
+State 71
+
+   65 array_val: IDENTIFIER . '[' INT_CONST ']'
+   66 get_container_elem: IDENTIFIER . ACCES IDENTIFIER
+   82 nr_exp: IDENTIFIER .
+
+    ACCES  shift, and go to state 69
+    '['    shift, and go to state 70
+
+    $default  reduce using rule 82 (nr_exp)
+
+
+State 72
+
+   87 nr_exp: '(' . nr_exp ')'
+
+    IDENTIFIER   shift, and go to state 71
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    '-'          shift, and go to state 54
+    '('          shift, and go to state 72
+
+    array_val           go to state 73
+    get_container_elem  go to state 74
+    nr_exp              go to state 103
+
+
+State 73
+
+   84 nr_exp: array_val .
+
+    $default  reduce using rule 84 (nr_exp)
+
+
+State 74
+
+   83 nr_exp: get_container_elem .
+
+    $default  reduce using rule 83 (nr_exp)
+
+
+State 75
+
+   88 nr_exp: nr_exp . '+' nr_exp
+   89       | nr_exp . '-' nr_exp
+   90       | nr_exp . '*' nr_exp
+   91       | nr_exp . '/' nr_exp
+   92       | nr_exp . '%' nr_exp
+   93       | '-' nr_exp .
+
+    $default  reduce using rule 93 (nr_exp)
+
+
+State 76
+
+   65 array_val: IDENTIFIER . '[' INT_CONST ']'
+   66 get_container_elem: IDENTIFIER . ACCES IDENTIFIER
+   82 nr_exp: IDENTIFIER .
+   94 bool_exp: IDENTIFIER .
+
+    ACCES  shift, and go to state 69
+    '['    shift, and go to state 70
+
+    EQUALITY    reduce using rule 82 (nr_exp)
+    INEQUALITY  reduce using rule 82 (nr_exp)
+    LT          reduce using rule 82 (nr_exp)
+    GT          reduce using rule 82 (nr_exp)
+    LTE         reduce using rule 82 (nr_exp)
+    GTE         reduce using rule 82 (nr_exp)
+    '+'         reduce using rule 82 (nr_exp)
+    '-'         reduce using rule 82 (nr_exp)
+    '-'         [reduce using rule 94 (bool_exp)]
+    '*'         reduce using rule 82 (nr_exp)
+    '/'         reduce using rule 82 (nr_exp)
+    '%'         reduce using rule 82 (nr_exp)
+    ')'         reduce using rule 82 (nr_exp)
+    ')'         [reduce using rule 94 (bool_exp)]
+    $default    reduce using rule 94 (bool_exp)
+
+
+State 77
+
+   84 nr_exp: array_val .
+   96 bool_exp: array_val .
+
+    EQUALITY    reduce using rule 84 (nr_exp)
+    INEQUALITY  reduce using rule 84 (nr_exp)
+    LT          reduce using rule 84 (nr_exp)
+    GT          reduce using rule 84 (nr_exp)
+    LTE         reduce using rule 84 (nr_exp)
+    GTE         reduce using rule 84 (nr_exp)
+    '+'         reduce using rule 84 (nr_exp)
+    '-'         reduce using rule 84 (nr_exp)
+    '-'         [reduce using rule 96 (bool_exp)]
+    '*'         reduce using rule 84 (nr_exp)
+    '/'         reduce using rule 84 (nr_exp)
+    '%'         reduce using rule 84 (nr_exp)
+    ')'         reduce using rule 84 (nr_exp)
+    ')'         [reduce using rule 96 (bool_exp)]
+    $default    reduce using rule 96 (bool_exp)
+
+
+State 78
+
+   83 nr_exp: get_container_elem .
+   95 bool_exp: get_container_elem .
+
+    EQUALITY    reduce using rule 83 (nr_exp)
+    INEQUALITY  reduce using rule 83 (nr_exp)
+    LT          reduce using rule 83 (nr_exp)
+    GT          reduce using rule 83 (nr_exp)
+    LTE         reduce using rule 83 (nr_exp)
+    GTE         reduce using rule 83 (nr_exp)
+    '+'         reduce using rule 83 (nr_exp)
+    '-'         reduce using rule 83 (nr_exp)
+    '-'         [reduce using rule 95 (bool_exp)]
+    '*'         reduce using rule 83 (nr_exp)
+    '/'         reduce using rule 83 (nr_exp)
+    '%'         reduce using rule 83 (nr_exp)
+    ')'         reduce using rule 83 (nr_exp)
+    ')'         [reduce using rule 95 (bool_exp)]
+    $default    reduce using rule 95 (bool_exp)
+
+
+State 79
+
+   88 nr_exp: nr_exp . '+' nr_exp
+   89       | nr_exp . '-' nr_exp
+   90       | nr_exp . '*' nr_exp
+   91       | nr_exp . '/' nr_exp
+   92       | nr_exp . '%' nr_exp
+  100 bool_exp: nr_exp . LT nr_exp
+  101         | nr_exp . GT nr_exp
+  102         | nr_exp . LTE nr_exp
+  103         | nr_exp . GTE nr_exp
+  104         | nr_exp . EQUALITY nr_exp
+  105         | nr_exp . INEQUALITY
+
+    EQUALITY    shift, and go to state 83
+    INEQUALITY  shift, and go to state 84
+    LT          shift, and go to state 85
+    GT          shift, and go to state 86
+    LTE         shift, and go to state 87
+    GTE         shift, and go to state 88
+    '+'         shift, and go to state 89
+    '-'         shift, and go to state 90
+    '*'         shift, and go to state 91
+    '/'         shift, and go to state 92
+    '%'         shift, and go to state 93
+
+
+State 80
+
+  106 bool_exp: bool_exp . AND bool_exp
+  107         | bool_exp . OR bool_exp
+  108         | '!' bool_exp .
+
+    $default  reduce using rule 108 (bool_exp)
+
+
+State 81
+
+   87 nr_exp: '(' nr_exp . ')'
+   88       | nr_exp . '+' nr_exp
+   89       | nr_exp . '-' nr_exp
+   90       | nr_exp . '*' nr_exp
+   91       | nr_exp . '/' nr_exp
+   92       | nr_exp . '%' nr_exp
+  100 bool_exp: nr_exp . LT nr_exp
+  101         | nr_exp . GT nr_exp
+  102         | nr_exp . LTE nr_exp
+  103         | nr_exp . GTE nr_exp
+  104         | nr_exp . EQUALITY nr_exp
+  105         | nr_exp . INEQUALITY
+
+    EQUALITY    shift, and go to state 83
+    INEQUALITY  shift, and go to state 84
+    LT          shift, and go to state 85
+    GT          shift, and go to state 86
+    LTE         shift, and go to state 87
+    GTE         shift, and go to state 88
+    '+'         shift, and go to state 89
+    '-'         shift, and go to state 90
+    '*'         shift, and go to state 91
+    '/'         shift, and go to state 92
+    '%'         shift, and go to state 93
+    ')'         shift, and go to state 104
+
+
+State 82
+
+   99 bool_exp: '(' bool_exp . ')'
+  106         | bool_exp . AND bool_exp
+  107         | bool_exp . OR bool_exp
+
+    AND  shift, and go to state 94
+    OR   shift, and go to state 95
+    ')'  shift, and go to state 105
+
+
+State 83
+
+  104 bool_exp: nr_exp EQUALITY . nr_exp
+
+    IDENTIFIER   shift, and go to state 71
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    '-'          shift, and go to state 54
+    '('          shift, and go to state 72
+
+    array_val           go to state 73
+    get_container_elem  go to state 74
+    nr_exp              go to state 106
+
+
+State 84
+
+  105 bool_exp: nr_exp INEQUALITY .
+
+    $default  reduce using rule 105 (bool_exp)
+
+
+State 85
+
+  100 bool_exp: nr_exp LT . nr_exp
+
+    IDENTIFIER   shift, and go to state 71
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    '-'          shift, and go to state 54
+    '('          shift, and go to state 72
+
+    array_val           go to state 73
+    get_container_elem  go to state 74
+    nr_exp              go to state 107
+
+
+State 86
+
+  101 bool_exp: nr_exp GT . nr_exp
+
+    IDENTIFIER   shift, and go to state 71
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    '-'          shift, and go to state 54
+    '('          shift, and go to state 72
+
+    array_val           go to state 73
+    get_container_elem  go to state 74
+    nr_exp              go to state 108
+
+
+State 87
+
+  102 bool_exp: nr_exp LTE . nr_exp
+
+    IDENTIFIER   shift, and go to state 71
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    '-'          shift, and go to state 54
+    '('          shift, and go to state 72
+
+    array_val           go to state 73
+    get_container_elem  go to state 74
+    nr_exp              go to state 109
+
+
+State 88
+
+  103 bool_exp: nr_exp GTE . nr_exp
+
+    IDENTIFIER   shift, and go to state 71
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    '-'          shift, and go to state 54
+    '('          shift, and go to state 72
+
+    array_val           go to state 73
+    get_container_elem  go to state 74
+    nr_exp              go to state 110
+
+
+State 89
+
+   88 nr_exp: nr_exp '+' . nr_exp
+
+    IDENTIFIER   shift, and go to state 71
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    '-'          shift, and go to state 54
+    '('          shift, and go to state 72
+
+    array_val           go to state 73
+    get_container_elem  go to state 74
+    nr_exp              go to state 111
+
+
+State 90
+
+   89 nr_exp: nr_exp '-' . nr_exp
+
+    IDENTIFIER   shift, and go to state 71
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    '-'          shift, and go to state 54
+    '('          shift, and go to state 72
+
+    array_val           go to state 73
+    get_container_elem  go to state 74
+    nr_exp              go to state 112
+
+
+State 91
+
+   90 nr_exp: nr_exp '*' . nr_exp
+
+    IDENTIFIER   shift, and go to state 71
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    '-'          shift, and go to state 54
+    '('          shift, and go to state 72
+
+    array_val           go to state 73
+    get_container_elem  go to state 74
+    nr_exp              go to state 113
+
+
+State 92
+
+   91 nr_exp: nr_exp '/' . nr_exp
+
+    IDENTIFIER   shift, and go to state 71
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    '-'          shift, and go to state 54
+    '('          shift, and go to state 72
+
+    array_val           go to state 73
+    get_container_elem  go to state 74
+    nr_exp              go to state 114
+
+
+State 93
+
+   92 nr_exp: nr_exp '%' . nr_exp
+
+    IDENTIFIER   shift, and go to state 71
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    '-'          shift, and go to state 54
+    '('          shift, and go to state 72
+
+    array_val           go to state 73
+    get_container_elem  go to state 74
+    nr_exp              go to state 115
+
+
+State 94
+
+  106 bool_exp: bool_exp AND . bool_exp
+
+    IDENTIFIER   shift, and go to state 76
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    TRUE         shift, and go to state 52
+    FALSE        shift, and go to state 53
+    '-'          shift, and go to state 54
+    '!'          shift, and go to state 55
+    '('          shift, and go to state 56
+
+    array_val           go to state 77
+    get_container_elem  go to state 78
+    nr_exp              go to state 79
+    bool_exp            go to state 116
+
+
+State 95
+
+  107 bool_exp: bool_exp OR . bool_exp
+
+    IDENTIFIER   shift, and go to state 76
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    TRUE         shift, and go to state 52
+    FALSE        shift, and go to state 53
+    '-'          shift, and go to state 54
+    '!'          shift, and go to state 55
+    '('          shift, and go to state 56
+
+    array_val           go to state 77
+    get_container_elem  go to state 78
+    nr_exp              go to state 79
+    bool_exp            go to state 117
+
+
+State 96
+
+  114 string_exp: string_exp '+' . string_exp
+
+    IDENTIFIER  shift, and go to state 118
+    CHAR_CONST  shift, and go to state 50
+    STR_CONST   shift, and go to state 51
+
+    array_val           go to state 119
+    get_container_elem  go to state 120
+    string_exp          go to state 121
+
+
+State 97
+
+   14 function_declaration: FUN return_type IDENTIFIER '(' fun_params ')' . '{' fun_body '}'
+
+    '{'  shift, and go to state 122
+
+
+State 98
+
+   18 fun_params: fun_params ',' . parameter
+
+    INT     shift, and go to state 15
+    FLOAT   shift, and go to state 16
+    CHAR    shift, and go to state 17
+    STRING  shift, and go to state 18
+    BOOL    shift, and go to state 19
+
+    $default  reduce using rule 20 (parameter)
+
+    parameter  go to state 123
+    types      go to state 65
+
+
+State 99
+
+   19 parameter: types IDENTIFIER .
+
+    $default  reduce using rule 19 (parameter)
+
+
+State 100
+
+   44 array_declaration: ARR types IDENTIFIER '[' INT_CONST ']' . '=' '{' array_list '}'
+   45                  | ARR types IDENTIFIER '[' INT_CONST ']' .
+
+    '='  shift, and go to state 124
+
+    $default  reduce using rule 45 (array_declaration)
+
+
+State 101
+
+   66 get_container_elem: IDENTIFIER ACCES IDENTIFIER .
+
+    $default  reduce using rule 66 (get_container_elem)
+
+
+State 102
+
+   65 array_val: IDENTIFIER '[' INT_CONST . ']'
+
+    ']'  shift, and go to state 125
+
+
+State 103
+
+   87 nr_exp: '(' nr_exp . ')'
+   88       | nr_exp . '+' nr_exp
+   89       | nr_exp . '-' nr_exp
+   90       | nr_exp . '*' nr_exp
+   91       | nr_exp . '/' nr_exp
+   92       | nr_exp . '%' nr_exp
+
+    '+'  shift, and go to state 89
+    '-'  shift, and go to state 90
+    '*'  shift, and go to state 91
+    '/'  shift, and go to state 92
+    '%'  shift, and go to state 93
+    ')'  shift, and go to state 104
+
+
+State 104
+
+   87 nr_exp: '(' nr_exp ')' .
+
+    $default  reduce using rule 87 (nr_exp)
+
+
+State 105
+
+   99 bool_exp: '(' bool_exp ')' .
+
+    $default  reduce using rule 99 (bool_exp)
+
+
+State 106
+
+   88 nr_exp: nr_exp . '+' nr_exp
+   89       | nr_exp . '-' nr_exp
+   90       | nr_exp . '*' nr_exp
+   91       | nr_exp . '/' nr_exp
+   92       | nr_exp . '%' nr_exp
+  104 bool_exp: nr_exp EQUALITY nr_exp .
+
+    '+'  shift, and go to state 89
+    '-'  shift, and go to state 90
+    '*'  shift, and go to state 91
+    '/'  shift, and go to state 92
+    '%'  shift, and go to state 93
+
+    $default  reduce using rule 104 (bool_exp)
+
+
+State 107
+
+   88 nr_exp: nr_exp . '+' nr_exp
+   89       | nr_exp . '-' nr_exp
+   90       | nr_exp . '*' nr_exp
+   91       | nr_exp . '/' nr_exp
+   92       | nr_exp . '%' nr_exp
+  100 bool_exp: nr_exp LT nr_exp .
+
+    '+'  shift, and go to state 89
+    '-'  shift, and go to state 90
+    '*'  shift, and go to state 91
+    '/'  shift, and go to state 92
+    '%'  shift, and go to state 93
+
+    $default  reduce using rule 100 (bool_exp)
+
+
+State 108
+
+   88 nr_exp: nr_exp . '+' nr_exp
+   89       | nr_exp . '-' nr_exp
+   90       | nr_exp . '*' nr_exp
+   91       | nr_exp . '/' nr_exp
+   92       | nr_exp . '%' nr_exp
+  101 bool_exp: nr_exp GT nr_exp .
+
+    '+'  shift, and go to state 89
+    '-'  shift, and go to state 90
+    '*'  shift, and go to state 91
+    '/'  shift, and go to state 92
+    '%'  shift, and go to state 93
+
+    $default  reduce using rule 101 (bool_exp)
+
+
+State 109
+
+   88 nr_exp: nr_exp . '+' nr_exp
+   89       | nr_exp . '-' nr_exp
+   90       | nr_exp . '*' nr_exp
+   91       | nr_exp . '/' nr_exp
+   92       | nr_exp . '%' nr_exp
+  102 bool_exp: nr_exp LTE nr_exp .
+
+    '+'  shift, and go to state 89
+    '-'  shift, and go to state 90
+    '*'  shift, and go to state 91
+    '/'  shift, and go to state 92
+    '%'  shift, and go to state 93
+
+    $default  reduce using rule 102 (bool_exp)
+
+
+State 110
+
+   88 nr_exp: nr_exp . '+' nr_exp
+   89       | nr_exp . '-' nr_exp
+   90       | nr_exp . '*' nr_exp
+   91       | nr_exp . '/' nr_exp
+   92       | nr_exp . '%' nr_exp
+  103 bool_exp: nr_exp GTE nr_exp .
+
+    '+'  shift, and go to state 89
+    '-'  shift, and go to state 90
+    '*'  shift, and go to state 91
+    '/'  shift, and go to state 92
+    '%'  shift, and go to state 93
+
+    $default  reduce using rule 103 (bool_exp)
+
+
+State 111
+
+   88 nr_exp: nr_exp . '+' nr_exp
+   88       | nr_exp '+' nr_exp .
+   89       | nr_exp . '-' nr_exp
+   90       | nr_exp . '*' nr_exp
+   91       | nr_exp . '/' nr_exp
+   92       | nr_exp . '%' nr_exp
+
+    '*'  shift, and go to state 91
+    '/'  shift, and go to state 92
+    '%'  shift, and go to state 93
+
+    $default  reduce using rule 88 (nr_exp)
+
+
+State 112
+
+   88 nr_exp: nr_exp . '+' nr_exp
+   89       | nr_exp . '-' nr_exp
+   89       | nr_exp '-' nr_exp .
+   90       | nr_exp . '*' nr_exp
+   91       | nr_exp . '/' nr_exp
+   92       | nr_exp . '%' nr_exp
+
+    '*'  shift, and go to state 91
+    '/'  shift, and go to state 92
+    '%'  shift, and go to state 93
+
+    $default  reduce using rule 89 (nr_exp)
+
+
+State 113
+
+   88 nr_exp: nr_exp . '+' nr_exp
+   89       | nr_exp . '-' nr_exp
+   90       | nr_exp . '*' nr_exp
+   90       | nr_exp '*' nr_exp .
+   91       | nr_exp . '/' nr_exp
+   92       | nr_exp . '%' nr_exp
+
+    $default  reduce using rule 90 (nr_exp)
+
+
+State 114
+
+   88 nr_exp: nr_exp . '+' nr_exp
+   89       | nr_exp . '-' nr_exp
+   90       | nr_exp . '*' nr_exp
+   91       | nr_exp . '/' nr_exp
+   91       | nr_exp '/' nr_exp .
+   92       | nr_exp . '%' nr_exp
+
+    $default  reduce using rule 91 (nr_exp)
+
+
+State 115
+
+   88 nr_exp: nr_exp . '+' nr_exp
+   89       | nr_exp . '-' nr_exp
+   90       | nr_exp . '*' nr_exp
+   91       | nr_exp . '/' nr_exp
+   92       | nr_exp . '%' nr_exp
+   92       | nr_exp '%' nr_exp .
+
+    $default  reduce using rule 92 (nr_exp)
+
+
+State 116
+
+  106 bool_exp: bool_exp . AND bool_exp
+  106         | bool_exp AND bool_exp .
+  107         | bool_exp . OR bool_exp
+
+    OR  shift, and go to state 95
+
+    $default  reduce using rule 106 (bool_exp)
+
+
+State 117
+
+  106 bool_exp: bool_exp . AND bool_exp
+  107         | bool_exp . OR bool_exp
+  107         | bool_exp OR bool_exp .
+
+    $default  reduce using rule 107 (bool_exp)
+
+
+State 118
+
+   65 array_val: IDENTIFIER . '[' INT_CONST ']'
+   66 get_container_elem: IDENTIFIER . ACCES IDENTIFIER
+  109 string_exp: IDENTIFIER .
+
+    ACCES  shift, and go to state 69
+    '['    shift, and go to state 70
+
+    $default  reduce using rule 109 (string_exp)
+
+
+State 119
+
+  111 string_exp: array_val .
+
+    $default  reduce using rule 111 (string_exp)
+
+
+State 120
+
+  110 string_exp: get_container_elem .
+
+    $default  reduce using rule 110 (string_exp)
+
+
+State 121
+
+  114 string_exp: string_exp . '+' string_exp
+  114           | string_exp '+' string_exp .
+
+    $default  reduce using rule 114 (string_exp)
+
+
+State 122
+
+   14 function_declaration: FUN return_type IDENTIFIER '(' fun_params ')' '{' . fun_body '}'
+
+    CONST       shift, and go to state 2
+    VAR         shift, and go to state 4
+    CALL        shift, and go to state 126
+    IF          shift, and go to state 127
+    WHILE       shift, and go to state 128
+    FOR         shift, and go to state 129
+    ARR         shift, and go to state 5
+    IDENTIFIER  shift, and go to state 130
+
+    fun_body              go to state 131
+    code_block            go to state 132
+    if_statement          go to state 133
+    while_statement       go to state 134
+    for_statement         go to state 135
+    var_assignment        go to state 136
+    array_declaration     go to state 137
+    array_assignment      go to state 138
+    array_val             go to state 139
+    get_container_elem    go to state 140
+    container_assignment  go to state 141
+    container_function    go to state 142
+    var_declaration       go to state 143
+    const_declaration     go to state 144
+    call_function         go to state 145
+
+
+State 123
+
+   18 fun_params: fun_params ',' parameter .
+
+    $default  reduce using rule 18 (fun_params)
+
+
+State 124
+
+   44 array_declaration: ARR types IDENTIFIER '[' INT_CONST ']' '=' . '{' array_list '}'
+
+    '{'  shift, and go to state 146
+
+
+State 125
+
+   65 array_val: IDENTIFIER '[' INT_CONST ']' .
+
+    $default  reduce using rule 65 (array_val)
+
+
+State 126
+
+   72 call_function: CALL . IDENTIFIER '(' call_params ')'
+   73              | CALL . eval_function
+
+    EVAL        shift, and go to state 147
+    IDENTIFIER  shift, and go to state 148
+
+    eval_function  go to state 149
+
+
+State 127
+
+   39 if_statement: IF . '(' expression ')' '{' code_block '}'
+   40             | IF . '(' expression ')' '{' code_block '}' ELSE '{' code_block '}'
+
+    '('  shift, and go to state 150
+
+
+State 128
+
+   41 while_statement: WHILE . '(' bool_exp ')' '{' code_block '}'
+
+    '('  shift, and go to state 151
+
+
+State 129
+
+   42 for_statement: FOR . '(' var_assignment ';' bool_exp ';' var_assignment ')' '{' code_block '}'
+
+    '('  shift, and go to state 152
+
+
+State 130
+
+   43 var_assignment: IDENTIFIER . '=' expression
+   65 array_val: IDENTIFIER . '[' INT_CONST ']'
+   66 get_container_elem: IDENTIFIER . ACCES IDENTIFIER
+
+    '='    shift, and go to state 153
+    ACCES  shift, and go to state 69
+    '['    shift, and go to state 70
+
+
+State 131
+
+   14 function_declaration: FUN return_type IDENTIFIER '(' fun_params ')' '{' fun_body . '}'
+   27 fun_body: fun_body . code_block
+
+    CONST       shift, and go to state 2
+    VAR         shift, and go to state 4
+    CALL        shift, and go to state 126
+    IF          shift, and go to state 127
+    WHILE       shift, and go to state 128
+    FOR         shift, and go to state 129
+    ARR         shift, and go to state 5
+    IDENTIFIER  shift, and go to state 130
+    '}'         shift, and go to state 154
+
+    code_block            go to state 155
+    if_statement          go to state 133
+    while_statement       go to state 134
+    for_statement         go to state 135
+    var_assignment        go to state 136
+    array_declaration     go to state 137
+    array_assignment      go to state 138
+    array_val             go to state 139
+    get_container_elem    go to state 140
+    container_assignment  go to state 141
+    container_function    go to state 142
+    var_declaration       go to state 143
+    const_declaration     go to state 144
+    call_function         go to state 145
+
+
+State 132
+
+   26 fun_body: code_block .
+
+    $default  reduce using rule 26 (fun_body)
+
+
+State 133
+
+   36 code_block: if_statement .
+
+    $default  reduce using rule 36 (code_block)
+
+
+State 134
+
+   37 code_block: while_statement .
+
+    $default  reduce using rule 37 (code_block)
+
+
+State 135
+
+   38 code_block: for_statement .
+
+    $default  reduce using rule 38 (code_block)
+
+
+State 136
+
+   33 code_block: var_assignment . ';'
+
+    ';'  shift, and go to state 156
+
+
+State 137
+
+   29 code_block: array_declaration . ';'
+
+    ';'  shift, and go to state 157
+
+
+State 138
+
+   30 code_block: array_assignment . ';'
+
+    ';'  shift, and go to state 158
+
+
+State 139
+
+   52 array_assignment: array_val . '=' expression
+
+    '='  shift, and go to state 159
+
+
+State 140
+
+   67 container_assignment: get_container_elem . '=' expression
+   68 container_function: get_container_elem . '(' call_params ')'
+
+    '='  shift, and go to state 160
+    '('  shift, and go to state 161
+
+
+State 141
+
+   34 code_block: container_assignment . ';'
+
+    ';'  shift, and go to state 162
+
+
+State 142
+
+   35 code_block: container_function . ';'
+
+    ';'  shift, and go to state 163
+
+
+State 143
+
+   28 code_block: var_declaration . ';'
+
+    ';'  shift, and go to state 164
+
+
+State 144
+
+   31 code_block: const_declaration . ';'
+
+    ';'  shift, and go to state 165
+
+
+State 145
+
+   32 code_block: call_function . ';'
+
+    ';'  shift, and go to state 166
+
+
+State 146
+
+   44 array_declaration: ARR types IDENTIFIER '[' INT_CONST ']' '=' '{' . array_list '}'
+
+    INT_CONST    shift, and go to state 167
+    FLOAT_CONST  shift, and go to state 168
+    CHAR_CONST   shift, and go to state 169
+    STR_CONST    shift, and go to state 170
+    TRUE         shift, and go to state 171
+    FALSE        shift, and go to state 172
+
+    $default  reduce using rule 51 (array_list)
+
+    array_list         go to state 173
+    array_list_int     go to state 174
+    array_list_float   go to state 175
+    array_list_char    go to state 176
+    array_list_string  go to state 177
+    array_list_bool    go to state 178
+
+
+State 147
+
+   74 eval_function: EVAL . '(' nr_exp ')'
+
+    '('  shift, and go to state 179
+
+
+State 148
+
+   72 call_function: CALL IDENTIFIER . '(' call_params ')'
+
+    '('  shift, and go to state 180
+
+
+State 149
+
+   73 call_function: CALL eval_function .
+
+    $default  reduce using rule 73 (call_function)
+
+
+State 150
+
+   39 if_statement: IF '(' . expression ')' '{' code_block '}'
+   40             | IF '(' . expression ')' '{' code_block '}' ELSE '{' code_block '}'
+
+    IDENTIFIER   shift, and go to state 47
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    CHAR_CONST   shift, and go to state 50
+    STR_CONST    shift, and go to state 51
+    TRUE         shift, and go to state 52
+    FALSE        shift, and go to state 53
+    '-'          shift, and go to state 54
+    '!'          shift, and go to state 55
+    '('          shift, and go to state 56
+
+    array_val           go to state 57
+    get_container_elem  go to state 58
+    expression          go to state 181
+    nr_exp              go to state 60
+    bool_exp            go to state 61
+    string_exp          go to state 62
+
+
+State 151
+
+   41 while_statement: WHILE '(' . bool_exp ')' '{' code_block '}'
+
+    IDENTIFIER   shift, and go to state 76
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    TRUE         shift, and go to state 52
+    FALSE        shift, and go to state 53
+    '-'          shift, and go to state 54
+    '!'          shift, and go to state 55
+    '('          shift, and go to state 56
+
+    array_val           go to state 77
+    get_container_elem  go to state 78
+    nr_exp              go to state 79
+    bool_exp            go to state 182
+
+
+State 152
+
+   42 for_statement: FOR '(' . var_assignment ';' bool_exp ';' var_assignment ')' '{' code_block '}'
+
+    IDENTIFIER  shift, and go to state 183
+
+    var_assignment  go to state 184
+
+
+State 153
+
+   43 var_assignment: IDENTIFIER '=' . expression
+
+    IDENTIFIER   shift, and go to state 47
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    CHAR_CONST   shift, and go to state 50
+    STR_CONST    shift, and go to state 51
+    TRUE         shift, and go to state 52
+    FALSE        shift, and go to state 53
+    '-'          shift, and go to state 54
+    '!'          shift, and go to state 55
+    '('          shift, and go to state 56
+
+    array_val           go to state 57
+    get_container_elem  go to state 58
+    expression          go to state 185
+    nr_exp              go to state 60
+    bool_exp            go to state 61
+    string_exp          go to state 62
+
+
+State 154
+
+   14 function_declaration: FUN return_type IDENTIFIER '(' fun_params ')' '{' fun_body '}' .
+
+    $default  reduce using rule 14 (function_declaration)
+
+
+State 155
+
+   27 fun_body: fun_body code_block .
+
+    $default  reduce using rule 27 (fun_body)
+
+
+State 156
+
+   33 code_block: var_assignment ';' .
+
+    $default  reduce using rule 33 (code_block)
+
+
+State 157
+
+   29 code_block: array_declaration ';' .
+
+    $default  reduce using rule 29 (code_block)
+
+
+State 158
+
+   30 code_block: array_assignment ';' .
+
+    $default  reduce using rule 30 (code_block)
+
+
+State 159
+
+   52 array_assignment: array_val '=' . expression
+
+    IDENTIFIER   shift, and go to state 47
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    CHAR_CONST   shift, and go to state 50
+    STR_CONST    shift, and go to state 51
+    TRUE         shift, and go to state 52
+    FALSE        shift, and go to state 53
+    '-'          shift, and go to state 54
+    '!'          shift, and go to state 55
+    '('          shift, and go to state 56
+
+    array_val           go to state 57
+    get_container_elem  go to state 58
+    expression          go to state 186
+    nr_exp              go to state 60
+    bool_exp            go to state 61
+    string_exp          go to state 62
+
+
+State 160
+
+   67 container_assignment: get_container_elem '=' . expression
+
+    IDENTIFIER   shift, and go to state 47
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    CHAR_CONST   shift, and go to state 50
+    STR_CONST    shift, and go to state 51
+    TRUE         shift, and go to state 52
+    FALSE        shift, and go to state 53
+    '-'          shift, and go to state 54
+    '!'          shift, and go to state 55
+    '('          shift, and go to state 56
+
+    array_val           go to state 57
+    get_container_elem  go to state 58
+    expression          go to state 187
+    nr_exp              go to state 60
+    bool_exp            go to state 61
+    string_exp          go to state 62
+
+
+State 161
+
+   68 container_function: get_container_elem '(' . call_params ')'
+
+    CALL         shift, and go to state 126
+    IDENTIFIER   shift, and go to state 47
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    CHAR_CONST   shift, and go to state 50
+    STR_CONST    shift, and go to state 51
+    TRUE         shift, and go to state 52
+    FALSE        shift, and go to state 53
+    '-'          shift, and go to state 54
+    '!'          shift, and go to state 55
+    '('          shift, and go to state 56
+
+    array_val           go to state 57
+    get_container_elem  go to state 58
+    call_function       go to state 188
+    call_params         go to state 189
+    call_param          go to state 190
+    expression          go to state 191
+    nr_exp              go to state 60
+    bool_exp            go to state 61
+    string_exp          go to state 62
+
+
+State 162
+
+   34 code_block: container_assignment ';' .
+
+    $default  reduce using rule 34 (code_block)
+
+
+State 163
+
+   35 code_block: container_function ';' .
+
+    $default  reduce using rule 35 (code_block)
+
+
+State 164
+
+   28 code_block: var_declaration ';' .
+
+    $default  reduce using rule 28 (code_block)
+
+
+State 165
+
+   31 code_block: const_declaration ';' .
+
+    $default  reduce using rule 31 (code_block)
+
+
+State 166
+
+   32 code_block: call_function ';' .
+
+    $default  reduce using rule 32 (code_block)
+
+
+State 167
+
+   54 array_list_int: INT_CONST .
+
+    $default  reduce using rule 54 (array_list_int)
+
+
+State 168
+
+   56 array_list_float: FLOAT_CONST .
+
+    $default  reduce using rule 56 (array_list_float)
+
+
+State 169
+
+   58 array_list_char: CHAR_CONST .
+
+    $default  reduce using rule 58 (array_list_char)
+
+
+State 170
+
+   60 array_list_string: STR_CONST .
+
+    $default  reduce using rule 60 (array_list_string)
+
+
+State 171
+
+   63 array_list_bool: TRUE .
+
+    $default  reduce using rule 63 (array_list_bool)
+
+
+State 172
+
+   64 array_list_bool: FALSE .
+
+    $default  reduce using rule 64 (array_list_bool)
+
+
+State 173
+
+   44 array_declaration: ARR types IDENTIFIER '[' INT_CONST ']' '=' '{' array_list . '}'
+
+    '}'  shift, and go to state 192
+
+
+State 174
+
+   46 array_list: array_list_int .
+   53 array_list_int: array_list_int . ',' INT_CONST
+
+    ','  shift, and go to state 193
+
+    $default  reduce using rule 46 (array_list)
+
+
+State 175
+
+   47 array_list: array_list_float .
+   55 array_list_float: array_list_float . ',' FLOAT_CONST
+
+    ','  shift, and go to state 194
+
+    $default  reduce using rule 47 (array_list)
+
+
+State 176
+
+   48 array_list: array_list_char .
+   57 array_list_char: array_list_char . ',' CHAR_CONST
+
+    ','  shift, and go to state 195
+
+    $default  reduce using rule 48 (array_list)
+
+
+State 177
+
+   49 array_list: array_list_string .
+   59 array_list_string: array_list_string . ',' STR_CONST
+
+    ','  shift, and go to state 196
+
+    $default  reduce using rule 49 (array_list)
+
+
+State 178
+
+   50 array_list: array_list_bool .
+   61 array_list_bool: array_list_bool . ',' TRUE
+   62                | array_list_bool . ',' FALSE
+
+    ','  shift, and go to state 197
+
+    $default  reduce using rule 50 (array_list)
+
+
+State 179
+
+   74 eval_function: EVAL '(' . nr_exp ')'
+
+    IDENTIFIER   shift, and go to state 71
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    '-'          shift, and go to state 54
+    '('          shift, and go to state 72
+
+    array_val           go to state 73
+    get_container_elem  go to state 74
+    nr_exp              go to state 198
+
+
+State 180
+
+   72 call_function: CALL IDENTIFIER '(' . call_params ')'
+
+    CALL         shift, and go to state 126
+    IDENTIFIER   shift, and go to state 47
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    CHAR_CONST   shift, and go to state 50
+    STR_CONST    shift, and go to state 51
+    TRUE         shift, and go to state 52
+    FALSE        shift, and go to state 53
+    '-'          shift, and go to state 54
+    '!'          shift, and go to state 55
+    '('          shift, and go to state 56
+
+    array_val           go to state 57
+    get_container_elem  go to state 58
+    call_function       go to state 188
+    call_params         go to state 199
+    call_param          go to state 190
+    expression          go to state 191
+    nr_exp              go to state 60
+    bool_exp            go to state 61
+    string_exp          go to state 62
+
+
+State 181
+
+   39 if_statement: IF '(' expression . ')' '{' code_block '}'
+   40             | IF '(' expression . ')' '{' code_block '}' ELSE '{' code_block '}'
+
+    ')'  shift, and go to state 200
+
+
+State 182
+
+   41 while_statement: WHILE '(' bool_exp . ')' '{' code_block '}'
+  106 bool_exp: bool_exp . AND bool_exp
+  107         | bool_exp . OR bool_exp
+
+    AND  shift, and go to state 94
+    OR   shift, and go to state 95
+    ')'  shift, and go to state 201
+
+
+State 183
+
+   43 var_assignment: IDENTIFIER . '=' expression
+
+    '='  shift, and go to state 153
+
+
+State 184
+
+   42 for_statement: FOR '(' var_assignment . ';' bool_exp ';' var_assignment ')' '{' code_block '}'
+
+    ';'  shift, and go to state 202
+
+
+State 185
+
+   43 var_assignment: IDENTIFIER '=' expression .
+
+    $default  reduce using rule 43 (var_assignment)
+
+
+State 186
+
+   52 array_assignment: array_val '=' expression .
+
+    $default  reduce using rule 52 (array_assignment)
+
+
+State 187
+
+   67 container_assignment: get_container_elem '=' expression .
+
+    $default  reduce using rule 67 (container_assignment)
+
+
+State 188
+
+   77 call_param: call_function .
+
+    $default  reduce using rule 77 (call_param)
+
+
+State 189
+
+   68 container_function: get_container_elem '(' call_params . ')'
+   76 call_params: call_params . call_param
+
+    CALL         shift, and go to state 126
+    IDENTIFIER   shift, and go to state 47
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    CHAR_CONST   shift, and go to state 50
+    STR_CONST    shift, and go to state 51
+    TRUE         shift, and go to state 52
+    FALSE        shift, and go to state 53
+    '-'          shift, and go to state 54
+    '!'          shift, and go to state 55
+    '('          shift, and go to state 56
+    ')'          shift, and go to state 203
+
+    array_val           go to state 57
+    get_container_elem  go to state 58
+    call_function       go to state 188
+    call_param          go to state 204
+    expression          go to state 191
+    nr_exp              go to state 60
+    bool_exp            go to state 61
+    string_exp          go to state 62
+
+
+State 190
+
+   75 call_params: call_param .
+
+    $default  reduce using rule 75 (call_params)
+
+
+State 191
+
+   78 call_param: expression .
+
+    $default  reduce using rule 78 (call_param)
+
+
+State 192
+
+   44 array_declaration: ARR types IDENTIFIER '[' INT_CONST ']' '=' '{' array_list '}' .
+
+    $default  reduce using rule 44 (array_declaration)
+
+
+State 193
+
+   53 array_list_int: array_list_int ',' . INT_CONST
+
+    INT_CONST  shift, and go to state 205
+
+
+State 194
+
+   55 array_list_float: array_list_float ',' . FLOAT_CONST
+
+    FLOAT_CONST  shift, and go to state 206
+
+
+State 195
+
+   57 array_list_char: array_list_char ',' . CHAR_CONST
+
+    CHAR_CONST  shift, and go to state 207
+
+
+State 196
+
+   59 array_list_string: array_list_string ',' . STR_CONST
+
+    STR_CONST  shift, and go to state 208
+
+
+State 197
+
+   61 array_list_bool: array_list_bool ',' . TRUE
+   62                | array_list_bool ',' . FALSE
+
+    TRUE   shift, and go to state 209
+    FALSE  shift, and go to state 210
+
+
+State 198
+
+   74 eval_function: EVAL '(' nr_exp . ')'
+   88 nr_exp: nr_exp . '+' nr_exp
+   89       | nr_exp . '-' nr_exp
+   90       | nr_exp . '*' nr_exp
+   91       | nr_exp . '/' nr_exp
+   92       | nr_exp . '%' nr_exp
+
+    '+'  shift, and go to state 89
+    '-'  shift, and go to state 90
+    '*'  shift, and go to state 91
+    '/'  shift, and go to state 92
+    '%'  shift, and go to state 93
+    ')'  shift, and go to state 211
+
+
+State 199
+
+   72 call_function: CALL IDENTIFIER '(' call_params . ')'
+   76 call_params: call_params . call_param
+
+    CALL         shift, and go to state 126
+    IDENTIFIER   shift, and go to state 47
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    CHAR_CONST   shift, and go to state 50
+    STR_CONST    shift, and go to state 51
+    TRUE         shift, and go to state 52
+    FALSE        shift, and go to state 53
+    '-'          shift, and go to state 54
+    '!'          shift, and go to state 55
+    '('          shift, and go to state 56
+    ')'          shift, and go to state 212
+
+    array_val           go to state 57
+    get_container_elem  go to state 58
+    call_function       go to state 188
+    call_param          go to state 204
+    expression          go to state 191
+    nr_exp              go to state 60
+    bool_exp            go to state 61
+    string_exp          go to state 62
+
+
+State 200
+
+   39 if_statement: IF '(' expression ')' . '{' code_block '}'
+   40             | IF '(' expression ')' . '{' code_block '}' ELSE '{' code_block '}'
+
+    '{'  shift, and go to state 213
+
+
+State 201
+
+   41 while_statement: WHILE '(' bool_exp ')' . '{' code_block '}'
+
+    '{'  shift, and go to state 214
+
+
+State 202
+
+   42 for_statement: FOR '(' var_assignment ';' . bool_exp ';' var_assignment ')' '{' code_block '}'
+
+    IDENTIFIER   shift, and go to state 76
+    INT_CONST    shift, and go to state 48
+    FLOAT_CONST  shift, and go to state 49
+    TRUE         shift, and go to state 52
+    FALSE        shift, and go to state 53
+    '-'          shift, and go to state 54
+    '!'          shift, and go to state 55
+    '('          shift, and go to state 56
+
+    array_val           go to state 77
+    get_container_elem  go to state 78
+    nr_exp              go to state 79
+    bool_exp            go to state 215
+
+
+State 203
+
+   68 container_function: get_container_elem '(' call_params ')' .
+
+    $default  reduce using rule 68 (container_function)
+
+
+State 204
+
+   76 call_params: call_params call_param .
+
+    $default  reduce using rule 76 (call_params)
+
+
+State 205
+
+   53 array_list_int: array_list_int ',' INT_CONST .
+
+    $default  reduce using rule 53 (array_list_int)
+
+
+State 206
+
+   55 array_list_float: array_list_float ',' FLOAT_CONST .
+
+    $default  reduce using rule 55 (array_list_float)
+
+
+State 207
+
+   57 array_list_char: array_list_char ',' CHAR_CONST .
+
+    $default  reduce using rule 57 (array_list_char)
+
+
+State 208
+
+   59 array_list_string: array_list_string ',' STR_CONST .
+
+    $default  reduce using rule 59 (array_list_string)
+
+
+State 209
+
+   61 array_list_bool: array_list_bool ',' TRUE .
+
+    $default  reduce using rule 61 (array_list_bool)
+
+
+State 210
+
+   62 array_list_bool: array_list_bool ',' FALSE .
+
+    $default  reduce using rule 62 (array_list_bool)
+
+
+State 211
+
+   74 eval_function: EVAL '(' nr_exp ')' .
+
+    $default  reduce using rule 74 (eval_function)
+
+
+State 212
+
+   72 call_function: CALL IDENTIFIER '(' call_params ')' .
+
+    $default  reduce using rule 72 (call_function)
+
+
+State 213
+
+   39 if_statement: IF '(' expression ')' '{' . code_block '}'
+   40             | IF '(' expression ')' '{' . code_block '}' ELSE '{' code_block '}'
+
+    CONST       shift, and go to state 2
+    VAR         shift, and go to state 4
+    CALL        shift, and go to state 126
+    IF          shift, and go to state 127
+    WHILE       shift, and go to state 128
+    FOR         shift, and go to state 129
+    ARR         shift, and go to state 5
+    IDENTIFIER  shift, and go to state 130
+
+    code_block            go to state 216
+    if_statement          go to state 133
+    while_statement       go to state 134
+    for_statement         go to state 135
+    var_assignment        go to state 136
+    array_declaration     go to state 137
+    array_assignment      go to state 138
+    array_val             go to state 139
+    get_container_elem    go to state 140
+    container_assignment  go to state 141
+    container_function    go to state 142
+    var_declaration       go to state 143
+    const_declaration     go to state 144
+    call_function         go to state 145
+
+
+State 214
+
+   41 while_statement: WHILE '(' bool_exp ')' '{' . code_block '}'
+
+    CONST       shift, and go to state 2
+    VAR         shift, and go to state 4
+    CALL        shift, and go to state 126
+    IF          shift, and go to state 127
+    WHILE       shift, and go to state 128
+    FOR         shift, and go to state 129
+    ARR         shift, and go to state 5
+    IDENTIFIER  shift, and go to state 130
+
+    code_block            go to state 217
+    if_statement          go to state 133
+    while_statement       go to state 134
+    for_statement         go to state 135
+    var_assignment        go to state 136
+    array_declaration     go to state 137
+    array_assignment      go to state 138
+    array_val             go to state 139
+    get_container_elem    go to state 140
+    container_assignment  go to state 141
+    container_function    go to state 142
+    var_declaration       go to state 143
+    const_declaration     go to state 144
+    call_function         go to state 145
+
+
+State 215
+
+   42 for_statement: FOR '(' var_assignment ';' bool_exp . ';' var_assignment ')' '{' code_block '}'
+  106 bool_exp: bool_exp . AND bool_exp
+  107         | bool_exp . OR bool_exp
+
+    AND  shift, and go to state 94
+    OR   shift, and go to state 95
+    ';'  shift, and go to state 218
+
+
+State 216
+
+   39 if_statement: IF '(' expression ')' '{' code_block . '}'
+   40             | IF '(' expression ')' '{' code_block . '}' ELSE '{' code_block '}'
+
+    '}'  shift, and go to state 219
+
+
+State 217
+
+   41 while_statement: WHILE '(' bool_exp ')' '{' code_block . '}'
+
+    '}'  shift, and go to state 220
+
+
+State 218
+
+   42 for_statement: FOR '(' var_assignment ';' bool_exp ';' . var_assignment ')' '{' code_block '}'
+
+    IDENTIFIER  shift, and go to state 183
+
+    var_assignment  go to state 221
+
+
+State 219
+
+   39 if_statement: IF '(' expression ')' '{' code_block '}' .
+   40             | IF '(' expression ')' '{' code_block '}' . ELSE '{' code_block '}'
+
+    ELSE  shift, and go to state 222
+
+    $default  reduce using rule 39 (if_statement)
+
+
+State 220
+
+   41 while_statement: WHILE '(' bool_exp ')' '{' code_block '}' .
+
+    $default  reduce using rule 41 (while_statement)
+
+
+State 221
+
+   42 for_statement: FOR '(' var_assignment ';' bool_exp ';' var_assignment . ')' '{' code_block '}'
+
+    ')'  shift, and go to state 223
+
+
+State 222
+
+   40 if_statement: IF '(' expression ')' '{' code_block '}' ELSE . '{' code_block '}'
+
+    '{'  shift, and go to state 224
+
+
+State 223
+
+   42 for_statement: FOR '(' var_assignment ';' bool_exp ';' var_assignment ')' . '{' code_block '}'
+
+    '{'  shift, and go to state 225
+
+
+State 224
+
+   40 if_statement: IF '(' expression ')' '{' code_block '}' ELSE '{' . code_block '}'
+
+    CONST       shift, and go to state 2
+    VAR         shift, and go to state 4
+    CALL        shift, and go to state 126
+    IF          shift, and go to state 127
+    WHILE       shift, and go to state 128
+    FOR         shift, and go to state 129
+    ARR         shift, and go to state 5
+    IDENTIFIER  shift, and go to state 130
+
+    code_block            go to state 226
+    if_statement          go to state 133
+    while_statement       go to state 134
+    for_statement         go to state 135
+    var_assignment        go to state 136
+    array_declaration     go to state 137
+    array_assignment      go to state 138
+    array_val             go to state 139
+    get_container_elem    go to state 140
+    container_assignment  go to state 141
+    container_function    go to state 142
+    var_declaration       go to state 143
+    const_declaration     go to state 144
+    call_function         go to state 145
+
+
+State 225
+
+   42 for_statement: FOR '(' var_assignment ';' bool_exp ';' var_assignment ')' '{' . code_block '}'
+
+    CONST       shift, and go to state 2
+    VAR         shift, and go to state 4
+    CALL        shift, and go to state 126
+    IF          shift, and go to state 127
+    WHILE       shift, and go to state 128
+    FOR         shift, and go to state 129
+    ARR         shift, and go to state 5
+    IDENTIFIER  shift, and go to state 130
+
+    code_block            go to state 227
+    if_statement          go to state 133
+    while_statement       go to state 134
+    for_statement         go to state 135
+    var_assignment        go to state 136
+    array_declaration     go to state 137
+    array_assignment      go to state 138
+    array_val             go to state 139
+    get_container_elem    go to state 140
+    container_assignment  go to state 141
+    container_function    go to state 142
+    var_declaration       go to state 143
+    const_declaration     go to state 144
+    call_function         go to state 145
+
+
+State 226
+
+   40 if_statement: IF '(' expression ')' '{' code_block '}' ELSE '{' code_block . '}'
+
+    '}'  shift, and go to state 228
+
+
+State 227
+
+   42 for_statement: FOR '(' var_assignment ';' bool_exp ';' var_assignment ')' '{' code_block . '}'
+
+    '}'  shift, and go to state 229
+
+
+State 228
+
+   40 if_statement: IF '(' expression ')' '{' code_block '}' ELSE '{' code_block '}' .
+
+    $default  reduce using rule 40 (if_statement)
+
+
+State 229
+
+   42 for_statement: FOR '(' var_assignment ';' bool_exp ';' var_assignment ')' '{' code_block '}' .
+
+    $default  reduce using rule 42 (for_statement)

@@ -1,5 +1,5 @@
 comp: interpretor.y interpretor.l
-	bison -d interpretor.y
+	bison -v -d interpretor.y
 	flex interpretor.l
 	gcc lex.yy.c interpretor.tab.c -o interpret
 
@@ -8,6 +8,7 @@ clean:
 	rm interpretor.tab.c 
 	rm interpretor.tab.h
 	rm interpret
+	rm interpretor.output
 
 push:
 	git add .

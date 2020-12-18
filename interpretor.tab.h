@@ -1,9 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.5.1.  */
+/* A Bison parser, made by GNU Bison 3.0.4.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
-   Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,9 +29,6 @@
 
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
-
-/* Undocumented macros, especially those whose name start with YY_,
-   are private implementation details.  Do not rely on them.  */
 
 #ifndef YY_YY_INTERPRETOR_TAB_H_INCLUDED
 # define YY_YY_INTERPRETOR_TAB_H_INCLUDED
@@ -65,31 +61,34 @@ extern int yydebug;
     STRING = 271,
     BOOL = 272,
     VOID = 273,
-    IDENTIFIER = 274,
-    INT_CONST = 275,
-    FLOAT_CONST = 276,
-    CHAR_CONST = 277,
-    STR_CONST = 278,
-    TRUE = 279,
-    FALSE = 280,
-    AND = 281,
-    OR = 282,
-    EQUALITY = 283,
-    INEQUALITY = 284,
-    LT = 285,
-    GT = 286,
-    LTE = 287,
-    GTE = 288,
-    NEG = 289,
-    ACCES = 290
+    ARR = 274,
+    IDENTIFIER = 275,
+    INT_CONST = 276,
+    FLOAT_CONST = 277,
+    CHAR_CONST = 278,
+    STR_CONST = 279,
+    TRUE = 280,
+    FALSE = 281,
+    AND = 282,
+    OR = 283,
+    EQUALITY = 284,
+    INEQUALITY = 285,
+    LT = 286,
+    GT = 287,
+    LTE = 288,
+    GTE = 289,
+    NEG = 290,
+    ACCES = 291,
+    THEN = 292
   };
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+
 union YYSTYPE
 {
-#line 10 "interpretor.y"
+#line 10 "interpretor.y" /* yacc.c:1909  */
 
     short boolVal : 1;
     int intVal;
@@ -98,9 +97,9 @@ union YYSTYPE
     char* stringVal;
     char* varId;
 
-#line 102 "interpretor.tab.h"
-
+#line 101 "interpretor.tab.h" /* yacc.c:1909  */
 };
+
 typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
