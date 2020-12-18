@@ -1,7 +1,7 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-#include "y.tab.h"
+#include "interpretor.tab.h"
 int nr_lines = 1;
 int nr_word = 0;
 %}
@@ -12,13 +12,25 @@ char '.'
 string \".*\"
 %option noyywrap
 %%
-= {nr_word++;return EQUAL;}
+"=" {nr_word++; return *yytext;}
+";" {nr_word++; return *yytext;}
+"(" {nr_word++; return *yytext;}
+")" {nr_word++; return *yytext;}
+"{" {nr_word++; return *yytext;}
+"}" {nr_word++; return *yytext;}
+"," {nr_word++; return *yytext;}
+"->" {nr_word++; return ACCES;}
+"&&" {nr_word++; return AND;}
+"||" {nr_word++; return OR;}
+">=" {nr_word++; return GTE;}
+"<=" {nr_word++; return LTE;}
+"<" {nr_word++; return LT;}
+">" {nr_word++; return GT;}
+[-+*/%!#] {nr_word++; return *yytext;}
 if {nr_word++;return IF;}
 else {nr_word++;return ELSE;}
 for {nr_word++;return FOR;}
 while {nr_word++;return WHILE;}
-then {nr_word++;return THEN;}
-do {nr_word++;return DO;}
 container {nr_word++; return CONTAINER;}
 const {nr_word++; return CONST;}
 int {nr_word++; return INT;}
@@ -27,18 +39,13 @@ char {nr_word++; return CHAR;}
 string {nr_word++; return STRING;}
 bool {nr_word++;return BOOL;}
 void {nr_word++;return VOID;}
-Fun: {nr_word++;return FUN;}
-Call: {nr_word++; return CALL;}
-Var: {nr_word++;return VAR;}
+FUN: {nr_word++;return FUN;}
+CALL: {nr_word++; return CALL;}
+VAR: {nr_word++;return VAR;}
 Eval {nr_word++;return EVAL;}
 true {nr_word++;yylval.boolVal=1; return TRUE;}
 false {nr_word++;yylval.boolVal=0; return FALSE;}
-\; {nr_word++;return SEMICOLON;}
-\( {nr_word++;return OPEN_P;}
-\) {nr_word++;return CLOSE_P;}
-\{ {nr_word++;return OPEN_BRACE;}
-\} {nr_word++;return CLOSE_BRACE;}
-, {nr_word++;return COMMA;}
+
 {id} {nr_word++;return IDENTIFIER;}
 {float} {nr_word++;yylval.floatVal=atof(yytext); return FLOAT_CONST;}
 {integer} {nr_word++;yylval.intVal=atoi(yytext); return INT_CONST;}
@@ -46,6 +53,5 @@ false {nr_word++;yylval.boolVal=0; return FALSE;}
 {string} {nr_word++;yylval.stringVal=strndup(yytext+1, strlen(yytext)-2); return STR_CONST;}
 [ \r\t]+ ;
 [\n] {nr_lines++; nr_word = 0;}
-[-+*/] {nr_word++; return *yytext;}
 . ;
 %%

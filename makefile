@@ -1,15 +1,18 @@
 comp: interpretor.y interpretor.l
-	yacc -d interpretor.y -Wno-yacc
-	lex interpretor.l
-	gcc lex.yy.c y.tab.c -o interpret
+	bison -d interpretor.y
+	flex interpretor.l
+	gcc lex.yy.c interpretor.tab.c -o interpret
 
 clean:
 	rm lex.yy.c
-	rm y.tab.c 
-	rm y.tab.h
+	rm interpretor.tab.c 
+	rm interpretor.tab.h
 	rm interpret
 
 push:
 	git add .
-	git commit -m "Versiunea 0.3"
-	git push origin second
+	git commit -m "Versiunea 0.5"
+	git push origin experimental
+
+run: interpret input.txt
+	./interpret input.txt

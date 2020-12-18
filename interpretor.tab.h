@@ -34,8 +34,8 @@
 /* Undocumented macros, especially those whose name start with YY_,
    are private implementation details.  Do not rely on them.  */
 
-#ifndef YY_YY_Y_TAB_H_INCLUDED
-# define YY_YY_Y_TAB_H_INCLUDED
+#ifndef YY_YY_INTERPRETOR_TAB_H_INCLUDED
+# define YY_YY_INTERPRETOR_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -49,75 +49,41 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    SEMICOLON = 258,
-    CONTAINER = 259,
-    OPEN_BRACE = 260,
-    CLOSE_BRACE = 261,
-    OPEN_P = 262,
-    CLOSE_P = 263,
-    VOID = 264,
-    EQUAL = 265,
-    EVAL = 266,
-    CONST = 267,
-    COMMA = 268,
-    FUN = 269,
-    VAR = 270,
-    UNARY = 271,
-    CALL = 272,
-    IF = 273,
-    ELSE = 274,
-    WHILE = 275,
-    FOR = 276,
-    THEN = 277,
-    DO = 278,
-    IDENTIFIER = 279,
-    INT_CONST = 280,
-    FLOAT_CONST = 281,
-    CHAR_CONST = 282,
-    STR_CONST = 283,
-    TRUE = 284,
-    FALSE = 285,
-    INT = 286,
-    FLOAT = 287,
-    CHAR = 288,
-    STRING = 289,
-    BOOL = 290
+    CONTAINER = 258,
+    EVAL = 259,
+    CONST = 260,
+    FUN = 261,
+    VAR = 262,
+    CALL = 263,
+    IF = 264,
+    ELSE = 265,
+    WHILE = 266,
+    FOR = 267,
+    INT = 268,
+    FLOAT = 269,
+    CHAR = 270,
+    STRING = 271,
+    BOOL = 272,
+    VOID = 273,
+    IDENTIFIER = 274,
+    INT_CONST = 275,
+    FLOAT_CONST = 276,
+    CHAR_CONST = 277,
+    STR_CONST = 278,
+    TRUE = 279,
+    FALSE = 280,
+    AND = 281,
+    OR = 282,
+    EQUALITY = 283,
+    INEQUALITY = 284,
+    LT = 285,
+    GT = 286,
+    LTE = 287,
+    GTE = 288,
+    NEG = 289,
+    ACCES = 290
   };
 #endif
-/* Tokens.  */
-#define SEMICOLON 258
-#define CONTAINER 259
-#define OPEN_BRACE 260
-#define CLOSE_BRACE 261
-#define OPEN_P 262
-#define CLOSE_P 263
-#define VOID 264
-#define EQUAL 265
-#define EVAL 266
-#define CONST 267
-#define COMMA 268
-#define FUN 269
-#define VAR 270
-#define UNARY 271
-#define CALL 272
-#define IF 273
-#define ELSE 274
-#define WHILE 275
-#define FOR 276
-#define THEN 277
-#define DO 278
-#define IDENTIFIER 279
-#define INT_CONST 280
-#define FLOAT_CONST 281
-#define CHAR_CONST 282
-#define STR_CONST 283
-#define TRUE 284
-#define FALSE 285
-#define INT 286
-#define FLOAT 287
-#define CHAR 288
-#define STRING 289
-#define BOOL 290
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -125,14 +91,14 @@ union YYSTYPE
 {
 #line 10 "interpretor.y"
 
+    short boolVal : 1;
     int intVal;
     float floatVal;
     char charVal;
-    char* dataType;
     char* stringVal;
-    short boolVal : 1;
+    char* varId;
 
-#line 136 "y.tab.h"
+#line 102 "interpretor.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -145,4 +111,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_Y_TAB_H_INCLUDED  */
+#endif /* !YY_YY_INTERPRETOR_TAB_H_INCLUDED  */
