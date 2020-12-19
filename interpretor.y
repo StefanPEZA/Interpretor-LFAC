@@ -6,6 +6,8 @@
     extern int nr_word;
     extern FILE* yyin;
     extern char* yytext;
+    int yylex();
+    void yyerror(char *s);
 %}
 %union {
     short boolVal : 1;
