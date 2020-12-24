@@ -41,6 +41,7 @@
 %nonassoc ELSE
 %start start
 %%
+
 start : stmts ;
 stmts : stmts stmt | stmt {}
 stmt : var_declaration ';' {}
@@ -100,14 +101,14 @@ code_block : var_declaration ';' {}
     | for_statement {}
     ;
 
-if_statement : IF '(' expression')' '{' code_block '}' %prec THEN {}
+if_statement : IF '(' expression ')' '{' code_block '}' %prec THEN {}
     | IF '(' expression ')' '{' code_block '}' ELSE '{' code_block '}' {}
     ;
 
-while_statement : WHILE '(' bool_exp ')' '{' code_block '}' {}
+while_statement : WHILE '(' expression ')' '{' code_block '}' {}
     ;
 
-for_statement : FOR '(' var_assignment ';' bool_exp ';' var_assignment ')' '{' code_block '}' {}
+for_statement : FOR '(' var_assignment ';'  expression ';' var_assignment ')' '{' code_block '}' {}
     ;
 
 var_assignment : IDENTIFIER '=' expression {}
@@ -165,7 +166,7 @@ call_function : CALL IDENTIFIER '(' call_params ')' {}
     | CALL eval_function {}
     ;
 
-eval_function : EVAL '(' nr_exp ')' {} 
+eval_function : EVAL '(' expression ')' {} 
     ;
 
 call_params : call_param {}
@@ -176,48 +177,31 @@ call_param : call_function {}
     | expression {}
     ;
 
-expression : nr_exp {}
-    | bool_exp {}
-    | string_exp {}
-    ;
-
-nr_exp:IDENTIFIER {}
+expression:IDENTIFIER {}
     | get_container_elem {}
     | array_val {}
     | INT_CONST {}
     | FLOAT_CONST {}
-    | '(' nr_exp ')' {}
-    | nr_exp '+' nr_exp {}
-    | nr_exp '-' nr_exp {}
-    | nr_exp '*' nr_exp {}
-    | nr_exp '/' nr_exp {}
-    | nr_exp '%' nr_exp {}
-    | '-' nr_exp %prec NEG {}
-    ; 
-
-bool_exp :IDENTIFIER {}
-    | get_container_elem {}
-    | array_val {}
+    | '(' expression ')' {}
+    | expression '+' expression {}
+    | expression '-' expression {}
+    | expression '*' expression {}
+    | expression '/' expression {}
+    | expression '%' expression {}
+    | '-' expression %prec NEG {}
     | TRUE {}
     | FALSE {}
-    | '(' bool_exp ')' {}
-    | nr_exp LT nr_exp {}
-    | nr_exp GT nr_exp {}
-    | nr_exp LTE nr_exp {}
-    | nr_exp GTE nr_exp {}
-    | nr_exp EQUALITY nr_exp {}
-    | nr_exp INEQUALITY {}
-    | bool_exp AND bool_exp {}
-    | bool_exp OR bool_exp {}
-    | '!' bool_exp {}
-    ;
-
-string_exp :IDENTIFIER {}
-    | get_container_elem {}
-    | array_val {} 
+    | expression LT expression {}
+    | expression GT expression {}
+    | expression LTE expression {}
+    | expression GTE expression {}
+    | expression EQUALITY expression {}
+    | expression INEQUALITY {}
+    | expression AND expression {}
+    | expression OR expression {}
+    | '!' expression {}
     | CHAR_CONST {}
     | STR_CONST {}
-    | string_exp '+' string_exp {}
     ;
 
 %%
