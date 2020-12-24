@@ -180,28 +180,26 @@ expression:IDENTIFIER {}
     | array_val {}
     | INT_CONST {}
     | FLOAT_CONST {}
-    | '(' nr_exp ')' {}
-    | nr_exp '+' nr_exp {}
-    | nr_exp '-' nr_exp {}
-    | nr_exp '*' nr_exp {}
-    | nr_exp '/' nr_exp {}
-    | nr_exp '%' nr_exp {}
-    | '-' nr_exp %prec NEG {}
+    | '(' expression ')' {}
+    | expression '+' expression {}
+    | expression '-' expression {}
+    | expression '*' expression {}
+    | expression '/' expression {}
+    | expression '%' expression {}
+    | '-' expression %prec NEG {}
     | TRUE {}
     | FALSE {}
-    | '(' bool_exp ')' {}
-    | nr_exp LT nr_exp {}
-    | nr_exp GT nr_exp {}
-    | nr_exp LTE nr_exp {}
-    | nr_exp GTE nr_exp {}
-    | nr_exp EQUALITY nr_exp {}
-    | nr_exp INEQUALITY {}
-    | bool_exp AND bool_exp {}
-    | bool_exp OR bool_exp {}
-    | '!' bool_exp {}
+    | expression LT expression {}
+    | expression GT expression {}
+    | expression LTE expression {}
+    | expression GTE expression {}
+    | expression EQUALITY expression {}
+    | expression INEQUALITY {}
+    | expression AND expression {}
+    | expression OR expression {}
+    | '!' expression {}
     | CHAR_CONST {}
     | STR_CONST {}
-    | string_exp '+' string_exp {}
     ;
 
 %%
