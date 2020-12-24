@@ -39,6 +39,7 @@
 %nonassoc ELSE
 %start start
 %%
+
 start : stmts ;
 stmts : stmts stmt | stmt {}
 stmt : var_declaration ';' {}
@@ -98,14 +99,14 @@ code_block : var_declaration ';' {}
     | for_statement {}
     ;
 
-if_statement : IF '(' expression')' '{' code_block '}' %prec THEN {}
+if_statement : IF '(' expression ')' '{' code_block '}' %prec THEN {}
     | IF '(' expression ')' '{' code_block '}' ELSE '{' code_block '}' {}
     ;
 
-while_statement : WHILE '(' bool_exp ')' '{' code_block '}' {}
+while_statement : WHILE '(' expression ')' '{' code_block '}' {}
     ;
 
-for_statement : FOR '(' var_assignment ';' bool_exp ';' var_assignment ')' '{' code_block '}' {}
+for_statement : FOR '(' var_assignment ';'  expression ';' var_assignment ')' '{' code_block '}' {}
     ;
 
 var_assignment : IDENTIFIER '=' expression {}
@@ -163,7 +164,7 @@ call_function : CALL IDENTIFIER '(' call_params ')' {}
     | CALL eval_function {}
     ;
 
-eval_function : EVAL '(' nr_exp ')' {} 
+eval_function : EVAL '(' expression ')' {} 
     ;
 
 call_params : call_param {}
@@ -174,12 +175,7 @@ call_param : call_function {}
     | expression {}
     ;
 
-expression : nr_exp {}
-    | bool_exp {}
-    | string_exp {}
-    ;
-
-nr_exp:IDENTIFIER {}
+expression:IDENTIFIER {}
     | get_container_elem {}
     | array_val {}
     | INT_CONST {}
@@ -191,11 +187,6 @@ nr_exp:IDENTIFIER {}
     | nr_exp '/' nr_exp {}
     | nr_exp '%' nr_exp {}
     | '-' nr_exp %prec NEG {}
-    ; 
-
-bool_exp :IDENTIFIER {}
-    | get_container_elem {}
-    | array_val {}
     | TRUE {}
     | FALSE {}
     | '(' bool_exp ')' {}
@@ -208,11 +199,6 @@ bool_exp :IDENTIFIER {}
     | bool_exp AND bool_exp {}
     | bool_exp OR bool_exp {}
     | '!' bool_exp {}
-    ;
-
-string_exp :IDENTIFIER {}
-    | get_container_elem {}
-    | array_val {} 
     | CHAR_CONST {}
     | STR_CONST {}
     | string_exp '+' string_exp {}
