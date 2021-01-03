@@ -7,7 +7,7 @@
     extern FILE* yyin;
     extern char* yytext;
     int yylex();
-    void yyerror(char *s);
+    int yyerror(const char *s);
 %}
 %union {
     short boolVal : 1;
@@ -20,7 +20,7 @@
 %define parse.lac full
 %define parse.error verbose
 
-%token CONTAINER EVAL CONST FUN VAR CALL IF ELSE WHILE FOR INT FLOAT CHAR STRING BOOL VOID ARR 
+%token CONTAINER EVAL CONST FUN VAR CALL IF ELSE WHILE FOR INT FLOAT CHAR STRING BOOL VOID ARR MAIN
 %token <varId> IDENTIFIER
 %token <intVal> INT_CONST
 %token <floatVal> FLOAT_CONST
@@ -49,6 +49,10 @@ stmt : var_declaration ';' {}
     | const_declaration ';' {}
     | function_declaration {}
     | container_declaration {}
+    | main_function {}
+    ;
+
+main_function : VOID MAIN '(' ')' '{' fun_body '}' {}
     ;
 
 container_declaration : CONTAINER '{' container_body '}' IDENTIFIER ';' {}
@@ -63,6 +67,7 @@ container_elements : var_declaration ';' {}
     ;
 
 function_declaration : FUN return_type IDENTIFIER '(' fun_params ')' '{' fun_body '}' {}
+    | FUN return_type IDENTIFIER '(' ')' '{' fun_body '}' {}
     ;
 
 return_type : types {}
@@ -74,7 +79,6 @@ fun_params : parameter ;
     ;
 
 parameter : types IDENTIFIER {}
-            | {}
             ;
 
 types : INT {}
@@ -144,7 +148,8 @@ array_list_bool : array_list_bool ',' TRUE {}
     | TRUE {}
     | FALSE {}
     ;
-array_val : IDENTIFIER '[' INT_CONST ']';
+array_val : IDENTIFIER '[' INT_CONST ']' {}
+    ;
 
 get_container_elem : IDENTIFIER ACCES IDENTIFIER {}
     ;
@@ -163,6 +168,7 @@ const_declaration : CONST types IDENTIFIER '=' expression {}
     ;
 
 call_function : CALL IDENTIFIER '(' call_params ')' {}
+    | CALL IDENTIFIER '(' ')' {}
     | CALL eval_function {}
     ;
 
@@ -170,7 +176,7 @@ eval_function : EVAL '(' expression ')' {}
     ;
 
 call_params : call_param {}
-    | call_params call_param {}
+    | call_params ',' call_param {}
     ;
 
 call_param : call_function {}
@@ -206,7 +212,7 @@ expression:IDENTIFIER {}
 
 %%
 int check = 1;
-void yyerror(char *s)
+int yyerror(const char *s)
 {
     printf ("%s la linia %d, cuvantul %d\n", s, nr_lines, nr_word);
     check = 0;

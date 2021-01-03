@@ -50,6 +50,7 @@ ARR: {nr_word++;return ARR;}
 Eval {nr_word++;return EVAL;}
 true {nr_word++;yylval.boolVal=1; return TRUE;}
 false {nr_word++;yylval.boolVal=0; return FALSE;}
+main {nr_word++;return MAIN;}
 
 {id} {nr_word++;yylval.varId=strdup(yytext); return IDENTIFIER;}
 {float} {nr_word++;yylval.floatVal=atof(yytext); return FLOAT_CONST;}
