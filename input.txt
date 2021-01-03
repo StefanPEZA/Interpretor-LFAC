@@ -9,7 +9,7 @@ container {
 
 VAR:int test = -(-(12+12)/2*7-3);
 
-FUN:int sum ()
+FUN:int sum (int a, int b)
 {
     var->ok = true;
     VAR:int m;
@@ -22,4 +22,9 @@ FUN:int sum ()
     } else {
         m = 12;
     }
+}
+
+void main () {
+    CALL:Eval(test);
+    CALL:sum(test, test);
 }

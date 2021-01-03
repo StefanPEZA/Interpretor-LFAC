@@ -6,6 +6,8 @@
     extern int nr_word;
     extern FILE* yyin;
     extern char* yytext;
+    int yylex();
+    int yyerror(const char *s);
 %}
 %union {
     short boolVal : 1;
@@ -18,7 +20,7 @@
 %define parse.lac full
 %define parse.error verbose
 
-%token CONTAINER EVAL CONST FUN VAR CALL IF ELSE WHILE FOR INT FLOAT CHAR STRING BOOL VOID ARR 
+%token CONTAINER EVAL CONST FUN VAR CALL IF ELSE WHILE FOR INT FLOAT CHAR STRING BOOL VOID ARR MAIN
 %token <varId> IDENTIFIER
 %token <intVal> INT_CONST
 %token <floatVal> FLOAT_CONST
@@ -39,6 +41,7 @@
 %nonassoc ELSE
 %start start
 %%
+
 start : stmts ;
 stmts : stmts stmt | stmt {}
 stmt : var_declaration ';' {}
@@ -46,6 +49,10 @@ stmt : var_declaration ';' {}
     | const_declaration ';' {}
     | function_declaration {}
     | container_declaration {}
+    | main_function {}
+    ;
+
+main_function : VOID MAIN '(' ')' '{' fun_body '}' {}
     ;
 
 container_declaration : CONTAINER '{' container_body '}' IDENTIFIER ';' {}
@@ -60,6 +67,7 @@ container_elements : var_declaration ';' {}
     ;
 
 function_declaration : FUN return_type IDENTIFIER '(' fun_params ')' '{' fun_body '}' {}
+    | FUN return_type IDENTIFIER '(' ')' '{' fun_body '}' {}
     ;
 
 return_type : types {}
@@ -71,7 +79,6 @@ fun_params : parameter ;
     ;
 
 parameter : types IDENTIFIER {}
-            | {}
             ;
 
 types : INT {}
@@ -98,14 +105,14 @@ code_block : var_declaration ';' {}
     | for_statement {}
     ;
 
-if_statement : IF '(' expression')' '{' code_block '}' %prec THEN {}
+if_statement : IF '(' expression ')' '{' code_block '}' %prec THEN {}
     | IF '(' expression ')' '{' code_block '}' ELSE '{' code_block '}' {}
     ;
 
-while_statement : WHILE '(' bool_exp ')' '{' code_block '}' {}
+while_statement : WHILE '(' expression ')' '{' code_block '}' {}
     ;
 
-for_statement : FOR '(' var_assignment ';' bool_exp ';' var_assignment ')' '{' code_block '}' {}
+for_statement : FOR '(' var_assignment ';'  expression ';' var_assignment ')' '{' code_block '}' {}
     ;
 
 var_assignment : IDENTIFIER '=' expression {}
@@ -141,7 +148,8 @@ array_list_bool : array_list_bool ',' TRUE {}
     | TRUE {}
     | FALSE {}
     ;
-array_val : IDENTIFIER '[' INT_CONST ']';
+array_val : IDENTIFIER '[' INT_CONST ']' {}
+    ;
 
 get_container_elem : IDENTIFIER ACCES IDENTIFIER {}
     ;
@@ -160,67 +168,51 @@ const_declaration : CONST types IDENTIFIER '=' expression {}
     ;
 
 call_function : CALL IDENTIFIER '(' call_params ')' {}
+    | CALL IDENTIFIER '(' ')' {}
     | CALL eval_function {}
     ;
 
-eval_function : EVAL '(' nr_exp ')' {} 
+eval_function : EVAL '(' expression ')' {} 
     ;
 
 call_params : call_param {}
-    | call_params call_param {}
+    | call_params ',' call_param {}
     ;
 
 call_param : call_function {}
     | expression {}
     ;
 
-expression : nr_exp {}
-    | bool_exp {}
-    | string_exp {}
-    ;
-
-nr_exp:IDENTIFIER {}
+expression:IDENTIFIER {}
     | get_container_elem {}
     | array_val {}
     | INT_CONST {}
     | FLOAT_CONST {}
-    | '(' nr_exp ')' {}
-    | nr_exp '+' nr_exp {}
-    | nr_exp '-' nr_exp {}
-    | nr_exp '*' nr_exp {}
-    | nr_exp '/' nr_exp {}
-    | nr_exp '%' nr_exp {}
-    | '-' nr_exp %prec NEG {}
-    ; 
-
-bool_exp :IDENTIFIER {}
-    | get_container_elem {}
-    | array_val {}
+    | '(' expression ')' {}
+    | expression '+' expression {}
+    | expression '-' expression {}
+    | expression '*' expression {}
+    | expression '/' expression {}
+    | expression '%' expression {}
+    | '-' expression %prec NEG {}
     | TRUE {}
     | FALSE {}
-    | '(' bool_exp ')' {}
-    | nr_exp LT nr_exp {}
-    | nr_exp GT nr_exp {}
-    | nr_exp LTE nr_exp {}
-    | nr_exp GTE nr_exp {}
-    | nr_exp EQUALITY nr_exp {}
-    | nr_exp INEQUALITY {}
-    | bool_exp AND bool_exp {}
-    | bool_exp OR bool_exp {}
-    | '!' bool_exp {}
-    ;
-
-string_exp :IDENTIFIER {}
-    | get_container_elem {}
-    | array_val {} 
+    | expression LT expression {}
+    | expression GT expression {}
+    | expression LTE expression {}
+    | expression GTE expression {}
+    | expression EQUALITY expression {}
+    | expression INEQUALITY {}
+    | expression AND expression {}
+    | expression OR expression {}
+    | '!' expression {}
     | CHAR_CONST {}
     | STR_CONST {}
-    | string_exp '+' string_exp {}
     ;
 
 %%
 int check = 1;
-void yyerror(char *s)
+int yyerror(const char *s)
 {
     printf ("%s la linia %d, cuvantul %d\n", s, nr_lines, nr_word);
     check = 0;
