@@ -142,7 +142,8 @@ array_list_bool : array_list_bool ',' TRUE {}
     | TRUE {}
     | FALSE {}
     ;
-array_val : IDENTIFIER '[' INT_CONST ']';
+array_val : IDENTIFIER '[' INT_CONST ']' {}
+    ;
 
 get_container_elem : IDENTIFIER ACCES IDENTIFIER {}
     ;
