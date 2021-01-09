@@ -5,6 +5,8 @@ typedef enum
     constChar,
     constStr,
     constBool,
+    typeName,
+    arraylist,
     typeId,
     typeOper
 } nodeEnum;
@@ -36,6 +38,24 @@ typedef struct
     struct nodeTypeTag *op[1]; /* operanzi */
 } oprNodeType;
 
+typedef struct
+{
+   int type;
+} typeNodeType;
+
+typedef struct 
+{
+    union 
+    {
+        int* arrInt;
+        char* arrChar;
+        char** arrStr;
+        short* arrBool;
+        float* arrFloat;
+    };
+    
+}arrayNodeType;
+
 typedef struct nodeTypeTag
 {
     nodeEnum type; /* tipul nodului */
@@ -44,5 +64,7 @@ typedef struct nodeTypeTag
         conNodeType con; /* constante */
         idNodeType id;   /* identificatori */
         oprNodeType opr; /* operatori */
+        typeNodeType typ;
+        arrayNodeType arr;
     };
 } nodeType;

@@ -1,15 +1,7 @@
+VAR: int x=69;
+VAR: bool y=true;
 void main() {
-    a = 36;
-    b = 42;
-    while (a != b) {
-
-        if(a > b) {
-            a = a - b;
-        }
-        else {
-            b = b - a;
-        }
-        b = 36;
-
-    }
+    ARR: int s[69]={1,6,8,4,9,3};
+    VAR: int a = 36;
+    VAR: int b;
 }
