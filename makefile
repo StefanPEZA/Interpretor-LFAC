@@ -12,8 +12,8 @@ clean:
 
 push:
 	git add .
-	git commit -m "Versiunea 0.5.1"
+	git commit -m "Versiunea 0.5.2"
 	git push origin experimental
 
-run: interpret input.txt
-	./interpret input.txt
+run: interpret input1.txt
+	./interpret input1.txt
