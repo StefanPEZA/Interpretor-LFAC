@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include "interpretor.h"
 #include "interpretor.tab.h"
 int nr_lines = 1;
 int nr_word = 0;
@@ -56,7 +57,7 @@ main {nr_word++;return MAIN;}
 {float} {nr_word++;yylval.floatVal=atof(yytext); return FLOAT_CONST;}
 {integer} {nr_word++;yylval.intVal=atoi(yytext); return INT_CONST;}
 {char} {nr_word++;yylval.charVal=yytext[1]; return CHAR_CONST;}
-{string} {nr_word++;yylval.stringVal=strndup(yytext+1, strlen(yytext)-2); return STR_CONST;}
+{string} {nr_word++;yylval.strVal=strndup(yytext+1, strlen(yytext)-2); return STR_CONST;}
 [ \r\t]+ ;
 [\n] {nr_lines++; nr_word = 0;}
 . ;
