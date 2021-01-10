@@ -1030,7 +1030,7 @@ YY_RULE_SETUP
 case 44:
 YY_RULE_SETUP
 #line 61 "interpretor.l"
-{nr_word++;yylval.strVal=strndup(yytext+1, strlen(yytext)-2); return STR_CONST;}
+{nr_word++;yylval.strVal=strndup(yytext+1, strlen(yytext+1)-1); return STR_CONST;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP

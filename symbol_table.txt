@@ -1,7 +1,9 @@
-name			scope			type			base type		value
----------------------------------------------------------------------
-xnou        	global      	Variable		INT   			69
-y           	global      	Variable		BOOL  			true
-s           	global      	Array   		BOOL  			true
-x           	local       	Variable		CHAR  			a
-b           	local       	Variable		INT   			0
+name			scope			type		base_type	value
+---------------------------------------------------------------------------------
+xnou        	global      	Variable	INT   		69
+y           	global      	Variable	BOOL  		true
+s           	global      	Array   	BOOL  		[false, ...]
+a           	local       	Variable	INT   		3
+x           	local       	Variable	CHAR  		'a'
+b           	local       	Variable	INT   		0
+str         	local       	Variable	STRING		"s"

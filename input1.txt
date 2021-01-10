@@ -1,10 +1,11 @@
 VAR: int xnou= 69;
 VAR: bool y=true;
-ARR: bool s[69] = {true, true};
+ARR: bool s[69] = {false, true};
 void main() {
-    const int a = 2;
+    VAR: int a = 2;
     a = 3;
     VAR: char x = 'a';
     VAR: int b;
-    CALL: Eval( ( s[1] + 2 )*(2+1) );
+    CALL: Eval( ( a + 2 )*(2+1) );
+    VAR: string str = "s";
 }

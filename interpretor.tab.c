@@ -1871,7 +1871,7 @@ yyreduce:
 
   case 10:
 #line 93 "interpretor.y"
-                    {}
+                    {localScope = 0;}
 #line 1876 "interpretor.tab.c"
     break;
 
@@ -2901,7 +2901,7 @@ void* interpret(nodeType *p)
     case constChar:
         return &p->con.charVal;
     case constStr:
-        return p->con.strVal;
+        return &p->con.strVal;
     case typeId:
         return &symbol[p->id.i].val.intVal;
     case typeOper:
@@ -3115,6 +3115,7 @@ int yyerror(const char *s)
 void printTable();
 int main(int argc, char **argv)
 {   
+    printf("\n");
     if (argc > 0)
         yyin = fopen(argv[1], "r");
     yyparse();
@@ -3126,48 +3127,70 @@ int main(int argc, char **argv)
 }
 
 void printTable(){
-    char symStr[1000] = "";
-    sprintf(symStr, "name\t\tscope\t\tvalue\t\ttype\t\tbase type\n");
-        for (int i = 0; i < lastIndex; i++)
+    FILE* out = fopen("symbol_table.txt", "w");
+    char symStr[10000] = "";
+    char temp[1000];
+    int funIDS[10];
+    int idf = 0;
+    
+    sprintf(temp, "name\t\t\tscope\t\t\ttype\t\tbase_type\tvalue\n");
+    strcat(symStr, temp);
+    sprintf(temp, "---------------------------------------------------------------------------------\n");
+    strcat(symStr, temp);
+    for (int i = 0; i < lastIndex; i++)
+    {
+        sprintf(temp, "%-12s\t", symbol[i].name);
+        strcat(symStr, temp);
+        sprintf(temp, "%-12s\t", (symbol[i].scope==0)?"global":((symbol[i].scope==1||symbol[i].scope==2)?"local":"in-container"));
+        strcat(symStr, temp);
+        if (symbol[i].type == FUN)
         {
-            char temp[100];
-            sprintf(temp, "%s\t\t", symbol[i].name);
+            funIDS[idf] = i;
+            idf++;
+        }
+        else if (symbol[i].type == VAR)
+        {
+            if (symbol[i].baseType == INT)
+                sprintf(temp, "%-8s\t%-6s\t\t%d", "Variable", "INT", symbol[i].val.intVal);
+            else if (symbol[i].baseType == FLOAT)
+                sprintf(temp, "%-8s\t%-6s\t\t%f", "Variable", "FLOAT", symbol[i].val.floatVal);
+            else if (symbol[i].baseType == CHAR)
+                sprintf(temp, "%-8s\t%-6s\t\t'%c'", "Variable", "CHAR", symbol[i].val.charVal);
+            else if (symbol[i].baseType == STRING)
+                sprintf(temp, "%-8s\t%-6s\t\t\"%s\"", "Variable", "STRING", symbol[i].val.strVal);
+            else if (symbol[i].baseType == BOOL)
+                sprintf(temp, "%-8s\t%-6s\t\t%s", "Variable", "BOOL", (symbol[i].val.boolVal)?"true":"false");
+        }
+        else if (symbol[i].type == ARR)
+        {
+            if (symbol[i].baseType == INT)
+                sprintf(temp, "%-8s\t%-6s\t\t[%d, ...]", "Array", "INT" , *symbol[i].arr.vect.arrInt);
+            else if (symbol[i].baseType == FLOAT)
+                sprintf(temp, "%-8s\t%-6s\t\t[%f, ...]", "Array", "FLOAT" , *symbol[i].arr.vect.arrFloat);
+            else if (symbol[i].baseType == CHAR)
+                sprintf(temp, "%-8s\t%-6s\t\t[%c, ...]", "Array", "CHAR" , *symbol[i].arr.vect.arrChar);
+            else if (symbol[i].baseType == STRING)
+                sprintf(temp, "%-8s\t%-6s\t\t[%s, ...]", "Array", "STRING", *symbol[i].arr.vect.arrStr);
+            else if (symbol[i].baseType == BOOL)
+                sprintf(temp, "%-8s\t%-6s\t\t[%s, ...]", "Array", "BOOL", (*symbol[i].arr.vect.arrBool)?"true":"false");
+        }
+        strcat(symStr, temp);
+        strcat(symStr, "\n");
+    }
+
+    if (idf > 0){
+        strcat(symStr, "\nFunctions:\n");
+        for (int i = 0; i < idf; i++)
+        {
+            int inx = funIDS[i];
+            sprintf(temp, "%-12s\t", symbol[i].name);
             strcat(symStr, temp);
-            sprintf(temp, "%s\t\t", (symbol[i].scope==0)?"global":((symbol[i].scope==1||symbol[i].scope==2)?"local":"in container"));
-            strcat(symStr, temp);
-            if (symbol[i].type == FUN)
-                sprintf(temp, "-\t\t");
-            else if (symbol[i].type == VAR)
-            {
-                if (symbol[i].baseType == INT)
-                    sprintf(temp, "%d\t\t%s\t%s", symbol[i].val.intVal, "Variable", "INT");
-                else if (symbol[i].baseType == FLOAT)
-                    sprintf(temp, "%f\t\t%s\t%s", symbol[i].val.floatVal, "Variable", "FLOAT");
-                else if (symbol[i].baseType == CHAR)
-                    sprintf(temp, "%c\t\t%s\t%s", symbol[i].val.charVal, "Variable", "CHAR");
-                else if (symbol[i].baseType == STRING)
-                    sprintf(temp, "%s\t\t%s\t%s", symbol[i].val.strVal, "Variable", "STRING");
-                else if (symbol[i].baseType == BOOL)
-                    sprintf(temp, "%s\t\t%s\t%s", (symbol[i].val.boolVal)?"true":"false", "Variable", "BOOL");
-            }
-            else if (symbol[i].type == ARR)
-            {
-                if (symbol[i].baseType == INT)
-                    sprintf(temp, "first - %d\t%s\t\t%s", *symbol[i].arr.vect.arrInt, "Array", "INT");
-                else if (symbol[i].baseType == FLOAT)
-                    sprintf(temp, "first - %f\t%s\t\t%s", *symbol[i].arr.vect.arrFloat, "Array", "FLOAT");
-                else if (symbol[i].baseType == CHAR)
-                    sprintf(temp, "first - %c\t%s\t\t%s", *symbol[i].arr.vect.arrChar, "Array", "CHAR");
-                else if (symbol[i].baseType == STRING)
-                    sprintf(temp, "first - %s\t%s\t\t%s", *symbol[i].arr.vect.arrStr, "Array", "STRING");
-                else if (symbol[i].baseType == BOOL)
-                    sprintf(temp, "first - %s\t%s\t\t%s", (*symbol[i].arr.vect.arrBool)?"true":"false", "Array", "BOOL");
-            }
-            strcat(symStr, temp);
+            sprintf(temp, "%-12s\t", (symbol[i].scope==0)?"global":((symbol[i].scope==1||symbol[i].scope==2)?"local":"in-container"));
 
 
+            strcat(symStr, temp);
             strcat(symStr, "\n");
         }
-        printf("\n");
-        printf("%s", symStr);
+    }
+    fprintf(out, "%s", symStr);
 }

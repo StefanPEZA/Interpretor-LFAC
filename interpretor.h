@@ -50,7 +50,7 @@ typedef struct
         char **arrStr;
         short *arrBool;
         float *arrFloat;
-    }vect;
+    } vect;
 
 } arrayNodeType;
 
@@ -134,7 +134,7 @@ static char *inorderExpr(nodeType *nodExpr)
 
     if (nodExpr->type == typeOper)
     {
-        if (nodExpr->opr.oper < 283 || nodExpr->opr.oper > 290 || nodExpr->opr.oper == '[') 
+        if (nodExpr->opr.oper < 283 || nodExpr->opr.oper > 290 || nodExpr->opr.oper == '[')
         {
             if (nodExpr->opr.oper == 291)
             {
@@ -143,19 +143,20 @@ static char *inorderExpr(nodeType *nodExpr)
                 inorderExpr(nodExpr->opr.op[0]);
                 strcat(strExpr, ")");
             }
-            else if(nodExpr->opr.oper == '['){
-                if(symbol[nodExpr->opr.op[0]->id.i].baseType==268){
+            else if (nodExpr->opr.oper == '[')
+            {
+                if (symbol[nodExpr->opr.op[0]->id.i].baseType == 268)
+                {
                     char integer[20];
-                    sprintf(integer,"%d",symbol[nodExpr->opr.op[0]->id.i].arr.vect.arrInt[nodExpr->opr.op[1]->con.intVal]);
+                    sprintf(integer, "%d", symbol[nodExpr->opr.op[0]->id.i].arr.vect.arrInt[nodExpr->opr.op[1]->con.intVal]);
                     strcat(strExpr, integer);
                 }
                 else
                 {
                     strcpy(strExpr, "fail");
                 }
-                
             }
-            else 
+            else
             {
                 strcat(strExpr, "(");
                 inorderExpr(nodExpr->opr.op[0]);
