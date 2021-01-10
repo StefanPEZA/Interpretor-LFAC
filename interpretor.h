@@ -42,6 +42,7 @@ typedef struct
 
 typedef struct
 {
+    int arrSize;
     union
     {
         int *arrInt;
@@ -49,7 +50,7 @@ typedef struct
         char **arrStr;
         short *arrBool;
         float *arrFloat;
-    };
+    }vect;
 
 } arrayNodeType;
 
@@ -83,6 +84,7 @@ static struct symbolTable
     int type;     //VAR = 262, ARR = 274, FUN = 261,
     int baseType; //INT = 268, FLOAT = 269, CHAR = 270, STRING = 271, BOOL = 272,
     int scope;    // 0 - global, 1 - local in main, 2 - local, 3 - inside container
+    int isconst;  // 0 -variabil, 1 - constant
     union
     {
         arrayNodeType arr;
@@ -104,7 +106,7 @@ static int getIndex(char *Var, int locScope)
     return -1;
 }
 
-static int addSymbol(char *name, int varType, int baseType, int scope)
+static int addSymbol(char *name, int varType, int baseType, int scope, int iscon)
 {
     for (int i = lastIndex - 1; i >= 0; i--)
     {
@@ -118,6 +120,7 @@ static int addSymbol(char *name, int varType, int baseType, int scope)
     symbol[lastIndex].type = varType;
     symbol[lastIndex].baseType = baseType;
     symbol[lastIndex].scope = scope;
+    symbol[lastIndex].isconst = iscon;
     lastIndex++;
     return 1;
 }
@@ -131,7 +134,7 @@ static char *inorderExpr(nodeType *nodExpr)
 
     if (nodExpr->type == typeOper)
     {
-        if (nodExpr->opr.oper < 283 || nodExpr->opr.oper > 290)
+        if (nodExpr->opr.oper < 283 || nodExpr->opr.oper > 290 || nodExpr->opr.oper == '[') 
         {
             if (nodExpr->opr.oper == 291)
             {
@@ -140,7 +143,19 @@ static char *inorderExpr(nodeType *nodExpr)
                 inorderExpr(nodExpr->opr.op[0]);
                 strcat(strExpr, ")");
             }
-            else
+            else if(nodExpr->opr.oper == '['){
+                if(symbol[nodExpr->opr.op[0]->id.i].baseType==268){
+                    char integer[20];
+                    sprintf(integer,"%d",symbol[nodExpr->opr.op[0]->id.i].arr.vect.arrInt[nodExpr->opr.op[1]->con.intVal]);
+                    strcat(strExpr, integer);
+                }
+                else
+                {
+                    strcpy(strExpr, "fail");
+                }
+                
+            }
+            else 
             {
                 strcat(strExpr, "(");
                 inorderExpr(nodExpr->opr.op[0]);
@@ -157,7 +172,7 @@ static char *inorderExpr(nodeType *nodExpr)
     else if (nodExpr->type == typeId)
     {
         char integer[20];
-        sprintf(integer, "%d", sym[nodExpr->id.i]);
+        sprintf(integer, "%d", symbol[nodExpr->id.i].val.intVal);
         strcat(strExpr, integer);
     }
     else

@@ -77,26 +77,26 @@ Grammar
    53           | array_list_string
    54           | array_list_bool
 
-   55 array_assignment: array_val '=' expression
+   55 array_list_int: array_list_int ',' INT_CONST
+   56               | INT_CONST
 
-   56 array_list_int: array_list_int ',' INT_CONST
-   57               | INT_CONST
+   57 array_list_float: array_list_float ',' FLOAT_CONST
+   58                 | FLOAT_CONST
 
-   58 array_list_float: array_list_float ',' FLOAT_CONST
-   59                 | FLOAT_CONST
+   59 array_list_char: array_list_char ',' CHAR_CONST
+   60                | CHAR_CONST
 
-   60 array_list_char: array_list_char ',' CHAR_CONST
-   61                | CHAR_CONST
+   61 array_list_string: array_list_string ',' STR_CONST
+   62                  | STR_CONST
 
-   62 array_list_string: array_list_string ',' STR_CONST
-   63                  | STR_CONST
+   63 array_list_bool: array_list_bool ',' TRUE
+   64                | array_list_bool ',' FALSE
+   65                | TRUE
+   66                | FALSE
 
-   64 array_list_bool: array_list_bool ',' TRUE
-   65                | array_list_bool ',' FALSE
-   66                | TRUE
-   67                | FALSE
+   67 array_val: IDENTIFIER '[' INT_CONST ']'
 
-   68 array_val: IDENTIFIER '[' INT_CONST ']'
+   68 array_assignment: array_val '=' expression
 
    69 get_container_elem: IDENTIFIER ACCES IDENTIFIER
 
@@ -157,13 +157,13 @@ Terminals, with rules where they appear
     ')' (41) 10 16 17 43 44 45 46 71 75 76 78 88
     '*' (42) 91
     '+' (43) 89
-    ',' (44) 21 56 58 60 62 64 65 80
+    ',' (44) 21 55 57 59 61 63 64 80
     '-' (45) 90 94
     '/' (47) 92
     ';' (59) 4 5 6 11 14 30 31 32 33 34 35 36 37 46
-    '=' (61) 47 48 55 70 73 74
-    '[' (91) 48 49 68
-    ']' (93) 48 49 68
+    '=' (61) 47 48 68 70 73 74
+    '[' (91) 48 49 67
+    ']' (93) 48 49 67
     '{' (123) 10 11 16 17 43 44 45 46 48
     '}' (125) 10 11 16 17 43 44 45 46 48
     error (256)
@@ -185,13 +185,13 @@ Terminals, with rules where they appear
     VOID (273) 10 19
     ARR (274) 48 49
     MAIN (275) 10
-    IDENTIFIER <varId> (276) 11 16 17 22 47 48 49 68 69 72 73 74 75 76 83
-    INT_CONST <intVal> (277) 48 49 56 57 68 86
-    FLOAT_CONST <floatVal> (278) 58 59 87
-    CHAR_CONST <charVal> (279) 60 61 106
-    STR_CONST <strVal> (280) 62 63 107
-    TRUE <boolVal> (281) 64 66 95
-    FALSE <boolVal> (282) 65 67 96
+    IDENTIFIER <varId> (276) 11 16 17 22 47 48 49 67 69 72 73 74 75 76 83
+    INT_CONST <intVal> (277) 48 49 55 56 67 86
+    FLOAT_CONST <floatVal> (278) 57 58 87
+    CHAR_CONST <charVal> (279) 59 60 106
+    STR_CONST <strVal> (280) 61 62 107
+    TRUE <boolVal> (281) 63 65 95
+    FALSE <boolVal> (282) 64 66 96
     AND (283) 103
     OR (284) 104
     EQUALITY (285) 101
@@ -272,27 +272,27 @@ Nonterminals, with rules where they appear
     array_list <nodPtr> (75)
         on left: 50 51 52 53 54
         on right: 48
-    array_assignment <nodPtr> (76)
-        on left: 55
-        on right: 32
-    array_list_int (77)
-        on left: 56 57
-        on right: 50 56
-    array_list_float (78)
-        on left: 58 59
-        on right: 51 58
-    array_list_char (79)
-        on left: 60 61
-        on right: 52 60
-    array_list_string (80)
-        on left: 62 63
-        on right: 53 62
-    array_list_bool (81)
-        on left: 64 65 66 67
-        on right: 54 64 65
-    array_val (82)
+    array_list_int (76)
+        on left: 55 56
+        on right: 50 55
+    array_list_float (77)
+        on left: 57 58
+        on right: 51 57
+    array_list_char (78)
+        on left: 59 60
+        on right: 52 59
+    array_list_string (79)
+        on left: 61 62
+        on right: 53 61
+    array_list_bool (80)
+        on left: 63 64 65 66
+        on right: 54 63 64
+    array_val <nodPtr> (81)
+        on left: 67
+        on right: 68 85
+    array_assignment <nodPtr> (82)
         on left: 68
-        on right: 55 85
+        on right: 32
     get_container_elem (83)
         on left: 69
         on right: 70 71 84
@@ -322,7 +322,7 @@ Nonterminals, with rules where they appear
         on right: 79 80
     expression <nodPtr> (92)
         on left: 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107
-        on right: 43 44 45 46 47 55 70 73 74 78 82 88 89 90 91 92 93 94 97 98 99 100 101 102 103 104 105
+        on right: 43 44 45 46 47 68 70 73 74 78 82 88 89 90 91 92 93 94 97 98 99 100 101 102 103 104 105
 
 
 State 0
@@ -809,7 +809,7 @@ State 51
 
 State 52
 
-   68 array_val: IDENTIFIER . '[' INT_CONST ']'
+   67 array_val: IDENTIFIER . '[' INT_CONST ']'
    69 get_container_elem: IDENTIFIER . ACCES IDENTIFIER
    83 expression: IDENTIFIER .
 
@@ -1053,8 +1053,8 @@ State 70
     for_statement         go to state 104
     var_assignment        go to state 105
     array_declaration     go to state 106
-    array_assignment      go to state 107
-    array_val             go to state 108
+    array_val             go to state 107
+    array_assignment      go to state 108
     get_container_elem    go to state 109
     container_assignment  go to state 110
     container_function    go to state 111
@@ -1087,7 +1087,7 @@ State 73
 
 State 74
 
-   68 array_val: IDENTIFIER '[' . INT_CONST ']'
+   67 array_val: IDENTIFIER '[' . INT_CONST ']'
 
     INT_CONST  shift, and go to state 117
 
@@ -1445,8 +1445,8 @@ State 91
     for_statement         go to state 104
     var_assignment        go to state 105
     array_declaration     go to state 106
-    array_assignment      go to state 107
-    array_val             go to state 108
+    array_val             go to state 107
+    array_assignment      go to state 108
     get_container_elem    go to state 109
     container_assignment  go to state 110
     container_function    go to state 111
@@ -1520,7 +1520,7 @@ State 98
 State 99
 
    47 var_assignment: IDENTIFIER . '=' expression
-   68 array_val: IDENTIFIER . '[' INT_CONST ']'
+   67 array_val: IDENTIFIER . '[' INT_CONST ']'
    69 get_container_elem: IDENTIFIER . ACCES IDENTIFIER
 
     '='    shift, and go to state 141
@@ -1549,8 +1549,8 @@ State 100
     for_statement         go to state 104
     var_assignment        go to state 105
     array_declaration     go to state 106
-    array_assignment      go to state 107
-    array_val             go to state 108
+    array_val             go to state 107
+    array_assignment      go to state 108
     get_container_elem    go to state 109
     container_assignment  go to state 110
     container_function    go to state 111
@@ -1603,16 +1603,16 @@ State 106
 
 State 107
 
-   32 code_block: array_assignment . ';'
+   68 array_assignment: array_val . '=' expression
 
-    ';'  shift, and go to state 146
+    '='  shift, and go to state 146
 
 
 State 108
 
-   55 array_assignment: array_val . '=' expression
+   32 code_block: array_assignment . ';'
 
-    '='  shift, and go to state 147
+    ';'  shift, and go to state 147
 
 
 State 109
@@ -1678,7 +1678,7 @@ State 116
 
 State 117
 
-   68 array_val: IDENTIFIER '[' INT_CONST . ']'
+   67 array_val: IDENTIFIER '[' INT_CONST . ']'
 
     ']'  shift, and go to state 156
 
@@ -2048,8 +2048,8 @@ State 132
     for_statement         go to state 104
     var_assignment        go to state 105
     array_declaration     go to state 106
-    array_assignment      go to state 107
-    array_val             go to state 108
+    array_val             go to state 107
+    array_assignment      go to state 108
     get_container_elem    go to state 109
     container_assignment  go to state 110
     container_function    go to state 111
@@ -2078,8 +2078,8 @@ State 133
     for_statement         go to state 104
     var_assignment        go to state 105
     array_declaration     go to state 106
-    array_assignment      go to state 107
-    array_val             go to state 108
+    array_val             go to state 107
+    array_assignment      go to state 108
     get_container_elem    go to state 109
     container_assignment  go to state 110
     container_function    go to state 111
@@ -2217,14 +2217,7 @@ State 145
 
 State 146
 
-   32 code_block: array_assignment ';' .
-
-    $default  reduce using rule 32 (code_block)
-
-
-State 147
-
-   55 array_assignment: array_val '=' . expression
+   68 array_assignment: array_val '=' . expression
 
     IDENTIFIER   shift, and go to state 52
     INT_CONST    shift, and go to state 53
@@ -2240,6 +2233,13 @@ State 147
     array_val           go to state 62
     get_container_elem  go to state 63
     expression          go to state 166
+
+
+State 147
+
+   32 code_block: array_assignment ';' .
+
+    $default  reduce using rule 32 (code_block)
 
 
 State 148
@@ -2330,9 +2330,9 @@ State 155
 
 State 156
 
-   68 array_val: IDENTIFIER '[' INT_CONST ']' .
+   67 array_val: IDENTIFIER '[' INT_CONST ']' .
 
-    $default  reduce using rule 68 (array_val)
+    $default  reduce using rule 67 (array_val)
 
 
 State 157
@@ -2363,8 +2363,8 @@ State 158
     for_statement         go to state 104
     var_assignment        go to state 105
     array_declaration     go to state 106
-    array_assignment      go to state 107
-    array_val             go to state 108
+    array_val             go to state 107
+    array_assignment      go to state 108
     get_container_elem    go to state 109
     container_assignment  go to state 110
     container_function    go to state 111
@@ -2536,7 +2536,7 @@ State 165
 
 State 166
 
-   55 array_assignment: array_val '=' expression .
+   68 array_assignment: array_val '=' expression .
    89 expression: expression . '+' expression
    90           | expression . '-' expression
    91           | expression . '*' expression
@@ -2565,7 +2565,7 @@ State 166
     '/'         shift, and go to state 89
     '%'         shift, and go to state 90
 
-    $default  reduce using rule 55 (array_assignment)
+    $default  reduce using rule 68 (array_assignment)
 
 
 State 167
@@ -2801,44 +2801,44 @@ State 181
 
 State 182
 
-   57 array_list_int: INT_CONST .
+   56 array_list_int: INT_CONST .
 
-    $default  reduce using rule 57 (array_list_int)
+    $default  reduce using rule 56 (array_list_int)
 
 
 State 183
 
-   59 array_list_float: FLOAT_CONST .
+   58 array_list_float: FLOAT_CONST .
 
-    $default  reduce using rule 59 (array_list_float)
+    $default  reduce using rule 58 (array_list_float)
 
 
 State 184
 
-   61 array_list_char: CHAR_CONST .
+   60 array_list_char: CHAR_CONST .
 
-    $default  reduce using rule 61 (array_list_char)
+    $default  reduce using rule 60 (array_list_char)
 
 
 State 185
 
-   63 array_list_string: STR_CONST .
+   62 array_list_string: STR_CONST .
 
-    $default  reduce using rule 63 (array_list_string)
+    $default  reduce using rule 62 (array_list_string)
 
 
 State 186
 
-   66 array_list_bool: TRUE .
+   65 array_list_bool: TRUE .
 
-    $default  reduce using rule 66 (array_list_bool)
+    $default  reduce using rule 65 (array_list_bool)
 
 
 State 187
 
-   67 array_list_bool: FALSE .
+   66 array_list_bool: FALSE .
 
-    $default  reduce using rule 67 (array_list_bool)
+    $default  reduce using rule 66 (array_list_bool)
 
 
 State 188
@@ -2851,7 +2851,7 @@ State 188
 State 189
 
    50 array_list: array_list_int .
-   56 array_list_int: array_list_int . ',' INT_CONST
+   55 array_list_int: array_list_int . ',' INT_CONST
 
     ','  shift, and go to state 201
 
@@ -2861,7 +2861,7 @@ State 189
 State 190
 
    51 array_list: array_list_float .
-   58 array_list_float: array_list_float . ',' FLOAT_CONST
+   57 array_list_float: array_list_float . ',' FLOAT_CONST
 
     ','  shift, and go to state 202
 
@@ -2871,7 +2871,7 @@ State 190
 State 191
 
    52 array_list: array_list_char .
-   60 array_list_char: array_list_char . ',' CHAR_CONST
+   59 array_list_char: array_list_char . ',' CHAR_CONST
 
     ','  shift, and go to state 203
 
@@ -2881,7 +2881,7 @@ State 191
 State 192
 
    53 array_list: array_list_string .
-   62 array_list_string: array_list_string . ',' STR_CONST
+   61 array_list_string: array_list_string . ',' STR_CONST
 
     ','  shift, and go to state 204
 
@@ -2891,8 +2891,8 @@ State 192
 State 193
 
    54 array_list: array_list_bool .
-   64 array_list_bool: array_list_bool . ',' TRUE
-   65                | array_list_bool . ',' FALSE
+   63 array_list_bool: array_list_bool . ',' TRUE
+   64                | array_list_bool . ',' FALSE
 
     ','  shift, and go to state 205
 
@@ -2934,8 +2934,8 @@ State 196
     for_statement         go to state 104
     var_assignment        go to state 105
     array_declaration     go to state 106
-    array_assignment      go to state 107
-    array_val             go to state 108
+    array_val             go to state 107
+    array_assignment      go to state 108
     get_container_elem    go to state 109
     container_assignment  go to state 110
     container_function    go to state 111
@@ -2964,8 +2964,8 @@ State 197
     for_statement         go to state 104
     var_assignment        go to state 105
     array_declaration     go to state 106
-    array_assignment      go to state 107
-    array_val             go to state 108
+    array_val             go to state 107
+    array_assignment      go to state 108
     get_container_elem    go to state 109
     container_assignment  go to state 110
     container_function    go to state 111
@@ -3023,36 +3023,36 @@ State 200
 
 State 201
 
-   56 array_list_int: array_list_int ',' . INT_CONST
+   55 array_list_int: array_list_int ',' . INT_CONST
 
     INT_CONST  shift, and go to state 210
 
 
 State 202
 
-   58 array_list_float: array_list_float ',' . FLOAT_CONST
+   57 array_list_float: array_list_float ',' . FLOAT_CONST
 
     FLOAT_CONST  shift, and go to state 211
 
 
 State 203
 
-   60 array_list_char: array_list_char ',' . CHAR_CONST
+   59 array_list_char: array_list_char ',' . CHAR_CONST
 
     CHAR_CONST  shift, and go to state 212
 
 
 State 204
 
-   62 array_list_string: array_list_string ',' . STR_CONST
+   61 array_list_string: array_list_string ',' . STR_CONST
 
     STR_CONST  shift, and go to state 213
 
 
 State 205
 
-   64 array_list_bool: array_list_bool ',' . TRUE
-   65                | array_list_bool ',' . FALSE
+   63 array_list_bool: array_list_bool ',' . TRUE
+   64                | array_list_bool ',' . FALSE
 
     TRUE   shift, and go to state 214
     FALSE  shift, and go to state 215
@@ -3087,8 +3087,8 @@ State 207
     for_statement         go to state 104
     var_assignment        go to state 105
     array_declaration     go to state 106
-    array_assignment      go to state 107
-    array_val             go to state 108
+    array_val             go to state 107
+    array_assignment      go to state 108
     get_container_elem    go to state 109
     container_assignment  go to state 110
     container_function    go to state 111
@@ -3118,8 +3118,8 @@ State 208
     for_statement         go to state 104
     var_assignment        go to state 105
     array_declaration     go to state 106
-    array_assignment      go to state 107
-    array_val             go to state 108
+    array_val             go to state 107
+    array_assignment      go to state 108
     get_container_elem    go to state 109
     container_assignment  go to state 110
     container_function    go to state 111
@@ -3139,44 +3139,44 @@ State 209
 
 State 210
 
-   56 array_list_int: array_list_int ',' INT_CONST .
+   55 array_list_int: array_list_int ',' INT_CONST .
 
-    $default  reduce using rule 56 (array_list_int)
+    $default  reduce using rule 55 (array_list_int)
 
 
 State 211
 
-   58 array_list_float: array_list_float ',' FLOAT_CONST .
+   57 array_list_float: array_list_float ',' FLOAT_CONST .
 
-    $default  reduce using rule 58 (array_list_float)
+    $default  reduce using rule 57 (array_list_float)
 
 
 State 212
 
-   60 array_list_char: array_list_char ',' CHAR_CONST .
+   59 array_list_char: array_list_char ',' CHAR_CONST .
 
-    $default  reduce using rule 60 (array_list_char)
+    $default  reduce using rule 59 (array_list_char)
 
 
 State 213
 
-   62 array_list_string: array_list_string ',' STR_CONST .
+   61 array_list_string: array_list_string ',' STR_CONST .
 
-    $default  reduce using rule 62 (array_list_string)
+    $default  reduce using rule 61 (array_list_string)
 
 
 State 214
 
-   64 array_list_bool: array_list_bool ',' TRUE .
+   63 array_list_bool: array_list_bool ',' TRUE .
 
-    $default  reduce using rule 64 (array_list_bool)
+    $default  reduce using rule 63 (array_list_bool)
 
 
 State 215
 
-   65 array_list_bool: array_list_bool ',' FALSE .
+   64 array_list_bool: array_list_bool ',' FALSE .
 
-    $default  reduce using rule 65 (array_list_bool)
+    $default  reduce using rule 64 (array_list_bool)
 
 
 State 216
@@ -3244,8 +3244,8 @@ State 222
     for_statement         go to state 104
     var_assignment        go to state 105
     array_declaration     go to state 106
-    array_assignment      go to state 107
-    array_val             go to state 108
+    array_val             go to state 107
+    array_assignment      go to state 108
     get_container_elem    go to state 109
     container_assignment  go to state 110
     container_function    go to state 111
@@ -3274,8 +3274,8 @@ State 223
     for_statement         go to state 104
     var_assignment        go to state 105
     array_declaration     go to state 106
-    array_assignment      go to state 107
-    array_val             go to state 108
+    array_val             go to state 107
+    array_assignment      go to state 108
     get_container_elem    go to state 109
     container_assignment  go to state 110
     container_function    go to state 111
@@ -3305,8 +3305,8 @@ State 224
     for_statement         go to state 104
     var_assignment        go to state 105
     array_declaration     go to state 106
-    array_assignment      go to state 107
-    array_val             go to state 108
+    array_val             go to state 107
+    array_assignment      go to state 108
     get_container_elem    go to state 109
     container_assignment  go to state 110
     container_function    go to state 111
@@ -3336,8 +3336,8 @@ State 225
     for_statement         go to state 104
     var_assignment        go to state 105
     array_declaration     go to state 106
-    array_assignment      go to state 107
-    array_val             go to state 108
+    array_val             go to state 107
+    array_assignment      go to state 108
     get_container_elem    go to state 109
     container_assignment  go to state 110
     container_function    go to state 111

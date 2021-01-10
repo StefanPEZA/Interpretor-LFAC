@@ -88,7 +88,7 @@
     nodeType *nodArr(int type, int size);
     void freeNode(nodeType *p);
         /* eliberare memorie */
-    int interpret(nodeType *p);
+    void* interpret(nodeType *p);
     void evalError(const char*, int nre);
         /* functia de interpretare */
     int arrayInt[1000];
@@ -505,7 +505,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  29
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   453
+#define YYLAST   452
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  54
@@ -569,13 +569,13 @@ static const yytype_int16 yyrline[] =
       93,    96,   100,   103,   104,   107,   108,   111,   112,   115,
      116,   119,   120,   123,   126,   127,   128,   129,   130,   133,
      134,   137,   138,   139,   140,   141,   142,   143,   144,   145,
-     146,   147,   150,   151,   154,   155,   158,   161,   164,   167,
-     172,   179,   180,   181,   182,   183,   185,   188,   189,   191,
-     192,   194,   195,   197,   198,   200,   201,   202,   203,   205,
-     208,   211,   214,   217,   222,   229,   232,   233,   234,   237,
-     240,   241,   244,   245,   248,   249,   250,   251,   252,   253,
-     254,   255,   256,   257,   258,   259,   260,   261,   262,   263,
-     264,   265,   266,   267,   268,   269,   270,   271,   272
+     146,   147,   150,   151,   154,   155,   158,   161,   164,   177,
+     182,   189,   190,   191,   192,   193,   195,   196,   198,   199,
+     201,   202,   204,   205,   207,   208,   209,   210,   212,   225,
+     229,   232,   235,   238,   244,   252,   260,   261,   262,   265,
+     268,   269,   272,   273,   276,   277,   278,   279,   280,   281,
+     282,   283,   284,   285,   286,   287,   288,   289,   290,   291,
+     292,   293,   294,   295,   296,   297,   298,   299,   300
 };
 #endif
 
@@ -595,12 +595,12 @@ static const char *const yytname[] =
   "container_elements", "function_declaration", "return_type",
   "fun_params", "parameter", "types", "fun_body", "code_block",
   "code_block_list", "if_statement", "while_statement", "for_statement",
-  "var_assignment", "array_declaration", "array_list", "array_assignment",
-  "array_list_int", "array_list_float", "array_list_char",
-  "array_list_string", "array_list_bool", "array_val",
-  "get_container_elem", "container_assignment", "container_function",
-  "var_declaration", "const_declaration", "call_function", "eval_function",
-  "call_params", "call_param", "expression", YY_NULLPTR
+  "var_assignment", "array_declaration", "array_list", "array_list_int",
+  "array_list_float", "array_list_char", "array_list_string",
+  "array_list_bool", "array_val", "array_assignment", "get_container_elem",
+  "container_assignment", "container_function", "var_declaration",
+  "const_declaration", "call_function", "eval_function", "call_params",
+  "call_param", "expression", YY_NULLPTR
 };
 #endif
 
@@ -632,29 +632,29 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-     116,   -40,   153,   132,   153,     6,   153,    28,   116,  -191,
+     116,   -40,   231,   132,   231,     6,   231,    28,   116,  -191,
     -191,  -191,  -191,   -17,    11,    25,   118,  -191,  -191,  -191,
     -191,  -191,    26,  -191,    55,  -191,    65,    74,    69,  -191,
     -191,  -191,  -191,  -191,    10,  -191,  -191,    81,   100,    95,
-     104,   119,    99,   157,  -191,  -191,   252,    83,   252,   125,
-     159,   134,   -33,  -191,  -191,  -191,  -191,  -191,  -191,   252,
-     252,   252,  -191,  -191,   377,   135,    13,  -191,   164,   377,
-     383,   133,  -191,   172,   184,  -191,  -191,   290,   252,   252,
-     252,   252,   252,   252,   252,   252,   252,   252,   252,   252,
-     252,   383,   161,   153,  -191,    -1,   187,   191,   193,     9,
-       3,  -191,  -191,  -191,  -191,   197,   198,   199,   212,     8,
-     201,   203,   204,   206,   208,   221,  -191,   205,  -191,   390,
-     402,   412,   412,   176,   176,   176,   176,    76,    76,  -191,
-    -191,  -191,    30,   383,  -191,   219,   220,  -191,   252,   252,
-     238,   252,  -191,  -191,  -191,  -191,  -191,   252,   252,   245,
-    -191,  -191,  -191,  -191,  -191,   231,  -191,  -191,    70,   252,
-     217,   308,   326,   246,   233,   377,   377,   377,  -191,    42,
-    -191,   377,   174,  -191,   344,  -191,    50,   235,   236,   252,
-    -191,   245,  -191,  -191,  -191,  -191,  -191,  -191,   237,   240,
-     241,   242,   243,   254,  -191,  -191,   383,   383,   269,  -191,
-    -191,   264,   288,   289,   287,   106,  -191,   168,   183,   238,
-    -191,  -191,  -191,  -191,  -191,  -191,   304,  -191,  -191,   270,
-     267,   277,   383,   383,   200,   215,  -191,  -191
+     104,   119,    99,   145,  -191,  -191,   251,    83,   251,   120,
+     146,   128,   -33,  -191,  -191,  -191,  -191,  -191,  -191,   251,
+     251,   251,  -191,  -191,   376,   130,    13,  -191,   170,   376,
+     382,   114,  -191,   180,   183,  -191,  -191,   289,   251,   251,
+     251,   251,   251,   251,   251,   251,   251,   251,   251,   251,
+     251,   382,   160,   231,  -191,    -1,   168,   169,   171,     9,
+       3,  -191,  -191,  -191,  -191,   179,   182,   192,   184,     8,
+     186,   188,   202,   203,   205,   193,  -191,   161,  -191,   389,
+     401,   411,   411,   273,   273,   273,   273,    76,    76,  -191,
+    -191,  -191,    30,   382,  -191,   173,   211,  -191,   251,   251,
+     235,   251,  -191,  -191,  -191,  -191,   251,  -191,   251,   244,
+    -191,  -191,  -191,  -191,  -191,   208,  -191,  -191,    70,   251,
+     216,   307,   325,   222,   215,   376,   376,   376,  -191,    42,
+    -191,   376,   172,  -191,   343,  -191,    50,   213,   230,   251,
+    -191,   244,  -191,  -191,  -191,  -191,  -191,  -191,   233,   229,
+     234,   239,   240,   241,  -191,  -191,   382,   382,   268,  -191,
+    -191,   259,   261,   262,   279,   106,  -191,   166,   181,   235,
+    -191,  -191,  -191,  -191,  -191,  -191,   283,  -191,  -191,   270,
+     276,   282,   382,   382,   199,   214,  -191,  -191
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -676,14 +676,14 @@ static const yytype_int8 yydefact[] =
        0,     0,     0,     0,     0,    50,    70,     0,    89,   104,
      105,   102,   103,    98,    99,   100,   101,    90,    91,    92,
       93,    94,     0,     0,    22,     0,     0,    78,     0,     0,
-       0,     0,    11,    30,    36,    32,    33,     0,     0,     0,
-      37,    38,    31,    34,    35,     0,    69,    18,     0,     0,
-       0,     0,     0,     0,     0,    48,    56,    71,    82,     0,
+       0,     0,    11,    30,    36,    32,     0,    33,     0,     0,
+      37,    38,    31,    34,    35,     0,    68,    18,     0,     0,
+       0,     0,     0,     0,     0,    48,    69,    71,    82,     0,
       80,    83,     0,    17,     0,    77,     0,     0,     0,     0,
-      72,     0,    58,    60,    62,    64,    67,    68,     0,    51,
+      72,     0,    57,    59,    61,    63,    66,    67,     0,    51,
       52,    53,    54,    55,    79,    76,     0,     0,     0,    81,
       49,     0,     0,     0,     0,     0,    42,     0,     0,     0,
-      57,    59,    61,    63,    65,    66,    44,    43,    46,     0,
+      56,    58,    60,    62,    64,    65,    44,    43,    46,     0,
        0,     0,     0,     0,     0,     0,    45,    47
 };
 
@@ -691,9 +691,9 @@ static const yytype_int8 yydefact[] =
 static const yytype_int16 yypgoto[] =
 {
     -191,  -191,  -191,   324,  -191,  -191,  -191,   299,   -11,  -191,
-    -191,   251,   226,   -90,   -64,  -190,  -191,  -191,  -191,  -138,
-      46,  -191,  -191,  -191,  -191,  -191,  -191,  -191,   -70,   -66,
-    -191,  -191,    40,    57,  -131,  -191,   190,   170,    24
+    -191,   250,   178,   -90,   -64,  -190,  -191,  -191,  -191,  -138,
+      46,  -191,  -191,  -191,  -191,  -191,  -191,   -70,  -191,   -66,
+    -191,  -191,    40,    57,  -131,  -191,   189,   187,    24
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
@@ -701,7 +701,7 @@ static const yytype_int16 yydefgoto[] =
 {
       -1,     7,     8,     9,    10,    11,    34,    35,    12,    24,
       66,    67,    68,   100,   206,   207,   102,   103,   104,   105,
-     106,   188,   107,   189,   190,   191,   192,   193,    62,    63,
+     106,   188,   189,   190,   191,   192,   193,    62,   108,    63,
      110,   111,   112,   113,   114,   137,   169,   170,   171
 };
 
@@ -710,52 +710,52 @@ static const yytype_int16 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-     108,   132,   164,   135,   109,    36,   101,   208,     2,    16,
+     107,   132,   164,   135,   109,    36,   101,   208,     2,    16,
        4,    95,    96,    73,    97,    98,     3,     4,   168,    74,
-     136,   108,     6,    36,    99,   109,    27,   101,    29,   168,
-     108,    31,   224,   225,   109,     2,   143,     4,    95,    96,
+     136,   107,     6,    36,    99,   109,    27,   101,    29,   168,
+     107,    31,   224,   225,   109,     2,   143,     4,    95,    96,
       14,    97,    98,   158,   148,   141,    13,    38,    14,     6,
      168,    99,   149,   142,    13,    73,    37,    15,    92,    32,
-      43,    74,   108,   108,    93,    15,   109,   109,   143,   101,
+      43,    74,   107,   107,    93,    15,   109,   109,   143,   101,
       64,   219,    69,    33,    37,     2,    39,     4,    95,    96,
-     157,    97,    98,    75,    76,    77,    40,   180,   108,     6,
+     157,    97,    98,    75,    76,    77,    40,   180,   107,     6,
       42,    99,   109,   181,   143,   195,    17,    18,    19,    20,
       21,   181,   119,   120,   121,   122,   123,   124,   125,   126,
      127,   128,   129,   130,   131,    88,    89,    90,    41,     1,
-     173,     2,     3,     4,     3,     4,   108,   108,    65,    45,
-     109,   109,   214,   215,     5,     6,    46,   108,   108,    47,
+     173,     2,     3,     4,     3,     4,   107,   107,    65,    45,
+     109,   109,   214,   215,     5,     6,    46,   107,   107,    47,
       48,   109,   109,   217,   217,    17,    18,    19,    20,    21,
-      23,    50,   108,   108,   108,   108,   109,   109,   109,   109,
-     217,   217,   161,   162,    49,   165,    17,    18,    19,    20,
-      21,   166,   167,     2,    70,     4,    95,    96,    51,    97,
-      98,    71,    72,   174,    91,    94,   115,     6,     2,    99,
-       4,    95,    96,   116,    97,    98,   182,   183,   184,   185,
-     186,   187,     6,   198,    99,     2,   117,     4,    95,    96,
-     133,    97,    98,    86,    87,    88,    89,    90,   216,     6,
-       2,    99,     4,    95,    96,    95,    97,    98,    22,    25,
-      26,   138,    28,   218,     6,   139,    99,   140,    52,    53,
-      54,    55,    56,    57,    58,   144,   145,   146,   147,   150,
-     226,   151,   152,    95,   153,    59,   154,   155,   156,   163,
-      60,    61,   175,   159,   160,   227,    52,    53,    54,    55,
-      56,    57,    58,    52,    53,    54,    55,    56,    57,    58,
-     172,   179,   141,    59,   196,   197,   210,   200,    60,    61,
-      59,   201,   202,   203,   204,    60,    61,    78,    79,    80,
-      81,    82,    83,    84,    85,   205,    86,    87,    88,    89,
-      90,   211,   213,   212,   220,   221,   222,   209,    78,    79,
-      80,    81,    82,    83,    84,    85,   223,    86,    87,    88,
-      89,    90,    30,    44,     0,   118,    78,    79,    80,    81,
-      82,    83,    84,    85,   134,    86,    87,    88,    89,    90,
-     176,   199,     0,   177,    78,    79,    80,    81,    82,    83,
-      84,    85,     0,    86,    87,    88,    89,    90,     0,     0,
-       0,   178,    78,    79,    80,    81,    82,    83,    84,    85,
-       0,    86,    87,    88,    89,    90,     0,     0,     2,   194,
-       4,    95,    96,     0,    97,    98,     0,     0,     0,     0,
-       0,     0,     6,     0,    99,    78,    79,    80,    81,    82,
-      83,    84,    85,     0,    86,    87,    88,    89,    90,    79,
-      80,    81,    82,    83,    84,    85,     0,    86,    87,    88,
-      89,    90,    80,    81,    82,    83,    84,    85,     0,    86,
-      87,    88,    89,    90,    82,    83,    84,    85,     0,    86,
-      87,    88,    89,    90
+      23,    50,   107,   107,   107,   107,   109,   109,   109,   109,
+     217,   217,   161,   162,    49,   165,    51,   115,    71,    70,
+     166,     2,   167,     4,    95,    96,    72,    97,    98,    91,
+      22,    25,    26,   174,    28,     6,     2,    99,     4,    95,
+      96,    94,    97,    98,   182,   183,   184,   185,   186,   187,
+       6,   116,    99,   198,     2,   117,     4,    95,    96,   133,
+      97,    98,   138,   139,   156,   140,   216,   159,     6,     2,
+      99,     4,    95,    96,    95,    97,    98,   144,   146,   155,
+     145,   218,   147,     6,   150,    99,   151,    52,    53,    54,
+      55,    56,    57,    58,    17,    18,    19,    20,    21,   226,
+     152,   153,    95,   154,    59,   160,   163,   172,   141,    60,
+      61,   175,   196,   179,   227,    52,    53,    54,    55,    56,
+      57,    58,    52,    53,    54,    55,    56,    57,    58,   197,
+     201,   210,    59,   200,   211,   202,   212,    60,    61,    59,
+     203,   204,   205,   220,    60,    61,    78,    79,    80,    81,
+      82,    83,    84,    85,   213,    86,    87,    88,    89,    90,
+      86,    87,    88,    89,    90,   221,   209,    78,    79,    80,
+      81,    82,    83,    84,    85,   222,    86,    87,    88,    89,
+      90,   223,    30,    44,   118,    78,    79,    80,    81,    82,
+      83,    84,    85,   134,    86,    87,    88,    89,    90,   176,
+       0,     0,   177,    78,    79,    80,    81,    82,    83,    84,
+      85,     0,    86,    87,    88,    89,    90,     0,   199,     0,
+     178,    78,    79,    80,    81,    82,    83,    84,    85,     0,
+      86,    87,    88,    89,    90,     0,     0,     2,   194,     4,
+      95,    96,     0,    97,    98,     0,     0,     0,     0,     0,
+       0,     6,     0,    99,    78,    79,    80,    81,    82,    83,
+      84,    85,     0,    86,    87,    88,    89,    90,    79,    80,
+      81,    82,    83,    84,    85,     0,    86,    87,    88,    89,
+      90,    80,    81,    82,    83,    84,    85,     0,    86,    87,
+      88,    89,    90,    82,    83,    84,    85,     0,    86,    87,
+      88,    89,    90
 };
 
 static const yytype_int16 yycheck[] =
@@ -776,36 +776,36 @@ static const yytype_int16 yycheck[] =
      196,   197,    26,    27,    18,    19,    36,   207,   208,    44,
       36,   207,   208,   207,   208,    13,    14,    15,    16,    17,
       18,    52,   222,   223,   224,   225,   222,   223,   224,   225,
-     224,   225,   138,   139,    45,   141,    13,    14,    15,    16,
-      17,   147,   148,     5,    49,     7,     8,     9,    21,    11,
-      12,    22,    48,   159,    49,    21,    53,    19,     5,    21,
-       7,     8,     9,    21,    11,    12,    22,    23,    24,    25,
-      26,    27,    19,   179,    21,     5,    22,     7,     8,     9,
-      49,    11,    12,    37,    38,    39,    40,    41,    50,    19,
-       5,    21,     7,     8,     9,     8,    11,    12,     2,     3,
-       4,    44,     6,    50,    19,    44,    21,    44,    21,    22,
-      23,    24,    25,    26,    27,    48,    48,    48,    36,    48,
-      50,    48,    48,     8,    48,    38,    48,    36,    53,    21,
-      43,    44,    45,    44,    44,    50,    21,    22,    23,    24,
-      25,    26,    27,    21,    22,    23,    24,    25,    26,    27,
-      49,    48,    36,    38,    49,    49,    22,    50,    43,    44,
-      38,    51,    51,    51,    51,    43,    44,    28,    29,    30,
-      31,    32,    33,    34,    35,    51,    37,    38,    39,    40,
-      41,    23,    25,    24,    10,    45,    49,    48,    28,    29,
-      30,    31,    32,    33,    34,    35,    49,    37,    38,    39,
-      40,    41,     8,    34,    -1,    45,    28,    29,    30,    31,
-      32,    33,    34,    35,    93,    37,    38,    39,    40,    41,
-     160,   181,    -1,    45,    28,    29,    30,    31,    32,    33,
-      34,    35,    -1,    37,    38,    39,    40,    41,    -1,    -1,
-      -1,    45,    28,    29,    30,    31,    32,    33,    34,    35,
-      -1,    37,    38,    39,    40,    41,    -1,    -1,     5,    45,
-       7,     8,     9,    -1,    11,    12,    -1,    -1,    -1,    -1,
-      -1,    -1,    19,    -1,    21,    28,    29,    30,    31,    32,
-      33,    34,    35,    -1,    37,    38,    39,    40,    41,    29,
-      30,    31,    32,    33,    34,    35,    -1,    37,    38,    39,
-      40,    41,    30,    31,    32,    33,    34,    35,    -1,    37,
-      38,    39,    40,    41,    32,    33,    34,    35,    -1,    37,
-      38,    39,    40,    41
+     224,   225,   138,   139,    45,   141,    21,    53,    22,    49,
+     146,     5,   148,     7,     8,     9,    48,    11,    12,    49,
+       2,     3,     4,   159,     6,    19,     5,    21,     7,     8,
+       9,    21,    11,    12,    22,    23,    24,    25,    26,    27,
+      19,    21,    21,   179,     5,    22,     7,     8,     9,    49,
+      11,    12,    44,    44,    53,    44,    50,    44,    19,     5,
+      21,     7,     8,     9,     8,    11,    12,    48,    36,    36,
+      48,    50,    48,    19,    48,    21,    48,    21,    22,    23,
+      24,    25,    26,    27,    13,    14,    15,    16,    17,    50,
+      48,    48,     8,    48,    38,    44,    21,    49,    36,    43,
+      44,    45,    49,    48,    50,    21,    22,    23,    24,    25,
+      26,    27,    21,    22,    23,    24,    25,    26,    27,    49,
+      51,    22,    38,    50,    23,    51,    24,    43,    44,    38,
+      51,    51,    51,    10,    43,    44,    28,    29,    30,    31,
+      32,    33,    34,    35,    25,    37,    38,    39,    40,    41,
+      37,    38,    39,    40,    41,    45,    48,    28,    29,    30,
+      31,    32,    33,    34,    35,    49,    37,    38,    39,    40,
+      41,    49,     8,    34,    45,    28,    29,    30,    31,    32,
+      33,    34,    35,    93,    37,    38,    39,    40,    41,   160,
+      -1,    -1,    45,    28,    29,    30,    31,    32,    33,    34,
+      35,    -1,    37,    38,    39,    40,    41,    -1,   181,    -1,
+      45,    28,    29,    30,    31,    32,    33,    34,    35,    -1,
+      37,    38,    39,    40,    41,    -1,    -1,     5,    45,     7,
+       8,     9,    -1,    11,    12,    -1,    -1,    -1,    -1,    -1,
+      -1,    19,    -1,    21,    28,    29,    30,    31,    32,    33,
+      34,    35,    -1,    37,    38,    39,    40,    41,    29,    30,
+      31,    32,    33,    34,    35,    -1,    37,    38,    39,    40,
+      41,    30,    31,    32,    33,    34,    35,    -1,    37,    38,
+      39,    40,    41,    32,    33,    34,    35,    -1,    37,    38,
+      39,    40,    41
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -818,20 +818,20 @@ static const yytype_int8 yystos[] =
       57,    48,    48,    48,    60,    61,    62,    86,    21,    21,
       21,    44,    21,    50,    61,    48,    36,    44,    36,    45,
       52,    21,    21,    22,    23,    24,    25,    26,    27,    38,
-      43,    44,    82,    83,    92,    45,    64,    65,    66,    92,
+      43,    44,    81,    83,    92,    45,    64,    65,    66,    92,
       49,    22,    48,    46,    52,    92,    92,    92,    28,    29,
       30,    31,    32,    33,    34,    35,    37,    38,    39,    40,
       41,    49,    45,    51,    21,     8,     9,    11,    12,    21,
-      67,    68,    70,    71,    72,    73,    74,    76,    82,    83,
+      67,    68,    70,    71,    72,    73,    74,    81,    82,    83,
       84,    85,    86,    87,    88,    53,    21,    22,    45,    92,
       92,    92,    92,    92,    92,    92,    92,    92,    92,    92,
       92,    92,    67,    49,    65,     4,    21,    89,    44,    44,
-      44,    36,    50,    68,    48,    48,    48,    36,    36,    44,
+      44,    36,    50,    68,    48,    48,    36,    48,    36,    44,
       48,    48,    48,    48,    48,    36,    53,    50,    67,    44,
       44,    92,    92,    21,    73,    92,    92,    92,    88,    90,
       91,    92,    49,    50,    92,    45,    90,    45,    45,    48,
-      45,    51,    22,    23,    24,    25,    26,    27,    75,    77,
-      78,    79,    80,    81,    45,    45,    49,    49,    92,    91,
+      45,    51,    22,    23,    24,    25,    26,    27,    75,    76,
+      77,    78,    79,    80,    45,    45,    49,    49,    92,    91,
       50,    51,    51,    51,    51,    51,    68,    69,    69,    48,
       22,    23,    24,    25,    26,    27,    50,    68,    50,    73,
       10,    45,    49,    49,    69,    69,    50,    50
@@ -845,8 +845,8 @@ static const yytype_int8 yyr1[] =
       63,    64,    64,    65,    66,    66,    66,    66,    66,    67,
       67,    68,    68,    68,    68,    68,    68,    68,    68,    68,
       68,    68,    69,    69,    70,    70,    71,    72,    73,    74,
-      74,    75,    75,    75,    75,    75,    76,    77,    77,    78,
-      78,    79,    79,    80,    80,    81,    81,    81,    81,    82,
+      74,    75,    75,    75,    75,    75,    76,    76,    77,    77,
+      78,    78,    79,    79,    80,    80,    80,    80,    81,    82,
       83,    84,    85,    86,    86,    87,    88,    88,    88,    89,
       90,    90,    91,    91,    92,    92,    92,    92,    92,    92,
       92,    92,    92,    92,    92,    92,    92,    92,    92,    92,
@@ -861,8 +861,8 @@ static const yytype_int8 yyr2[] =
        1,     1,     3,     2,     1,     1,     1,     1,     1,     1,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     1,
        1,     1,     1,     2,     7,    11,     7,    11,     3,    10,
-       6,     1,     1,     1,     1,     1,     3,     3,     1,     3,
-       1,     3,     1,     3,     1,     3,     3,     1,     1,     4,
+       6,     1,     1,     1,     1,     1,     3,     1,     3,     1,
+       3,     1,     3,     1,     3,     3,     1,     1,     4,     3,
        3,     3,     4,     3,     5,     5,     5,     4,     2,     4,
        1,     3,     1,     1,     1,     1,     1,     1,     1,     3,
        3,     3,     3,     3,     3,     2,     1,     1,     3,     3,
@@ -2094,388 +2094,417 @@ yyreduce:
 
   case 48:
 #line 164 "interpretor.y"
-                                           {(yyval.nodPtr) = nodOper('=', 2, nodId((yyvsp[-2].varId), 0), (yyvsp[0].nodPtr));}
-#line 2099 "interpretor.tab.c"
-    break;
-
-  case 49:
-#line 167 "interpretor.y"
-                                                                                  {
-        if (addSymbol((yyvsp[-7].varId), ARR, (yyvsp[-8].Types), localScope) == -1){
-            yyerror("Variabila deja declarata - ");
-        }
-        (yyval.nodPtr)=nodOper(ARR, 4,nodCon(typeName,&(yyvsp[-8].Types)),nodId((yyvsp[-7].varId), 1),nodCon(constInt,&(yyvsp[-5].intVal)),nodArr((yyvsp[-8].Types), indx)); indx=0;}
+                                           {
+    int x=getIndex((yyvsp[-2].varId),localScope);
+    if(symbol[x].isconst==1)
+        yyerror("Nu poti schimba valoarea unei constante - ");
+    else{
+        if(x==-1)
+            yyerror("Variabila nu este declarata - ");
+        else
+            (yyval.nodPtr) = nodOper('=', 2, nodId((yyvsp[-2].varId), 0), (yyvsp[0].nodPtr));
+    }
+}
 #line 2109 "interpretor.tab.c"
     break;
 
-  case 50:
-#line 172 "interpretor.y"
-                                             {
-        if (addSymbol((yyvsp[-3].varId), ARR, (yyvsp[-4].Types), localScope) == -1){
+  case 49:
+#line 177 "interpretor.y"
+                                                                                  {
+        if (addSymbol((yyvsp[-7].varId), ARR, (yyvsp[-8].Types), localScope, 0) == -1){
             yyerror("Variabila deja declarata - ");
         }
-        (yyval.nodPtr)=nodOper(ARR, 3,nodCon(typeName,&(yyvsp[-4].Types)),nodId((yyvsp[-3].varId), 1),nodCon(constInt,&(yyvsp[-1].intVal)));}
+        (yyval.nodPtr)=nodOper(ARR, 4,nodCon(typeName,&(yyvsp[-8].Types)),nodId((yyvsp[-7].varId), 1),nodCon(constInt,&(yyvsp[-5].intVal)),nodArr((yyvsp[-8].Types), indx)); indx=0;}
 #line 2119 "interpretor.tab.c"
     break;
 
+  case 50:
+#line 182 "interpretor.y"
+                                             {
+        if (addSymbol((yyvsp[-3].varId), ARR, (yyvsp[-4].Types), localScope, 0) == -1){
+            yyerror("Variabila deja declarata - ");
+        }
+        (yyval.nodPtr)=nodOper(ARR, 3,nodCon(typeName,&(yyvsp[-4].Types)),nodId((yyvsp[-3].varId), 1),nodCon(constInt,&(yyvsp[-1].intVal)));}
+#line 2129 "interpretor.tab.c"
+    break;
+
   case 51:
-#line 179 "interpretor.y"
+#line 189 "interpretor.y"
                             {}
-#line 2125 "interpretor.tab.c"
+#line 2135 "interpretor.tab.c"
     break;
 
   case 52:
-#line 180 "interpretor.y"
+#line 190 "interpretor.y"
                        {}
-#line 2131 "interpretor.tab.c"
+#line 2141 "interpretor.tab.c"
     break;
 
   case 53:
-#line 181 "interpretor.y"
+#line 191 "interpretor.y"
                       {}
-#line 2137 "interpretor.tab.c"
+#line 2147 "interpretor.tab.c"
     break;
 
   case 54:
-#line 182 "interpretor.y"
+#line 192 "interpretor.y"
                         {}
-#line 2143 "interpretor.tab.c"
+#line 2153 "interpretor.tab.c"
     break;
 
   case 55:
-#line 183 "interpretor.y"
+#line 193 "interpretor.y"
                       {}
-#line 2149 "interpretor.tab.c"
+#line 2159 "interpretor.tab.c"
     break;
 
   case 56:
-#line 185 "interpretor.y"
-                                           {}
-#line 2155 "interpretor.tab.c"
+#line 195 "interpretor.y"
+                                              { arrayInt[indx]=(yyvsp[0].intVal); indx++;}
+#line 2165 "interpretor.tab.c"
     break;
 
   case 57:
-#line 188 "interpretor.y"
-                                              { arrayInt[indx]=(yyvsp[0].intVal); indx++;}
-#line 2161 "interpretor.tab.c"
+#line 196 "interpretor.y"
+                {arrayInt[indx]=(yyvsp[0].intVal); indx++;}
+#line 2171 "interpretor.tab.c"
     break;
 
   case 58:
-#line 189 "interpretor.y"
-                {arrayInt[indx]=(yyvsp[0].intVal); indx++;}
-#line 2167 "interpretor.tab.c"
+#line 198 "interpretor.y"
+                                                    {arrayFloat[indx]=(yyvsp[0].floatVal); indx++;}
+#line 2177 "interpretor.tab.c"
     break;
 
   case 59:
-#line 191 "interpretor.y"
-                                                    {arrayFloat[indx]=(yyvsp[0].floatVal); indx++;}
-#line 2173 "interpretor.tab.c"
+#line 199 "interpretor.y"
+                  {arrayFloat[indx]=(yyvsp[0].floatVal); indx++;}
+#line 2183 "interpretor.tab.c"
     break;
 
   case 60:
-#line 192 "interpretor.y"
-                  {arrayFloat[indx]=(yyvsp[0].floatVal); indx++;}
-#line 2179 "interpretor.tab.c"
+#line 201 "interpretor.y"
+                                                 {arrayChar[indx]=(yyvsp[0].charVal); indx++;}
+#line 2189 "interpretor.tab.c"
     break;
 
   case 61:
-#line 194 "interpretor.y"
-                                                 {arrayChar[indx]=(yyvsp[0].charVal); indx++;}
-#line 2185 "interpretor.tab.c"
+#line 202 "interpretor.y"
+                 {arrayChar[indx]=(yyvsp[0].charVal); indx++;}
+#line 2195 "interpretor.tab.c"
     break;
 
   case 62:
-#line 195 "interpretor.y"
-                 {arrayChar[indx]=(yyvsp[0].charVal); indx++;}
-#line 2191 "interpretor.tab.c"
+#line 204 "interpretor.y"
+                                                    {arrayStr[indx]=(yyvsp[0].strVal); indx++;}
+#line 2201 "interpretor.tab.c"
     break;
 
   case 63:
-#line 197 "interpretor.y"
-                                                    {arrayStr[indx]=(yyvsp[0].strVal); indx++;}
-#line 2197 "interpretor.tab.c"
+#line 205 "interpretor.y"
+                {arrayStr[indx]=(yyvsp[0].strVal); indx++;}
+#line 2207 "interpretor.tab.c"
     break;
 
   case 64:
-#line 198 "interpretor.y"
-                {arrayStr[indx]=(yyvsp[0].strVal); indx++;}
-#line 2203 "interpretor.tab.c"
+#line 207 "interpretor.y"
+                                           {arrayBool[indx]=1; indx++;}
+#line 2213 "interpretor.tab.c"
     break;
 
   case 65:
-#line 200 "interpretor.y"
-                                           {arrayBool[indx]=1; indx++;}
-#line 2209 "interpretor.tab.c"
+#line 208 "interpretor.y"
+                                {arrayBool[indx]=0; indx++;}
+#line 2219 "interpretor.tab.c"
     break;
 
   case 66:
-#line 201 "interpretor.y"
-                                {arrayBool[indx]=0; indx++;}
-#line 2215 "interpretor.tab.c"
+#line 209 "interpretor.y"
+           {arrayBool[indx]=1; indx++;}
+#line 2225 "interpretor.tab.c"
     break;
 
   case 67:
-#line 202 "interpretor.y"
-           {arrayBool[indx]=1; indx++;}
-#line 2221 "interpretor.tab.c"
+#line 210 "interpretor.y"
+            {arrayBool[indx]=0; indx++;}
+#line 2231 "interpretor.tab.c"
     break;
 
   case 68:
-#line 203 "interpretor.y"
-            {arrayBool[indx]=0; indx++;}
-#line 2227 "interpretor.tab.c"
+#line 212 "interpretor.y"
+                                         {
+    int x=getIndex((yyvsp[-3].varId),localScope);
+    if(x==-1)
+        yyerror("Variabila nu este declarata - ");
+    else{
+        if(symbol[x].type==ARR){
+            (yyval.nodPtr) = nodOper('[',2,nodId((yyvsp[-3].varId),0),nodCon(constInt,&(yyvsp[-1].intVal)));
+        }
+        else
+            yyerror("Nu este vector - ");
+    }
+}
+#line 2248 "interpretor.tab.c"
     break;
 
   case 69:
-#line 205 "interpretor.y"
-                                         {}
-#line 2233 "interpretor.tab.c"
+#line 225 "interpretor.y"
+                                            {
+     (yyval.nodPtr) = nodOper('=', 3, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr), NULL);
+}
+#line 2256 "interpretor.tab.c"
     break;
 
   case 70:
-#line 208 "interpretor.y"
+#line 229 "interpretor.y"
                                                  {}
-#line 2239 "interpretor.tab.c"
+#line 2262 "interpretor.tab.c"
     break;
 
   case 71:
-#line 211 "interpretor.y"
+#line 232 "interpretor.y"
                                                          {}
-#line 2245 "interpretor.tab.c"
+#line 2268 "interpretor.tab.c"
     break;
 
   case 72:
-#line 214 "interpretor.y"
+#line 235 "interpretor.y"
                                                             {}
-#line 2251 "interpretor.tab.c"
+#line 2274 "interpretor.tab.c"
     break;
 
   case 73:
-#line 217 "interpretor.y"
+#line 238 "interpretor.y"
                                        {
-        if (addSymbol((yyvsp[0].varId), VAR, (yyvsp[-1].Types), localScope) == -1){
+        if (addSymbol((yyvsp[0].varId), VAR, (yyvsp[-1].Types), localScope, 0) == -1){
             yyerror("Variabila deja declarata - ");
         }
         (yyval.nodPtr) = nodOper(VAR,2,nodCon(typeName,&(yyvsp[-1].Types)),nodId((yyvsp[0].varId), 1));}
-#line 2261 "interpretor.tab.c"
+#line 2284 "interpretor.tab.c"
     break;
 
   case 74:
-#line 222 "interpretor.y"
+#line 244 "interpretor.y"
                                           {
-        if (addSymbol((yyvsp[-2].varId), VAR, (yyvsp[-3].Types), localScope) == -1){
+
+        if (addSymbol((yyvsp[-2].varId), VAR, (yyvsp[-3].Types), localScope, 0) == -1){
             yyerror("Variabila deja declarata - ");
         }
         (yyval.nodPtr) = nodOper(VAR,3,nodCon(typeName,&(yyvsp[-3].Types)),nodId((yyvsp[-2].varId), 1),(yyvsp[0].nodPtr));}
-#line 2271 "interpretor.tab.c"
-    break;
-
-  case 75:
-#line 229 "interpretor.y"
-                                                          {}
-#line 2277 "interpretor.tab.c"
-    break;
-
-  case 76:
-#line 232 "interpretor.y"
-                                                    {}
-#line 2283 "interpretor.tab.c"
-    break;
-
-  case 77:
-#line 233 "interpretor.y"
-                              {}
-#line 2289 "interpretor.tab.c"
-    break;
-
-  case 78:
-#line 234 "interpretor.y"
-                         {(yyval.nodPtr) = (yyvsp[0].nodPtr); }
 #line 2295 "interpretor.tab.c"
     break;
 
+  case 75:
+#line 252 "interpretor.y"
+                                                          {
+    if (addSymbol((yyvsp[-2].varId), VAR, (yyvsp[-3].Types), localScope, 1) == -1){
+            yyerror("Variabila deja declarata - ");
+        }
+        (yyval.nodPtr) = nodOper(VAR,3,nodCon(typeName,&(yyvsp[-3].Types)),nodId((yyvsp[-2].varId), 1),(yyvsp[0].nodPtr));
+    }
+#line 2306 "interpretor.tab.c"
+    break;
+
+  case 76:
+#line 260 "interpretor.y"
+                                                    {}
+#line 2312 "interpretor.tab.c"
+    break;
+
+  case 77:
+#line 261 "interpretor.y"
+                              {}
+#line 2318 "interpretor.tab.c"
+    break;
+
+  case 78:
+#line 262 "interpretor.y"
+                         {(yyval.nodPtr) = (yyvsp[0].nodPtr); }
+#line 2324 "interpretor.tab.c"
+    break;
+
   case 79:
-#line 237 "interpretor.y"
+#line 265 "interpretor.y"
                                         { (yyval.nodPtr) = nodOper(EVAL, 1, (yyvsp[-1].nodPtr)); }
-#line 2301 "interpretor.tab.c"
+#line 2330 "interpretor.tab.c"
     break;
 
   case 80:
-#line 240 "interpretor.y"
+#line 268 "interpretor.y"
                          {}
-#line 2307 "interpretor.tab.c"
+#line 2336 "interpretor.tab.c"
     break;
 
   case 81:
-#line 241 "interpretor.y"
+#line 269 "interpretor.y"
                                  {}
-#line 2313 "interpretor.tab.c"
+#line 2342 "interpretor.tab.c"
     break;
 
   case 82:
-#line 244 "interpretor.y"
+#line 272 "interpretor.y"
                            {}
-#line 2319 "interpretor.tab.c"
+#line 2348 "interpretor.tab.c"
     break;
 
   case 83:
-#line 245 "interpretor.y"
+#line 273 "interpretor.y"
                  {}
-#line 2325 "interpretor.tab.c"
+#line 2354 "interpretor.tab.c"
     break;
 
   case 84:
-#line 248 "interpretor.y"
+#line 276 "interpretor.y"
                       {(yyval.nodPtr) = nodId((yyvsp[0].varId), 0);}
-#line 2331 "interpretor.tab.c"
+#line 2360 "interpretor.tab.c"
     break;
 
   case 85:
-#line 249 "interpretor.y"
+#line 277 "interpretor.y"
                          {}
-#line 2337 "interpretor.tab.c"
+#line 2366 "interpretor.tab.c"
     break;
 
   case 86:
-#line 250 "interpretor.y"
-                {}
-#line 2343 "interpretor.tab.c"
+#line 278 "interpretor.y"
+                {(yyval.nodPtr)=(yyvsp[0].nodPtr);}
+#line 2372 "interpretor.tab.c"
     break;
 
   case 87:
-#line 251 "interpretor.y"
+#line 279 "interpretor.y"
                 {(yyval.nodPtr) = nodCon(constInt, &(yyvsp[0].intVal));}
-#line 2349 "interpretor.tab.c"
+#line 2378 "interpretor.tab.c"
     break;
 
   case 88:
-#line 252 "interpretor.y"
+#line 280 "interpretor.y"
                   {(yyval.nodPtr) = nodCon(constFloat, &(yyvsp[0].floatVal));}
-#line 2355 "interpretor.tab.c"
+#line 2384 "interpretor.tab.c"
     break;
 
   case 89:
-#line 253 "interpretor.y"
+#line 281 "interpretor.y"
                          {(yyval.nodPtr) = (yyvsp[-1].nodPtr);}
-#line 2361 "interpretor.tab.c"
+#line 2390 "interpretor.tab.c"
     break;
 
   case 90:
-#line 254 "interpretor.y"
+#line 282 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper('+', 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2367 "interpretor.tab.c"
+#line 2396 "interpretor.tab.c"
     break;
 
   case 91:
-#line 255 "interpretor.y"
+#line 283 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper('-', 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2373 "interpretor.tab.c"
+#line 2402 "interpretor.tab.c"
     break;
 
   case 92:
-#line 256 "interpretor.y"
+#line 284 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper('*', 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2379 "interpretor.tab.c"
+#line 2408 "interpretor.tab.c"
     break;
 
   case 93:
-#line 257 "interpretor.y"
+#line 285 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper('/', 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2385 "interpretor.tab.c"
+#line 2414 "interpretor.tab.c"
     break;
 
   case 94:
-#line 258 "interpretor.y"
+#line 286 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper('%', 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2391 "interpretor.tab.c"
+#line 2420 "interpretor.tab.c"
     break;
 
   case 95:
-#line 259 "interpretor.y"
+#line 287 "interpretor.y"
                                {(yyval.nodPtr) = nodOper(NEG, 1, (yyvsp[0].nodPtr));}
-#line 2397 "interpretor.tab.c"
+#line 2426 "interpretor.tab.c"
     break;
 
   case 96:
-#line 260 "interpretor.y"
+#line 288 "interpretor.y"
            {short b = 1; (yyval.nodPtr) = nodCon(constBool, &b);}
-#line 2403 "interpretor.tab.c"
+#line 2432 "interpretor.tab.c"
     break;
 
   case 97:
-#line 261 "interpretor.y"
+#line 289 "interpretor.y"
             {short b = 0; (yyval.nodPtr) = nodCon(constBool, &b);}
-#line 2409 "interpretor.tab.c"
+#line 2438 "interpretor.tab.c"
     break;
 
   case 98:
-#line 262 "interpretor.y"
+#line 290 "interpretor.y"
                                {(yyval.nodPtr) = nodOper(LT, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2415 "interpretor.tab.c"
+#line 2444 "interpretor.tab.c"
     break;
 
   case 99:
-#line 263 "interpretor.y"
+#line 291 "interpretor.y"
                                {(yyval.nodPtr) = nodOper(GT, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2421 "interpretor.tab.c"
+#line 2450 "interpretor.tab.c"
     break;
 
   case 100:
-#line 264 "interpretor.y"
+#line 292 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper(LTE, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2427 "interpretor.tab.c"
+#line 2456 "interpretor.tab.c"
     break;
 
   case 101:
-#line 265 "interpretor.y"
+#line 293 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper(GTE, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2433 "interpretor.tab.c"
+#line 2462 "interpretor.tab.c"
     break;
 
   case 102:
-#line 266 "interpretor.y"
+#line 294 "interpretor.y"
                                      {(yyval.nodPtr) = nodOper(EQUALITY, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2439 "interpretor.tab.c"
+#line 2468 "interpretor.tab.c"
     break;
 
   case 103:
-#line 267 "interpretor.y"
+#line 295 "interpretor.y"
                                       {(yyval.nodPtr) = nodOper(INEQUALITY, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2445 "interpretor.tab.c"
+#line 2474 "interpretor.tab.c"
     break;
 
   case 104:
-#line 268 "interpretor.y"
+#line 296 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper(AND, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2451 "interpretor.tab.c"
+#line 2480 "interpretor.tab.c"
     break;
 
   case 105:
-#line 269 "interpretor.y"
+#line 297 "interpretor.y"
                                {(yyval.nodPtr) = nodOper(OR, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2457 "interpretor.tab.c"
+#line 2486 "interpretor.tab.c"
     break;
 
   case 106:
-#line 270 "interpretor.y"
+#line 298 "interpretor.y"
                      {(yyval.nodPtr) = nodOper('!', 1, (yyvsp[0].nodPtr));}
-#line 2463 "interpretor.tab.c"
+#line 2492 "interpretor.tab.c"
     break;
 
   case 107:
-#line 271 "interpretor.y"
+#line 299 "interpretor.y"
                  {(yyval.nodPtr) = nodCon(constChar, &(yyvsp[0].charVal));}
-#line 2469 "interpretor.tab.c"
+#line 2498 "interpretor.tab.c"
     break;
 
   case 108:
-#line 272 "interpretor.y"
+#line 300 "interpretor.y"
                 {(yyval.nodPtr) = nodCon(constStr, &(yyvsp[0].strVal));}
-#line 2475 "interpretor.tab.c"
+#line 2504 "interpretor.tab.c"
     break;
 
 
-#line 2479 "interpretor.tab.c"
+#line 2508 "interpretor.tab.c"
 
         default: break;
       }
@@ -2719,7 +2748,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 275 "interpretor.y"
+#line 303 "interpretor.y"
 
 int check = 1;
 
@@ -2761,6 +2790,7 @@ nodeType *nodCon(int type, void* value)
 }
 nodeType *nodId(char* i, int newId)
 {
+    
     nodeType *p;
     size_t nodeSize;
     /* alocare memorie pentru noul nod */
@@ -2806,37 +2836,37 @@ nodeType *nodArr(int type, int size)
     /* copiere valoare constanta */
     if (type == INT){
         p->type = arraylist;
-        p->arr.arrInt=(int*)malloc(size*sizeof(int));
+        p->arr.vect.arrInt=(int*)malloc(size*sizeof(int));
         for(int i=0; i<size;i++){
-            p->arr.arrInt[i] = arrayInt[i];
+            p->arr.vect.arrInt[i] = arrayInt[i];
         }
     }
     else if (type == BOOL){
         p->type = arraylist;
-        p->arr.arrBool=malloc(size*sizeof(short));
+        p->arr.vect.arrBool=malloc(size*sizeof(short));
         for(int i=0; i<size;i++){
-            p->arr.arrBool[i] = arrayBool[i];
+            p->arr.vect.arrBool[i] = arrayBool[i];
         }
     }
     else if (type == CHAR){
         p->type = arraylist;
-        p->arr.arrChar=malloc(size*sizeof(char));
+        p->arr.vect.arrChar=malloc(size*sizeof(char));
         for(int i=0; i<size;i++){
-            p->arr.arrChar[i] = arrayChar[i];
+            p->arr.vect.arrChar[i] = arrayChar[i];
         }
     }
     else if (type == STRING){
         p->type = arraylist;
-        p->arr.arrStr=malloc(size*sizeof(char*));
+        p->arr.vect.arrStr=malloc(size*sizeof(char*));
         for(int i=0; i<size;i++){
-            p->arr.arrStr[i] = arrayStr[i];
+            p->arr.vect.arrStr[i] = arrayStr[i];
         }
     }
     else if (type == FLOAT){
         p->type = arraylist;
-        p->arr.arrFloat=malloc(size*sizeof(float));
+        p->arr.vect.arrFloat=malloc(size*sizeof(float));
         for(int i=0; i<size;i++){
-            p->arr.arrFloat[i] = arrayFloat[i];
+            p->arr.vect.arrFloat[i] = arrayFloat[i];
         }
     }
     return p;
@@ -2855,40 +2885,42 @@ void freeNode(nodeType *p)
 }
 
 
-int interpret(nodeType *p)
+void* interpret(nodeType *p)
 {
-    int result;
+    int* result = (int*)malloc(sizeof(int));;
     if (!p)
         return 0;
     switch (p->type)
     {
     case constInt:
-        return p->con.intVal;
+        return &p->con.intVal;
     case constFloat:
-        return p->con.floatVal;
+        return &p->con.floatVal;
     case constBool:
-        return p->con.boolVal;
+        return &p->con.boolVal;
     case constChar:
-        return p->con.charVal;
+        return &p->con.charVal;
     case constStr:
-        return *p->con.strVal;
+        return p->con.strVal;
     case typeId:
-        return symbol[p->id.i].val.intVal;
+        return &symbol[p->id.i].val.intVal;
     case typeOper:
         switch (p->opr.oper)
         {
         case MAIN: return interpret(p->opr.op[0]);
         case EVAL:
-            inorderExpr(p->opr.op[0]);
-            if (strstr(strExpr, "fail"))
-            {
-                evalError("Parametrul nu este de tip int - la eval #", nreval);
-                return 0;
+            if(check == 1){
+                inorderExpr(p->opr.op[0]);
+                if (strstr(strExpr, "fail"))
+                {
+                    evalError("Parametrul nu este de tip int - la eval #", nreval);
+                    return 0;
+                }
+                nreval++;
+                result = (int*)interpret(p->opr.op[0]);
+                printf("Eval[%s] = %d\n", strExpr, *result);
             }
-            nreval++;
-            result = interpret(p->opr.op[0]);
-            printf("Eval[%s] = %d\n", strExpr, result);
-            return result;
+            return 0;
         case ';': interpret(p->opr.op[0]);
             return interpret(p->opr.op[1]);
         case WHILE:
@@ -2896,113 +2928,175 @@ int interpret(nodeType *p)
                 interpret(p->opr.op[1]);
             return 0;
         case IF:
-            if (interpret(p->opr.op[0]))
+            if (*(short*)interpret(p->opr.op[0]))
                 interpret(p->opr.op[1]);
             else if (p->opr.nops > 2)
                 interpret(p->opr.op[2]);
             return 0;
         case FOR:
-            for(interpret(p->opr.op[0]);interpret(p->opr.op[1]);interpret(p->opr.op[2]))
+            for(interpret(p->opr.op[0]);*(short*)interpret(p->opr.op[1]);interpret(p->opr.op[2]))
                 interpret(p->opr.op[3]);
             return 0;
         case ARR:
             if(p->opr.nops == 3){
                 if(p->opr.op[0]->con.typeVal==INT){
-                    symbol[p->opr.op[1]->id.i].arr.arrInt = malloc(p->opr.op[2]->con.intVal*sizeof(int));
+                    symbol[p->opr.op[1]->id.i].arr.vect.arrInt = malloc(p->opr.op[2]->con.intVal*sizeof(int));
                     return 0;
                     }
                 else if(p->opr.op[0]->con.typeVal==FLOAT){
-                    symbol[p->opr.op[1]->id.i].arr.arrFloat = malloc(p->opr.op[2]->con.intVal*sizeof(float));
+                    symbol[p->opr.op[1]->id.i].arr.vect.arrFloat = malloc(p->opr.op[2]->con.intVal*sizeof(float));
                     return 0;
                 }
                 else if(p->opr.op[0]->con.typeVal==CHAR){
-                    symbol[p->opr.op[1]->id.i].arr.arrChar = malloc(p->opr.op[2]->con.intVal*sizeof(char));;
+                    symbol[p->opr.op[1]->id.i].arr.vect.arrChar = malloc(p->opr.op[2]->con.intVal*sizeof(char));;
                     return 0;
                 }
                 else if(p->opr.op[0]->con.typeVal==STRING){
-                    symbol[p->opr.op[1]->id.i].arr.arrStr = malloc(p->opr.op[2]->con.intVal*sizeof(char*));
+                    symbol[p->opr.op[1]->id.i].arr.vect.arrStr = malloc(p->opr.op[2]->con.intVal*sizeof(char*));
                     return 0;
                 }
                 else if(p->opr.op[0]->con.typeVal==BOOL){
-                    symbol[p->opr.op[1]->id.i].arr.arrBool = malloc(p->opr.op[2]->con.intVal*sizeof(short));
+                    symbol[p->opr.op[1]->id.i].arr.vect.arrBool = malloc(p->opr.op[2]->con.intVal*sizeof(short));
                     return 0;
                 }
             }
             else{
                 if(p->opr.op[0]->con.typeVal==INT){
-                    symbol[p->opr.op[1]->id.i].arr.arrInt = p->opr.op[3]->arr.arrInt;
+                    symbol[p->opr.op[1]->id.i].arr.vect.arrInt = p->opr.op[3]->arr.vect.arrInt;
                     return 0;
                     }
                 else if(p->opr.op[0]->con.typeVal==FLOAT){
-                    symbol[p->opr.op[1]->id.i].arr.arrFloat = p->opr.op[3]->arr.arrFloat;
+                    symbol[p->opr.op[1]->id.i].arr.vect.arrFloat = p->opr.op[3]->arr.vect.arrFloat;
                     return 0;
                 }
                 else if(p->opr.op[0]->con.typeVal==CHAR){
-                    symbol[p->opr.op[1]->id.i].arr.arrChar = p->opr.op[3]->arr.arrChar;
+                    symbol[p->opr.op[1]->id.i].arr.vect.arrChar = p->opr.op[3]->arr.vect.arrChar;
                     return 0;
                 }
                 else if(p->opr.op[0]->con.typeVal==STRING){
-                    symbol[p->opr.op[1]->id.i].arr.arrStr = p->opr.op[3]->arr.arrStr;
+                    symbol[p->opr.op[1]->id.i].arr.vect.arrStr = p->opr.op[3]->arr.vect.arrStr;
                     return 0;
                 }
                 else if(p->opr.op[0]->con.typeVal==BOOL){
-                    symbol[p->opr.op[1]->id.i].arr.arrBool = p->opr.op[3]->arr.arrBool;
+                    symbol[p->opr.op[1]->id.i].arr.vect.arrBool = p->opr.op[3]->arr.vect.arrBool;
                     return 0;
                 }
+            }
+        case '[':
+            if(symbol[p->opr.op[0]->id.i].baseType==INT)
+                return &(symbol[p->opr.op[0]->id.i].arr.vect.arrInt[p->opr.op[1]->con.intVal]);
+            else if(symbol[p->opr.op[0]->id.i].baseType==FLOAT){
+                return &symbol[p->opr.op[1]->id.i].arr.vect.arrFloat[p->opr.op[1]->con.intVal];
+            }
+            else if(symbol[p->opr.op[0]->id.i].baseType==CHAR){
+                return &symbol[p->opr.op[1]->id.i].arr.vect.arrChar[p->opr.op[1]->con.intVal];
+            }
+            else if(symbol[p->opr.op[0]->id.i].baseType==STRING){
+                return &symbol[p->opr.op[1]->id.i].arr.vect.arrStr[p->opr.op[1]->con.intVal];
+            }
+            else if(symbol[p->opr.op[0]->id.i].baseType==BOOL){
+                return &(symbol[p->opr.op[0]->id.i].arr.vect.arrBool[p->opr.op[1]->con.intVal]);
             }
         case VAR:
             if(p->opr.nops == 2){
                 if(p->opr.op[0]->con.typeVal==INT)
-                    return symbol[p->opr.op[1]->id.i].val.intVal=0;
+                    symbol[p->opr.op[1]->id.i].val.intVal=0;
                 else if(p->opr.op[0]->con.typeVal==FLOAT)
-                    return symbol[p->opr.op[1]->id.i].val.floatVal =0.0;
+                    symbol[p->opr.op[1]->id.i].val.floatVal =0.0;
                 else if(p->opr.op[0]->con.typeVal==CHAR)
-                    return symbol[p->opr.op[1]->id.i].val.charVal = '\0';
-                else if(p->opr.op[0]->con.typeVal==STRING){
+                    symbol[p->opr.op[1]->id.i].val.charVal = '\0';
+                else if(p->opr.op[0]->con.typeVal==STRING)
                     symbol[p->opr.op[1]->id.i].val.strVal = (char*)"";
-                    return 0;
-                }
                 else if(p->opr.op[0]->con.typeVal==BOOL)
-                    return symbol[p->opr.op[1]->id.i].val.boolVal = 0;
+                    symbol[p->opr.op[1]->id.i].val.boolVal = 0;
             }
             else{
                 if(p->opr.op[0]->con.typeVal==INT)
-                    return symbol[p->opr.op[1]->id.i].val.intVal=interpret(p->opr.op[2]);
+                    symbol[p->opr.op[1]->id.i].val.intVal=*(int*)interpret(p->opr.op[2]);
                 else if(p->opr.op[0]->con.typeVal==FLOAT)
-                    return symbol[p->opr.op[1]->id.i].val.floatVal=interpret(p->opr.op[2]);
+                    symbol[p->opr.op[1]->id.i].val.floatVal=*(float*)interpret(p->opr.op[2]);
                 else if(p->opr.op[0]->con.typeVal==CHAR)
-                    return symbol[p->opr.op[1]->id.i].val.charVal=interpret(p->opr.op[2]);
+                    symbol[p->opr.op[1]->id.i].val.charVal=*(char*)interpret(p->opr.op[2]);
                 else if(p->opr.op[0]->con.typeVal==STRING)
-                    return (symbol[p->opr.op[1]->id.i].val.strVal[0])=interpret(p->opr.op[2]);
+                    symbol[p->opr.op[1]->id.i].val.strVal=*(char**)interpret(p->opr.op[2]);
                 else if(p->opr.op[0]->con.typeVal==BOOL)
-                    return symbol[p->opr.op[1]->id.i].val.boolVal=interpret(p->opr.op[2]);
+                    symbol[p->opr.op[1]->id.i].val.boolVal=*(short*)interpret(p->opr.op[2]);
             }
+            return 0;
         case '=':
-            return sym[p->opr.op[0]->id.i] = interpret(p->opr.op[1]);
-        case NEG:
-            return -interpret(p->opr.op[0]);
-        case '+':
-            return interpret(p->opr.op[0]) + interpret(p->opr.op[1]);
-        case '-':
-            return interpret(p->opr.op[0]) - interpret(p->opr.op[1]);
-        case '*':
-            return interpret(p->opr.op[0]) * interpret(p->opr.op[1]);
-        case '/':
-            return interpret(p->opr.op[0]) / interpret(p->opr.op[1]);
-        case '%':
-            return interpret(p->opr.op[0]) % interpret(p->opr.op[1]);
-        case LT:
-            return interpret(p->opr.op[0]) <  interpret(p->opr.op[1]);
-        case GT:
-            return interpret(p->opr.op[0]) > interpret(p->opr.op[1]);
-        case GTE:
-            return interpret(p->opr.op[0]) >= interpret(p->opr.op[1]);
-        case LTE:
-            return interpret(p->opr.op[0]) <= interpret(p->opr.op[1]);
-        case INEQUALITY:
-            return interpret(p->opr.op[0]) !=  interpret(p->opr.op[1]);
-        case EQUALITY:
-            return interpret(p->opr.op[0]) == interpret(p->opr.op[1]);
+        if(p->opr.nops == 2){
+            if(symbol[p->opr.op[0]->id.i].baseType==INT)
+                symbol[p->opr.op[0]->id.i].val.intVal = *(int*)interpret(p->opr.op[1]);
+            else if(symbol[p->opr.op[0]->id.i].baseType==FLOAT)
+                symbol[p->opr.op[0]->id.i].val.floatVal = *(float*)interpret(p->opr.op[1]);
+            else if(symbol[p->opr.op[0]->id.i].baseType==CHAR)
+                symbol[p->opr.op[0]->id.i].val.charVal = *(char*)interpret(p->opr.op[1]);
+            else if(symbol[p->opr.op[0]->id.i].baseType==STRING)
+                symbol[p->opr.op[0]->id.i].val.strVal = *(char**)interpret(p->opr.op[1]);
+            else if(symbol[p->opr.op[0]->id.i].baseType==BOOL)
+                symbol[p->opr.op[0]->id.i].val.boolVal = *(short*)interpret(p->opr.op[1]);
+        }
+        else if(p->opr.nops == 3){
+            if(symbol[p->opr.op[0]->opr.op[0]->id.i].baseType==INT)
+                *(int*)interpret(p->opr.op[0]) = *(int*)interpret(p->opr.op[1]);
+            else if(symbol[p->opr.op[0]->opr.op[0]->id.i].baseType==FLOAT)
+                *(float*)interpret(p->opr.op[0]) = *(float*)interpret(p->opr.op[1]);
+            else if(symbol[p->opr.op[0]->id.i].baseType==CHAR)
+                *(char*)interpret(p->opr.op[0]) = *(char*)interpret(p->opr.op[1]);
+            else if(symbol[p->opr.op[0]->id.i].baseType==STRING)
+                *(char**)interpret(p->opr.op[0]) = *(char**)interpret(p->opr.op[1]);
+            else if(symbol[p->opr.op[0]->id.i].baseType==BOOL)
+                *(short*)interpret(p->opr.op[0]) = *(short*)interpret(p->opr.op[1]);
+        }
+        return 0;
+        case NEG:{
+            *result =-*(int*)interpret(p->opr.op[0]);
+            return result;
+        }
+        case '+':{
+            *result= (*(int*)interpret(p->opr.op[0]) + *(int*)interpret(p->opr.op[1]));
+            return result;
+        }
+        case '-':{
+            *result = *(int*)interpret(p->opr.op[0]) - *(int*)interpret(p->opr.op[1]);
+            return result;
+        }
+        case '*':{
+            *result = *(int*)interpret(p->opr.op[0]) * *(int*)interpret(p->opr.op[1]);
+            return result;
+        }
+        case '/':{
+            *result =*(int*)interpret(p->opr.op[0]) / *(int*)interpret(p->opr.op[1]);
+            return result;
+        }
+        case '%':{
+            *result = *(int*)interpret(p->opr.op[0]) % *(int*)interpret(p->opr.op[1]);
+            return result;
+        }
+        case LT:{
+            *result = *(int*)interpret(p->opr.op[0]) < *(int*)interpret(p->opr.op[1]);
+            return result;
+        }
+        case GT:{
+            *result= *(int*)interpret(p->opr.op[0]) > *(int*)interpret(p->opr.op[1]);
+            return result;
+        }
+        case GTE:{
+            *result= *(int*)interpret(p->opr.op[0]) >= *(int*)interpret(p->opr.op[1]);
+            return result;
+        }
+        case LTE:{
+            *result = *(int*)interpret(p->opr.op[0]) <= *(int*)interpret(p->opr.op[1]);
+            return result;
+        }
+        case INEQUALITY:{
+            *result = *(int*)interpret(p->opr.op[0]) != *(int*)interpret(p->opr.op[1]);
+            return result;
+        }
+        case EQUALITY:{
+            *result = *(int*)interpret(p->opr.op[0]) == *(int*)interpret(p->opr.op[1]);
+            return result;
+        }
         }
     }
     return 0;
@@ -3059,15 +3153,15 @@ void printTable(){
             else if (symbol[i].type == ARR)
             {
                 if (symbol[i].baseType == INT)
-                    sprintf(temp, "first - %d\t%s\t\t%s", *symbol[i].arr.arrInt, "Array", "INT");
+                    sprintf(temp, "first - %d\t%s\t\t%s", *symbol[i].arr.vect.arrInt, "Array", "INT");
                 else if (symbol[i].baseType == FLOAT)
-                    sprintf(temp, "first - %f\t%s\t\t%s", *symbol[i].arr.arrFloat, "Array", "FLOAT");
+                    sprintf(temp, "first - %f\t%s\t\t%s", *symbol[i].arr.vect.arrFloat, "Array", "FLOAT");
                 else if (symbol[i].baseType == CHAR)
-                    sprintf(temp, "first - %c\t%s\t\t%s", *symbol[i].arr.arrChar, "Array", "CHAR");
+                    sprintf(temp, "first - %c\t%s\t\t%s", *symbol[i].arr.vect.arrChar, "Array", "CHAR");
                 else if (symbol[i].baseType == STRING)
-                    sprintf(temp, "first - %s\t%s\t\t%s", *symbol[i].arr.arrStr, "Array", "STRING");
+                    sprintf(temp, "first - %s\t%s\t\t%s", *symbol[i].arr.vect.arrStr, "Array", "STRING");
                 else if (symbol[i].baseType == BOOL)
-                    sprintf(temp, "first - %s\t%s\t\t%s", (*symbol[i].arr.arrBool)?"true":"false", "Array", "BOOL");
+                    sprintf(temp, "first - %s\t%s\t\t%s", (*symbol[i].arr.vect.arrBool)?"true":"false", "Array", "BOOL");
             }
             strcat(symStr, temp);
 
