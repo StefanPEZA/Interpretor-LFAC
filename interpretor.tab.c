@@ -566,16 +566,16 @@ static const yytype_int8 yytranslate[] =
 static const yytype_int16 yyrline[] =
 {
        0,    83,    83,    84,    85,    88,    89,    90,    91,    92,
-      93,    96,   101,   104,   105,   108,   109,   112,   113,   116,
-     117,   120,   121,   124,   127,   128,   129,   130,   131,   134,
-     135,   138,   139,   140,   141,   142,   143,   144,   145,   146,
-     147,   148,   151,   152,   155,   156,   159,   162,   165,   168,
-     170,   173,   174,   175,   176,   177,   179,   182,   183,   185,
-     186,   188,   189,   191,   192,   194,   195,   196,   197,   199,
-     202,   205,   208,   211,   216,   223,   226,   227,   228,   231,
-     234,   235,   238,   239,   242,   243,   244,   245,   246,   247,
-     248,   249,   250,   251,   252,   253,   254,   255,   256,   257,
-     258,   259,   260,   261,   262,   263,   264,   265,   266
+      93,    96,   100,   103,   104,   107,   108,   111,   112,   115,
+     116,   119,   120,   123,   126,   127,   128,   129,   130,   133,
+     134,   137,   138,   139,   140,   141,   142,   143,   144,   145,
+     146,   147,   150,   151,   154,   155,   158,   161,   164,   167,
+     169,   172,   173,   174,   175,   176,   178,   181,   182,   184,
+     185,   187,   188,   190,   191,   193,   194,   195,   196,   198,
+     201,   204,   207,   210,   215,   222,   225,   226,   227,   230,
+     233,   234,   237,   238,   241,   242,   243,   244,   245,   246,
+     247,   248,   249,   250,   251,   252,   253,   254,   255,   256,
+     257,   258,   259,   260,   261,   262,   263,   264,   265
 };
 #endif
 
@@ -1823,7 +1823,7 @@ yyreduce:
       {
   case 2:
 #line 83 "interpretor.y"
-              {interpret((yyvsp[0].nodPtr));}
+              {interpret((yyvsp[0].nodPtr)); }
 #line 1828 "interpretor.tab.c"
     break;
 
@@ -1878,598 +1878,597 @@ yyreduce:
   case 11:
 #line 96 "interpretor.y"
                                                    {
-    localScope = 1;
     (yyval.nodPtr)=nodOper(MAIN,1,(yyvsp[-1].nodPtr));}
-#line 1884 "interpretor.tab.c"
+#line 1883 "interpretor.tab.c"
     break;
 
   case 12:
-#line 101 "interpretor.y"
+#line 100 "interpretor.y"
                                                                         {}
-#line 1890 "interpretor.tab.c"
+#line 1889 "interpretor.tab.c"
     break;
 
   case 13:
-#line 104 "interpretor.y"
+#line 103 "interpretor.y"
                                     {}
-#line 1896 "interpretor.tab.c"
+#line 1895 "interpretor.tab.c"
     break;
 
   case 14:
-#line 105 "interpretor.y"
+#line 104 "interpretor.y"
                                         {}
-#line 1902 "interpretor.tab.c"
+#line 1901 "interpretor.tab.c"
     break;
 
   case 15:
-#line 108 "interpretor.y"
+#line 107 "interpretor.y"
                                          {}
-#line 1908 "interpretor.tab.c"
+#line 1907 "interpretor.tab.c"
     break;
 
   case 16:
-#line 109 "interpretor.y"
+#line 108 "interpretor.y"
                            {}
-#line 1914 "interpretor.tab.c"
+#line 1913 "interpretor.tab.c"
     break;
 
   case 17:
-#line 112 "interpretor.y"
+#line 111 "interpretor.y"
                                                                                       {}
-#line 1920 "interpretor.tab.c"
+#line 1919 "interpretor.tab.c"
     break;
 
   case 18:
-#line 113 "interpretor.y"
+#line 112 "interpretor.y"
                                                           {}
-#line 1926 "interpretor.tab.c"
+#line 1925 "interpretor.tab.c"
     break;
 
   case 19:
-#line 116 "interpretor.y"
+#line 115 "interpretor.y"
                     {}
-#line 1932 "interpretor.tab.c"
+#line 1931 "interpretor.tab.c"
     break;
 
   case 20:
-#line 117 "interpretor.y"
+#line 116 "interpretor.y"
            {}
-#line 1938 "interpretor.tab.c"
+#line 1937 "interpretor.tab.c"
     break;
 
   case 22:
-#line 121 "interpretor.y"
+#line 120 "interpretor.y"
                                {}
-#line 1944 "interpretor.tab.c"
+#line 1943 "interpretor.tab.c"
     break;
 
   case 23:
-#line 124 "interpretor.y"
+#line 123 "interpretor.y"
                              {}
-#line 1950 "interpretor.tab.c"
+#line 1949 "interpretor.tab.c"
     break;
 
   case 24:
-#line 127 "interpretor.y"
+#line 126 "interpretor.y"
             {(yyval.Types)=INT;}
-#line 1956 "interpretor.tab.c"
+#line 1955 "interpretor.tab.c"
     break;
 
   case 25:
-#line 128 "interpretor.y"
+#line 127 "interpretor.y"
             {(yyval.Types)=FLOAT;}
-#line 1962 "interpretor.tab.c"
+#line 1961 "interpretor.tab.c"
     break;
 
   case 26:
-#line 129 "interpretor.y"
+#line 128 "interpretor.y"
            {(yyval.Types)=CHAR;}
-#line 1968 "interpretor.tab.c"
+#line 1967 "interpretor.tab.c"
     break;
 
   case 27:
-#line 130 "interpretor.y"
+#line 129 "interpretor.y"
              {(yyval.Types)=STRING;}
-#line 1974 "interpretor.tab.c"
+#line 1973 "interpretor.tab.c"
     break;
 
   case 28:
-#line 131 "interpretor.y"
+#line 130 "interpretor.y"
            {(yyval.Types)=BOOL;}
-#line 1980 "interpretor.tab.c"
+#line 1979 "interpretor.tab.c"
     break;
 
   case 29:
-#line 134 "interpretor.y"
+#line 133 "interpretor.y"
                       {(yyval.nodPtr) = (yyvsp[0].nodPtr);}
-#line 1986 "interpretor.tab.c"
+#line 1985 "interpretor.tab.c"
     break;
 
   case 30:
-#line 135 "interpretor.y"
+#line 134 "interpretor.y"
                           {(yyval.nodPtr) = nodOper(';', 2, (yyvsp[-1].nodPtr), (yyvsp[0].nodPtr));}
-#line 1992 "interpretor.tab.c"
+#line 1991 "interpretor.tab.c"
     break;
 
   case 31:
-#line 138 "interpretor.y"
+#line 137 "interpretor.y"
                                  {}
-#line 1998 "interpretor.tab.c"
+#line 1997 "interpretor.tab.c"
     break;
 
   case 32:
-#line 139 "interpretor.y"
+#line 138 "interpretor.y"
                             {}
-#line 2004 "interpretor.tab.c"
+#line 2003 "interpretor.tab.c"
     break;
 
   case 33:
-#line 140 "interpretor.y"
+#line 139 "interpretor.y"
                            {}
-#line 2010 "interpretor.tab.c"
+#line 2009 "interpretor.tab.c"
     break;
 
   case 34:
-#line 141 "interpretor.y"
+#line 140 "interpretor.y"
                             {}
-#line 2016 "interpretor.tab.c"
+#line 2015 "interpretor.tab.c"
     break;
 
   case 35:
-#line 142 "interpretor.y"
+#line 141 "interpretor.y"
                         {}
-#line 2022 "interpretor.tab.c"
+#line 2021 "interpretor.tab.c"
     break;
 
   case 36:
-#line 143 "interpretor.y"
+#line 142 "interpretor.y"
                          {}
-#line 2028 "interpretor.tab.c"
+#line 2027 "interpretor.tab.c"
     break;
 
   case 37:
-#line 144 "interpretor.y"
+#line 143 "interpretor.y"
                                {}
-#line 2034 "interpretor.tab.c"
+#line 2033 "interpretor.tab.c"
     break;
 
   case 38:
-#line 145 "interpretor.y"
+#line 144 "interpretor.y"
                              {}
-#line 2040 "interpretor.tab.c"
+#line 2039 "interpretor.tab.c"
     break;
 
   case 39:
-#line 146 "interpretor.y"
+#line 145 "interpretor.y"
                    {}
-#line 2046 "interpretor.tab.c"
+#line 2045 "interpretor.tab.c"
     break;
 
   case 40:
-#line 147 "interpretor.y"
+#line 146 "interpretor.y"
                       {}
-#line 2052 "interpretor.tab.c"
+#line 2051 "interpretor.tab.c"
     break;
 
   case 41:
-#line 148 "interpretor.y"
+#line 147 "interpretor.y"
                     {}
-#line 2058 "interpretor.tab.c"
+#line 2057 "interpretor.tab.c"
     break;
 
   case 42:
-#line 151 "interpretor.y"
+#line 150 "interpretor.y"
                              {(yyval.nodPtr) = (yyvsp[0].nodPtr);}
-#line 2064 "interpretor.tab.c"
+#line 2063 "interpretor.tab.c"
     break;
 
   case 43:
-#line 152 "interpretor.y"
+#line 151 "interpretor.y"
                                  {(yyval.nodPtr) = nodOper(';', 2, (yyvsp[-1].nodPtr), (yyvsp[0].nodPtr));}
-#line 2070 "interpretor.tab.c"
+#line 2069 "interpretor.tab.c"
     break;
 
   case 44:
-#line 155 "interpretor.y"
+#line 154 "interpretor.y"
                                                                           {(yyval.nodPtr) = nodOper(IF, 2, (yyvsp[-4].nodPtr), (yyvsp[-1].nodPtr));}
-#line 2076 "interpretor.tab.c"
+#line 2075 "interpretor.tab.c"
     break;
 
   case 45:
-#line 156 "interpretor.y"
+#line 155 "interpretor.y"
                                                                                    {(yyval.nodPtr) = nodOper(IF, 3, (yyvsp[-8].nodPtr), (yyvsp[-5].nodPtr), (yyvsp[-1].nodPtr));}
-#line 2082 "interpretor.tab.c"
+#line 2081 "interpretor.tab.c"
     break;
 
   case 46:
-#line 159 "interpretor.y"
+#line 158 "interpretor.y"
                                                                     {(yyval.nodPtr) = nodOper(WHILE, 2, (yyvsp[-4].nodPtr), (yyvsp[-1].nodPtr));}
-#line 2088 "interpretor.tab.c"
+#line 2087 "interpretor.tab.c"
     break;
 
   case 47:
-#line 162 "interpretor.y"
+#line 161 "interpretor.y"
                                                                                                         { (yyval.nodPtr) = nodOper(FOR,4,(yyvsp[-8].nodPtr),(yyvsp[-6].nodPtr),(yyvsp[-4].nodPtr),(yyvsp[-1].nodPtr));}
-#line 2094 "interpretor.tab.c"
+#line 2093 "interpretor.tab.c"
     break;
 
   case 48:
-#line 165 "interpretor.y"
+#line 164 "interpretor.y"
                                            {(yyval.nodPtr) = nodOper('=', 2, nodId((yyvsp[-2].varId), 0), (yyvsp[0].nodPtr));}
-#line 2100 "interpretor.tab.c"
+#line 2099 "interpretor.tab.c"
     break;
 
   case 49:
-#line 168 "interpretor.y"
+#line 167 "interpretor.y"
                                                                                   {
         (yyval.nodPtr)=nodOper(ARR, 4,nodCon(typeName,&(yyvsp[-8].Types)),nodId((yyvsp[-7].varId), 1),nodCon(constInt,&(yyvsp[-5].intVal)),nodArr((yyvsp[-8].Types), indx)); indx=0;}
-#line 2107 "interpretor.tab.c"
+#line 2106 "interpretor.tab.c"
     break;
 
   case 50:
-#line 170 "interpretor.y"
+#line 169 "interpretor.y"
                                              {(yyval.nodPtr)=nodOper(ARR, 3,nodCon(typeName,&(yyvsp[-4].Types)),nodId((yyvsp[-3].varId), 1),nodCon(constInt,&(yyvsp[-1].intVal)));}
-#line 2113 "interpretor.tab.c"
+#line 2112 "interpretor.tab.c"
     break;
 
   case 51:
-#line 173 "interpretor.y"
+#line 172 "interpretor.y"
                             {}
-#line 2119 "interpretor.tab.c"
+#line 2118 "interpretor.tab.c"
     break;
 
   case 52:
-#line 174 "interpretor.y"
+#line 173 "interpretor.y"
                        {}
-#line 2125 "interpretor.tab.c"
+#line 2124 "interpretor.tab.c"
     break;
 
   case 53:
-#line 175 "interpretor.y"
+#line 174 "interpretor.y"
                       {}
-#line 2131 "interpretor.tab.c"
+#line 2130 "interpretor.tab.c"
     break;
 
   case 54:
-#line 176 "interpretor.y"
+#line 175 "interpretor.y"
                         {}
-#line 2137 "interpretor.tab.c"
+#line 2136 "interpretor.tab.c"
     break;
 
   case 55:
-#line 177 "interpretor.y"
+#line 176 "interpretor.y"
                       {}
-#line 2143 "interpretor.tab.c"
+#line 2142 "interpretor.tab.c"
     break;
 
   case 56:
-#line 179 "interpretor.y"
+#line 178 "interpretor.y"
                                            {}
-#line 2149 "interpretor.tab.c"
+#line 2148 "interpretor.tab.c"
     break;
 
   case 57:
-#line 182 "interpretor.y"
+#line 181 "interpretor.y"
                                               { arrayInt[indx]=(yyvsp[0].intVal); indx++;}
-#line 2155 "interpretor.tab.c"
+#line 2154 "interpretor.tab.c"
     break;
 
   case 58:
-#line 183 "interpretor.y"
+#line 182 "interpretor.y"
                 {arrayInt[indx]=(yyvsp[0].intVal); indx++;}
-#line 2161 "interpretor.tab.c"
+#line 2160 "interpretor.tab.c"
     break;
 
   case 59:
-#line 185 "interpretor.y"
+#line 184 "interpretor.y"
                                                     {arrayFloat[indx]=(yyvsp[0].floatVal); indx++;}
-#line 2167 "interpretor.tab.c"
+#line 2166 "interpretor.tab.c"
     break;
 
   case 60:
-#line 186 "interpretor.y"
+#line 185 "interpretor.y"
                   {arrayFloat[indx]=(yyvsp[0].floatVal); indx++;}
-#line 2173 "interpretor.tab.c"
+#line 2172 "interpretor.tab.c"
     break;
 
   case 61:
-#line 188 "interpretor.y"
+#line 187 "interpretor.y"
                                                  {arrayChar[indx]=(yyvsp[0].charVal); indx++;}
-#line 2179 "interpretor.tab.c"
+#line 2178 "interpretor.tab.c"
     break;
 
   case 62:
-#line 189 "interpretor.y"
+#line 188 "interpretor.y"
                  {arrayChar[indx]=(yyvsp[0].charVal); indx++;}
-#line 2185 "interpretor.tab.c"
+#line 2184 "interpretor.tab.c"
     break;
 
   case 63:
-#line 191 "interpretor.y"
+#line 190 "interpretor.y"
                                                     {arrayStr[indx]=(yyvsp[0].strVal); indx++;}
-#line 2191 "interpretor.tab.c"
+#line 2190 "interpretor.tab.c"
     break;
 
   case 64:
-#line 192 "interpretor.y"
+#line 191 "interpretor.y"
                 {arrayStr[indx]=(yyvsp[0].strVal); indx++;}
-#line 2197 "interpretor.tab.c"
+#line 2196 "interpretor.tab.c"
     break;
 
   case 65:
-#line 194 "interpretor.y"
+#line 193 "interpretor.y"
                                            {arrayBool[indx]=1; indx++;}
-#line 2203 "interpretor.tab.c"
+#line 2202 "interpretor.tab.c"
     break;
 
   case 66:
-#line 195 "interpretor.y"
+#line 194 "interpretor.y"
                                 {arrayBool[indx]=0; indx++;}
-#line 2209 "interpretor.tab.c"
+#line 2208 "interpretor.tab.c"
     break;
 
   case 67:
-#line 196 "interpretor.y"
+#line 195 "interpretor.y"
            {arrayBool[indx]=1; indx++;}
-#line 2215 "interpretor.tab.c"
+#line 2214 "interpretor.tab.c"
     break;
 
   case 68:
-#line 197 "interpretor.y"
+#line 196 "interpretor.y"
             {arrayBool[indx]=0; indx++;}
-#line 2221 "interpretor.tab.c"
+#line 2220 "interpretor.tab.c"
     break;
 
   case 69:
-#line 199 "interpretor.y"
+#line 198 "interpretor.y"
                                          {}
-#line 2227 "interpretor.tab.c"
+#line 2226 "interpretor.tab.c"
     break;
 
   case 70:
-#line 202 "interpretor.y"
+#line 201 "interpretor.y"
                                                  {}
-#line 2233 "interpretor.tab.c"
+#line 2232 "interpretor.tab.c"
     break;
 
   case 71:
-#line 205 "interpretor.y"
+#line 204 "interpretor.y"
                                                          {}
-#line 2239 "interpretor.tab.c"
+#line 2238 "interpretor.tab.c"
     break;
 
   case 72:
-#line 208 "interpretor.y"
+#line 207 "interpretor.y"
                                                             {}
-#line 2245 "interpretor.tab.c"
+#line 2244 "interpretor.tab.c"
     break;
 
   case 73:
-#line 211 "interpretor.y"
+#line 210 "interpretor.y"
                                        {
         if (addSymbol((yyvsp[0].varId), VAR, (yyvsp[-1].Types), localScope) == -1){
             yyerror("Variabila deja declarata - ");
         }
         (yyval.nodPtr) = nodOper(VAR,2,nodCon(typeName,&(yyvsp[-1].Types)),nodId((yyvsp[0].varId), 1));}
-#line 2255 "interpretor.tab.c"
+#line 2254 "interpretor.tab.c"
     break;
 
   case 74:
-#line 216 "interpretor.y"
+#line 215 "interpretor.y"
                                           {
         if (addSymbol((yyvsp[-2].varId), VAR, (yyvsp[-3].Types), localScope) == -1){
             yyerror("Variabila deja declarata - ");
         }
         (yyval.nodPtr) = nodOper(VAR,3,nodCon(typeName,&(yyvsp[-3].Types)),nodId((yyvsp[-2].varId), 1),(yyvsp[0].nodPtr));}
-#line 2265 "interpretor.tab.c"
+#line 2264 "interpretor.tab.c"
     break;
 
   case 75:
-#line 223 "interpretor.y"
+#line 222 "interpretor.y"
                                                           {}
-#line 2271 "interpretor.tab.c"
+#line 2270 "interpretor.tab.c"
     break;
 
   case 76:
-#line 226 "interpretor.y"
+#line 225 "interpretor.y"
                                                     {}
-#line 2277 "interpretor.tab.c"
+#line 2276 "interpretor.tab.c"
     break;
 
   case 77:
-#line 227 "interpretor.y"
+#line 226 "interpretor.y"
                               {}
-#line 2283 "interpretor.tab.c"
+#line 2282 "interpretor.tab.c"
     break;
 
   case 78:
-#line 228 "interpretor.y"
+#line 227 "interpretor.y"
                          {(yyval.nodPtr) = (yyvsp[0].nodPtr); }
-#line 2289 "interpretor.tab.c"
+#line 2288 "interpretor.tab.c"
     break;
 
   case 79:
-#line 231 "interpretor.y"
+#line 230 "interpretor.y"
                                         { (yyval.nodPtr) = nodOper(EVAL, 1, (yyvsp[-1].nodPtr)); }
-#line 2295 "interpretor.tab.c"
+#line 2294 "interpretor.tab.c"
     break;
 
   case 80:
-#line 234 "interpretor.y"
+#line 233 "interpretor.y"
                          {}
-#line 2301 "interpretor.tab.c"
+#line 2300 "interpretor.tab.c"
     break;
 
   case 81:
-#line 235 "interpretor.y"
+#line 234 "interpretor.y"
                                  {}
-#line 2307 "interpretor.tab.c"
+#line 2306 "interpretor.tab.c"
     break;
 
   case 82:
-#line 238 "interpretor.y"
+#line 237 "interpretor.y"
                            {}
-#line 2313 "interpretor.tab.c"
+#line 2312 "interpretor.tab.c"
     break;
 
   case 83:
-#line 239 "interpretor.y"
+#line 238 "interpretor.y"
                  {}
-#line 2319 "interpretor.tab.c"
+#line 2318 "interpretor.tab.c"
     break;
 
   case 84:
-#line 242 "interpretor.y"
+#line 241 "interpretor.y"
                       {(yyval.nodPtr) = nodId((yyvsp[0].varId), 0);}
-#line 2325 "interpretor.tab.c"
+#line 2324 "interpretor.tab.c"
     break;
 
   case 85:
-#line 243 "interpretor.y"
+#line 242 "interpretor.y"
                          {}
-#line 2331 "interpretor.tab.c"
+#line 2330 "interpretor.tab.c"
     break;
 
   case 86:
-#line 244 "interpretor.y"
+#line 243 "interpretor.y"
                 {}
-#line 2337 "interpretor.tab.c"
+#line 2336 "interpretor.tab.c"
     break;
 
   case 87:
-#line 245 "interpretor.y"
+#line 244 "interpretor.y"
                 {(yyval.nodPtr) = nodCon(constInt, &(yyvsp[0].intVal));}
-#line 2343 "interpretor.tab.c"
+#line 2342 "interpretor.tab.c"
     break;
 
   case 88:
-#line 246 "interpretor.y"
+#line 245 "interpretor.y"
                   {(yyval.nodPtr) = nodCon(constFloat, &(yyvsp[0].floatVal));}
-#line 2349 "interpretor.tab.c"
+#line 2348 "interpretor.tab.c"
     break;
 
   case 89:
-#line 247 "interpretor.y"
+#line 246 "interpretor.y"
                          {(yyval.nodPtr) = (yyvsp[-1].nodPtr);}
-#line 2355 "interpretor.tab.c"
+#line 2354 "interpretor.tab.c"
     break;
 
   case 90:
-#line 248 "interpretor.y"
+#line 247 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper('+', 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2361 "interpretor.tab.c"
+#line 2360 "interpretor.tab.c"
     break;
 
   case 91:
-#line 249 "interpretor.y"
+#line 248 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper('-', 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2367 "interpretor.tab.c"
+#line 2366 "interpretor.tab.c"
     break;
 
   case 92:
-#line 250 "interpretor.y"
+#line 249 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper('*', 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2373 "interpretor.tab.c"
+#line 2372 "interpretor.tab.c"
     break;
 
   case 93:
-#line 251 "interpretor.y"
+#line 250 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper('/', 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2379 "interpretor.tab.c"
+#line 2378 "interpretor.tab.c"
     break;
 
   case 94:
-#line 252 "interpretor.y"
+#line 251 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper('%', 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2385 "interpretor.tab.c"
+#line 2384 "interpretor.tab.c"
     break;
 
   case 95:
-#line 253 "interpretor.y"
+#line 252 "interpretor.y"
                                {(yyval.nodPtr) = nodOper(NEG, 1, (yyvsp[0].nodPtr));}
-#line 2391 "interpretor.tab.c"
+#line 2390 "interpretor.tab.c"
     break;
 
   case 96:
-#line 254 "interpretor.y"
+#line 253 "interpretor.y"
            {short b = 1; (yyval.nodPtr) = nodCon(constBool, &b);}
-#line 2397 "interpretor.tab.c"
+#line 2396 "interpretor.tab.c"
     break;
 
   case 97:
-#line 255 "interpretor.y"
+#line 254 "interpretor.y"
             {short b = 0; (yyval.nodPtr) = nodCon(constBool, &b);}
-#line 2403 "interpretor.tab.c"
+#line 2402 "interpretor.tab.c"
     break;
 
   case 98:
-#line 256 "interpretor.y"
+#line 255 "interpretor.y"
                                {(yyval.nodPtr) = nodOper(LT, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2409 "interpretor.tab.c"
+#line 2408 "interpretor.tab.c"
     break;
 
   case 99:
-#line 257 "interpretor.y"
+#line 256 "interpretor.y"
                                {(yyval.nodPtr) = nodOper(GT, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2415 "interpretor.tab.c"
+#line 2414 "interpretor.tab.c"
     break;
 
   case 100:
-#line 258 "interpretor.y"
+#line 257 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper(LTE, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2421 "interpretor.tab.c"
+#line 2420 "interpretor.tab.c"
     break;
 
   case 101:
-#line 259 "interpretor.y"
+#line 258 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper(GTE, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2427 "interpretor.tab.c"
+#line 2426 "interpretor.tab.c"
     break;
 
   case 102:
-#line 260 "interpretor.y"
+#line 259 "interpretor.y"
                                      {(yyval.nodPtr) = nodOper(EQUALITY, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2433 "interpretor.tab.c"
+#line 2432 "interpretor.tab.c"
     break;
 
   case 103:
-#line 261 "interpretor.y"
+#line 260 "interpretor.y"
                                       {(yyval.nodPtr) = nodOper(INEQUALITY, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2439 "interpretor.tab.c"
+#line 2438 "interpretor.tab.c"
     break;
 
   case 104:
-#line 262 "interpretor.y"
+#line 261 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper(AND, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2445 "interpretor.tab.c"
+#line 2444 "interpretor.tab.c"
     break;
 
   case 105:
-#line 263 "interpretor.y"
+#line 262 "interpretor.y"
                                {(yyval.nodPtr) = nodOper(OR, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2451 "interpretor.tab.c"
+#line 2450 "interpretor.tab.c"
     break;
 
   case 106:
-#line 264 "interpretor.y"
+#line 263 "interpretor.y"
                      {(yyval.nodPtr) = nodOper('!', 1, (yyvsp[0].nodPtr));}
-#line 2457 "interpretor.tab.c"
+#line 2456 "interpretor.tab.c"
     break;
 
   case 107:
-#line 265 "interpretor.y"
+#line 264 "interpretor.y"
                  {(yyval.nodPtr) = nodCon(constChar, &(yyvsp[0].charVal));}
-#line 2463 "interpretor.tab.c"
+#line 2462 "interpretor.tab.c"
     break;
 
   case 108:
-#line 266 "interpretor.y"
+#line 265 "interpretor.y"
                 {(yyval.nodPtr) = nodCon(constStr, &(yyvsp[0].strVal));}
-#line 2469 "interpretor.tab.c"
+#line 2468 "interpretor.tab.c"
     break;
 
 
-#line 2473 "interpretor.tab.c"
+#line 2472 "interpretor.tab.c"
 
         default: break;
       }
@@ -2713,7 +2712,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 269 "interpretor.y"
+#line 268 "interpretor.y"
 
 int check = 1;
 
@@ -3005,7 +3004,7 @@ int main(int argc, char **argv)
         {
             printf("%d " , sym[i]);
         }*/
-        printf("%s = %c", symbol[2].name, symbol[2].val.charVal);
+        printf("%s = %d", symbol[0].name, symbol[0].val.charVal);
         printf("\n");
     }
 }

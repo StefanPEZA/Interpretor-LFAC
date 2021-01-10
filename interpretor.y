@@ -80,7 +80,7 @@
 %start start
 %%
 
-start : stmts {interpret($1);};
+start : stmts {interpret($1); };
 stmts : stmts stmt {$$ = nodOper(';', 2, $1, $2);}
     | stmt {$$=$1;}
     ;
@@ -94,7 +94,6 @@ stmt : var_declaration ';' {}
     ;
 
 main_function : VOID MAIN '(' ')' '{' fun_body '}' {
-    localScope = 1;
     $$=nodOper(MAIN,1,$6);}
     ;
 
@@ -553,11 +552,12 @@ int main(int argc, char **argv)
     if (check == 1)
     {
         printf("\n");
-        /*for (int i = 0; i < 30; i++)
+        for (int i = 0; i < lastIndex; i++)
         {
-            printf("%d " , sym[i]);
-        }*/
-        printf("%s = %c", symbol[2].name, symbol[2].val.charVal);
+            if (symbol[])
+
+            printf("\n");
+        }
         printf("\n");
     }
 }

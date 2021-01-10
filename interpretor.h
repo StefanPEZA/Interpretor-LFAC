@@ -82,7 +82,7 @@ struct symbolTable
     char *name;
     int type;     //VAR = 262, ARR = 274, FUN = 261,
     int baseType; //INT = 268, FLOAT = 269, CHAR = 270, STRING = 271, BOOL = 272,
-    int scope;    // 0 - global, 1 - local in main, 2 - local
+    int scope;    // 0 - global, 1 - local in main, 2 - local, 3 - inside container
     union
     {
         arrayNodeType arr;
@@ -130,7 +130,7 @@ static int addSymbol(char *name, int varType, int baseType, int scope)
         symbol[lastIndex].scope = scope;
     }
 }
-
+extern int localScope;
 extern int sym[30];
 extern char strExpr[1000];
 static char *inorderExpr(nodeType *nodExpr)
