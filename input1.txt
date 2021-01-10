@@ -1,0 +1,7 @@
+VAR: int x=69;
+VAR: bool y=true;
+void main() {
+    ARR: int s[69]={1,6,8,4,9,3};
+    VAR: int a = 36;
+    VAR: int b;
+}
