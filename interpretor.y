@@ -165,8 +165,15 @@ var_assignment : IDENTIFIER '=' expression {$$ = nodOper('=', 2, nodId($1, 0), $
     ;
 
 array_declaration : ARR types IDENTIFIER '[' INT_CONST ']' '=' '{' array_list '}' {
+        if (addSymbol($3, ARR, $2, localScope) == -1){
+            yyerror("Variabila deja declarata - ");
+        }
         $$=nodOper(ARR, 4,nodCon(typeName,&$2),nodId($3, 1),nodCon(constInt,&$5),nodArr($2, indx)); indx=0;}
-    | ARR types IDENTIFIER '[' INT_CONST ']' {$$=nodOper(ARR, 3,nodCon(typeName,&$2),nodId($3, 1),nodCon(constInt,&$5));}
+    | ARR types IDENTIFIER '[' INT_CONST ']' {
+        if (addSymbol($3, ARR, $2, localScope) == -1){
+            yyerror("Variabila deja declarata - ");
+        }
+        $$=nodOper(ARR, 3,nodCon(typeName,&$2),nodId($3, 1),nodCon(constInt,&$5));}
     ;
 
 array_list : array_list_int {}
@@ -418,7 +425,7 @@ int interpret(nodeType *p)
     case constStr:
         return *p->con.strVal;
     case typeId:
-        return sym[p->id.i];
+        return symbol[p->id.i].val.intVal;
     case typeOper:
         switch (p->opr.oper)
         {
@@ -452,28 +459,48 @@ int interpret(nodeType *p)
             return 0;
         case ARR:
             if(p->opr.nops == 3){
-                if(p->opr.op[0]->con.typeVal==INT)
-                    return sym[p->opr.op[1]->id.i] = 0;
-                else if(p->opr.op[0]->con.typeVal==FLOAT)
-                    return sym[p->opr.op[1]->id.i] = 0.0;
-                else if(p->opr.op[0]->con.typeVal==CHAR)
-                    return sym[p->opr.op[1]->id.i] = '\0';
-                else if(p->opr.op[0]->con.typeVal==STRING)
-                    return sym[p->opr.op[1]->id.i] = '\0';
-                else if(p->opr.op[0]->con.typeVal==BOOL)
-                    return sym[p->opr.op[1]->id.i] = 0;
+                if(p->opr.op[0]->con.typeVal==INT){
+                    symbol[p->opr.op[1]->id.i].arr.arrInt = malloc(p->opr.op[2]->con.intVal*sizeof(int));
+                    return 0;
+                    }
+                else if(p->opr.op[0]->con.typeVal==FLOAT){
+                    symbol[p->opr.op[1]->id.i].arr.arrFloat = malloc(p->opr.op[2]->con.intVal*sizeof(float));
+                    return 0;
+                }
+                else if(p->opr.op[0]->con.typeVal==CHAR){
+                    symbol[p->opr.op[1]->id.i].arr.arrChar = malloc(p->opr.op[2]->con.intVal*sizeof(char));;
+                    return 0;
+                }
+                else if(p->opr.op[0]->con.typeVal==STRING){
+                    symbol[p->opr.op[1]->id.i].arr.arrStr = malloc(p->opr.op[2]->con.intVal*sizeof(char*));
+                    return 0;
+                }
+                else if(p->opr.op[0]->con.typeVal==BOOL){
+                    symbol[p->opr.op[1]->id.i].arr.arrBool = malloc(p->opr.op[2]->con.intVal*sizeof(short));
+                    return 0;
+                }
             }
             else{
-                if(p->opr.op[0]->con.typeVal==INT)
-                    return sym[p->opr.op[1]->id.i] = p->opr.op[3]->arr.arrInt[0];
-                else if(p->opr.op[0]->con.typeVal==FLOAT)
-                    return sym[p->opr.op[1]->id.i] = p->opr.op[3]->arr.arrFloat[0];
-                else if(p->opr.op[0]->con.typeVal==CHAR)
-                    return sym[p->opr.op[1]->id.i] = p->opr.op[3]->arr.arrChar[0];
-                else if(p->opr.op[0]->con.typeVal==STRING)
-                    return sym[p->opr.op[1]->id.i] = *p->opr.op[3]->arr.arrStr[0];
-                else if(p->opr.op[0]->con.typeVal==BOOL)
-                    return sym[p->opr.op[1]->id.i] = p->opr.op[3]->arr.arrBool[0];
+                if(p->opr.op[0]->con.typeVal==INT){
+                    symbol[p->opr.op[1]->id.i].arr.arrInt = p->opr.op[3]->arr.arrInt;
+                    return 0;
+                    }
+                else if(p->opr.op[0]->con.typeVal==FLOAT){
+                    symbol[p->opr.op[1]->id.i].arr.arrFloat = p->opr.op[3]->arr.arrFloat;
+                    return 0;
+                }
+                else if(p->opr.op[0]->con.typeVal==CHAR){
+                    symbol[p->opr.op[1]->id.i].arr.arrChar = p->opr.op[3]->arr.arrChar;
+                    return 0;
+                }
+                else if(p->opr.op[0]->con.typeVal==STRING){
+                    symbol[p->opr.op[1]->id.i].arr.arrStr = p->opr.op[3]->arr.arrStr;
+                    return 0;
+                }
+                else if(p->opr.op[0]->con.typeVal==BOOL){
+                    symbol[p->opr.op[1]->id.i].arr.arrBool = p->opr.op[3]->arr.arrBool;
+                    return 0;
+                }
             }
         case VAR:
             if(p->opr.nops == 2){
@@ -545,19 +572,51 @@ int yyerror(const char *s)
 
 int main(int argc, char **argv)
 {   
-    printf("\n");
+    char symStr[1000] = "";
     if (argc > 0)
         yyin = fopen(argv[1], "r");
     yyparse();
     if (check == 1)
     {
-        printf("\n");
+        sprintf(symStr, "name\t\tvalue\t\tscope\t\ttype\t\tbase type\n");
         for (int i = 0; i < lastIndex; i++)
         {
-            if (symbol[])
-
-            printf("\n");
+            char temp[100];
+            sprintf(temp, "%s\t\t", symbol[i].name);
+            strcat(symStr, temp);
+            if (symbol[i].type == FUN)
+                sprintf(temp, "-\t\t");
+            else if (symbol[i].type == VAR)
+            {
+                if (symbol[i].baseType == INT)
+                    sprintf(temp, "%d\t\t", symbol[i].val.intVal);
+                else if (symbol[i].baseType == FLOAT)
+                    sprintf(temp, "%f\t\t", symbol[i].val.floatVal);
+                else if (symbol[i].baseType == CHAR)
+                    sprintf(temp, "%c\t\t", symbol[i].val.charVal);
+                else if (symbol[i].baseType == STRING)
+                    sprintf(temp, "%s\t\t", symbol[i].val.strVal);
+                else if (symbol[i].baseType == BOOL)
+                    sprintf(temp, "%s\t\t", (symbol[i].val.boolVal)?"true":"false");
+            }
+            else if (symbol[i].type == ARR)
+            {
+                if (symbol[i].baseType == INT)
+                    sprintf(temp, "first - %d\t\t", *symbol[i].arr.arrInt);
+                else if (symbol[i].baseType == FLOAT)
+                    sprintf(temp, "first - %f\t\t", *symbol[i].arr.arrFloat);
+                else if (symbol[i].baseType == CHAR)
+                    sprintf(temp, "first - %c\t\t", *symbol[i].arr.arrChar);
+                else if (symbol[i].baseType == STRING)
+                    sprintf(temp, "first - %s\t\t", *symbol[i].arr.arrStr);
+                else if (symbol[i].baseType == BOOL)
+                    sprintf(temp, "first - %s\t\t", (*symbol[i].arr.arrBool)?"true":"false");
+            }
+            strcat(symStr, temp);
+            strcat(symStr, "\n");
         }
         printf("\n");
+        printf("%s", symStr);
     }
+
 }

@@ -570,12 +570,12 @@ static const yytype_int16 yyrline[] =
      116,   119,   120,   123,   126,   127,   128,   129,   130,   133,
      134,   137,   138,   139,   140,   141,   142,   143,   144,   145,
      146,   147,   150,   151,   154,   155,   158,   161,   164,   167,
-     169,   172,   173,   174,   175,   176,   178,   181,   182,   184,
-     185,   187,   188,   190,   191,   193,   194,   195,   196,   198,
-     201,   204,   207,   210,   215,   222,   225,   226,   227,   230,
-     233,   234,   237,   238,   241,   242,   243,   244,   245,   246,
-     247,   248,   249,   250,   251,   252,   253,   254,   255,   256,
-     257,   258,   259,   260,   261,   262,   263,   264,   265
+     172,   179,   180,   181,   182,   183,   185,   188,   189,   191,
+     192,   194,   195,   197,   198,   200,   201,   202,   203,   205,
+     208,   211,   214,   217,   222,   229,   232,   233,   234,   237,
+     240,   241,   244,   245,   248,   249,   250,   251,   252,   253,
+     254,   255,   256,   257,   258,   259,   260,   261,   262,   263,
+     264,   265,   266,   267,   268,   269,   270,   271,   272
 };
 #endif
 
@@ -2101,374 +2101,381 @@ yyreduce:
   case 49:
 #line 167 "interpretor.y"
                                                                                   {
+        if (addSymbol((yyvsp[-7].varId), ARR, (yyvsp[-8].Types), localScope) == -1){
+            yyerror("Variabila deja declarata - ");
+        }
         (yyval.nodPtr)=nodOper(ARR, 4,nodCon(typeName,&(yyvsp[-8].Types)),nodId((yyvsp[-7].varId), 1),nodCon(constInt,&(yyvsp[-5].intVal)),nodArr((yyvsp[-8].Types), indx)); indx=0;}
-#line 2106 "interpretor.tab.c"
+#line 2109 "interpretor.tab.c"
     break;
 
   case 50:
-#line 169 "interpretor.y"
-                                             {(yyval.nodPtr)=nodOper(ARR, 3,nodCon(typeName,&(yyvsp[-4].Types)),nodId((yyvsp[-3].varId), 1),nodCon(constInt,&(yyvsp[-1].intVal)));}
-#line 2112 "interpretor.tab.c"
+#line 172 "interpretor.y"
+                                             {
+        if (addSymbol((yyvsp[-3].varId), ARR, (yyvsp[-4].Types), localScope) == -1){
+            yyerror("Variabila deja declarata - ");
+        }
+        (yyval.nodPtr)=nodOper(ARR, 3,nodCon(typeName,&(yyvsp[-4].Types)),nodId((yyvsp[-3].varId), 1),nodCon(constInt,&(yyvsp[-1].intVal)));}
+#line 2119 "interpretor.tab.c"
     break;
 
   case 51:
-#line 172 "interpretor.y"
+#line 179 "interpretor.y"
                             {}
-#line 2118 "interpretor.tab.c"
+#line 2125 "interpretor.tab.c"
     break;
 
   case 52:
-#line 173 "interpretor.y"
+#line 180 "interpretor.y"
                        {}
-#line 2124 "interpretor.tab.c"
+#line 2131 "interpretor.tab.c"
     break;
 
   case 53:
-#line 174 "interpretor.y"
+#line 181 "interpretor.y"
                       {}
-#line 2130 "interpretor.tab.c"
+#line 2137 "interpretor.tab.c"
     break;
 
   case 54:
-#line 175 "interpretor.y"
+#line 182 "interpretor.y"
                         {}
-#line 2136 "interpretor.tab.c"
+#line 2143 "interpretor.tab.c"
     break;
 
   case 55:
-#line 176 "interpretor.y"
+#line 183 "interpretor.y"
                       {}
-#line 2142 "interpretor.tab.c"
+#line 2149 "interpretor.tab.c"
     break;
 
   case 56:
-#line 178 "interpretor.y"
+#line 185 "interpretor.y"
                                            {}
-#line 2148 "interpretor.tab.c"
+#line 2155 "interpretor.tab.c"
     break;
 
   case 57:
-#line 181 "interpretor.y"
+#line 188 "interpretor.y"
                                               { arrayInt[indx]=(yyvsp[0].intVal); indx++;}
-#line 2154 "interpretor.tab.c"
+#line 2161 "interpretor.tab.c"
     break;
 
   case 58:
-#line 182 "interpretor.y"
+#line 189 "interpretor.y"
                 {arrayInt[indx]=(yyvsp[0].intVal); indx++;}
-#line 2160 "interpretor.tab.c"
+#line 2167 "interpretor.tab.c"
     break;
 
   case 59:
-#line 184 "interpretor.y"
+#line 191 "interpretor.y"
                                                     {arrayFloat[indx]=(yyvsp[0].floatVal); indx++;}
-#line 2166 "interpretor.tab.c"
+#line 2173 "interpretor.tab.c"
     break;
 
   case 60:
-#line 185 "interpretor.y"
+#line 192 "interpretor.y"
                   {arrayFloat[indx]=(yyvsp[0].floatVal); indx++;}
-#line 2172 "interpretor.tab.c"
+#line 2179 "interpretor.tab.c"
     break;
 
   case 61:
-#line 187 "interpretor.y"
+#line 194 "interpretor.y"
                                                  {arrayChar[indx]=(yyvsp[0].charVal); indx++;}
-#line 2178 "interpretor.tab.c"
+#line 2185 "interpretor.tab.c"
     break;
 
   case 62:
-#line 188 "interpretor.y"
+#line 195 "interpretor.y"
                  {arrayChar[indx]=(yyvsp[0].charVal); indx++;}
-#line 2184 "interpretor.tab.c"
+#line 2191 "interpretor.tab.c"
     break;
 
   case 63:
-#line 190 "interpretor.y"
+#line 197 "interpretor.y"
                                                     {arrayStr[indx]=(yyvsp[0].strVal); indx++;}
-#line 2190 "interpretor.tab.c"
+#line 2197 "interpretor.tab.c"
     break;
 
   case 64:
-#line 191 "interpretor.y"
+#line 198 "interpretor.y"
                 {arrayStr[indx]=(yyvsp[0].strVal); indx++;}
-#line 2196 "interpretor.tab.c"
+#line 2203 "interpretor.tab.c"
     break;
 
   case 65:
-#line 193 "interpretor.y"
+#line 200 "interpretor.y"
                                            {arrayBool[indx]=1; indx++;}
-#line 2202 "interpretor.tab.c"
+#line 2209 "interpretor.tab.c"
     break;
 
   case 66:
-#line 194 "interpretor.y"
+#line 201 "interpretor.y"
                                 {arrayBool[indx]=0; indx++;}
-#line 2208 "interpretor.tab.c"
+#line 2215 "interpretor.tab.c"
     break;
 
   case 67:
-#line 195 "interpretor.y"
+#line 202 "interpretor.y"
            {arrayBool[indx]=1; indx++;}
-#line 2214 "interpretor.tab.c"
+#line 2221 "interpretor.tab.c"
     break;
 
   case 68:
-#line 196 "interpretor.y"
+#line 203 "interpretor.y"
             {arrayBool[indx]=0; indx++;}
-#line 2220 "interpretor.tab.c"
+#line 2227 "interpretor.tab.c"
     break;
 
   case 69:
-#line 198 "interpretor.y"
+#line 205 "interpretor.y"
                                          {}
-#line 2226 "interpretor.tab.c"
+#line 2233 "interpretor.tab.c"
     break;
 
   case 70:
-#line 201 "interpretor.y"
+#line 208 "interpretor.y"
                                                  {}
-#line 2232 "interpretor.tab.c"
+#line 2239 "interpretor.tab.c"
     break;
 
   case 71:
-#line 204 "interpretor.y"
+#line 211 "interpretor.y"
                                                          {}
-#line 2238 "interpretor.tab.c"
+#line 2245 "interpretor.tab.c"
     break;
 
   case 72:
-#line 207 "interpretor.y"
+#line 214 "interpretor.y"
                                                             {}
-#line 2244 "interpretor.tab.c"
+#line 2251 "interpretor.tab.c"
     break;
 
   case 73:
-#line 210 "interpretor.y"
+#line 217 "interpretor.y"
                                        {
         if (addSymbol((yyvsp[0].varId), VAR, (yyvsp[-1].Types), localScope) == -1){
             yyerror("Variabila deja declarata - ");
         }
         (yyval.nodPtr) = nodOper(VAR,2,nodCon(typeName,&(yyvsp[-1].Types)),nodId((yyvsp[0].varId), 1));}
-#line 2254 "interpretor.tab.c"
+#line 2261 "interpretor.tab.c"
     break;
 
   case 74:
-#line 215 "interpretor.y"
+#line 222 "interpretor.y"
                                           {
         if (addSymbol((yyvsp[-2].varId), VAR, (yyvsp[-3].Types), localScope) == -1){
             yyerror("Variabila deja declarata - ");
         }
         (yyval.nodPtr) = nodOper(VAR,3,nodCon(typeName,&(yyvsp[-3].Types)),nodId((yyvsp[-2].varId), 1),(yyvsp[0].nodPtr));}
-#line 2264 "interpretor.tab.c"
+#line 2271 "interpretor.tab.c"
     break;
 
   case 75:
-#line 222 "interpretor.y"
+#line 229 "interpretor.y"
                                                           {}
-#line 2270 "interpretor.tab.c"
+#line 2277 "interpretor.tab.c"
     break;
 
   case 76:
-#line 225 "interpretor.y"
+#line 232 "interpretor.y"
                                                     {}
-#line 2276 "interpretor.tab.c"
+#line 2283 "interpretor.tab.c"
     break;
 
   case 77:
-#line 226 "interpretor.y"
+#line 233 "interpretor.y"
                               {}
-#line 2282 "interpretor.tab.c"
+#line 2289 "interpretor.tab.c"
     break;
 
   case 78:
-#line 227 "interpretor.y"
+#line 234 "interpretor.y"
                          {(yyval.nodPtr) = (yyvsp[0].nodPtr); }
-#line 2288 "interpretor.tab.c"
+#line 2295 "interpretor.tab.c"
     break;
 
   case 79:
-#line 230 "interpretor.y"
+#line 237 "interpretor.y"
                                         { (yyval.nodPtr) = nodOper(EVAL, 1, (yyvsp[-1].nodPtr)); }
-#line 2294 "interpretor.tab.c"
+#line 2301 "interpretor.tab.c"
     break;
 
   case 80:
-#line 233 "interpretor.y"
+#line 240 "interpretor.y"
                          {}
-#line 2300 "interpretor.tab.c"
+#line 2307 "interpretor.tab.c"
     break;
 
   case 81:
-#line 234 "interpretor.y"
+#line 241 "interpretor.y"
                                  {}
-#line 2306 "interpretor.tab.c"
+#line 2313 "interpretor.tab.c"
     break;
 
   case 82:
-#line 237 "interpretor.y"
+#line 244 "interpretor.y"
                            {}
-#line 2312 "interpretor.tab.c"
+#line 2319 "interpretor.tab.c"
     break;
 
   case 83:
-#line 238 "interpretor.y"
+#line 245 "interpretor.y"
                  {}
-#line 2318 "interpretor.tab.c"
+#line 2325 "interpretor.tab.c"
     break;
 
   case 84:
-#line 241 "interpretor.y"
+#line 248 "interpretor.y"
                       {(yyval.nodPtr) = nodId((yyvsp[0].varId), 0);}
-#line 2324 "interpretor.tab.c"
+#line 2331 "interpretor.tab.c"
     break;
 
   case 85:
-#line 242 "interpretor.y"
+#line 249 "interpretor.y"
                          {}
-#line 2330 "interpretor.tab.c"
+#line 2337 "interpretor.tab.c"
     break;
 
   case 86:
-#line 243 "interpretor.y"
+#line 250 "interpretor.y"
                 {}
-#line 2336 "interpretor.tab.c"
+#line 2343 "interpretor.tab.c"
     break;
 
   case 87:
-#line 244 "interpretor.y"
+#line 251 "interpretor.y"
                 {(yyval.nodPtr) = nodCon(constInt, &(yyvsp[0].intVal));}
-#line 2342 "interpretor.tab.c"
+#line 2349 "interpretor.tab.c"
     break;
 
   case 88:
-#line 245 "interpretor.y"
+#line 252 "interpretor.y"
                   {(yyval.nodPtr) = nodCon(constFloat, &(yyvsp[0].floatVal));}
-#line 2348 "interpretor.tab.c"
+#line 2355 "interpretor.tab.c"
     break;
 
   case 89:
-#line 246 "interpretor.y"
+#line 253 "interpretor.y"
                          {(yyval.nodPtr) = (yyvsp[-1].nodPtr);}
-#line 2354 "interpretor.tab.c"
+#line 2361 "interpretor.tab.c"
     break;
 
   case 90:
-#line 247 "interpretor.y"
+#line 254 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper('+', 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2360 "interpretor.tab.c"
+#line 2367 "interpretor.tab.c"
     break;
 
   case 91:
-#line 248 "interpretor.y"
+#line 255 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper('-', 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2366 "interpretor.tab.c"
+#line 2373 "interpretor.tab.c"
     break;
 
   case 92:
-#line 249 "interpretor.y"
+#line 256 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper('*', 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2372 "interpretor.tab.c"
+#line 2379 "interpretor.tab.c"
     break;
 
   case 93:
-#line 250 "interpretor.y"
+#line 257 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper('/', 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2378 "interpretor.tab.c"
+#line 2385 "interpretor.tab.c"
     break;
 
   case 94:
-#line 251 "interpretor.y"
+#line 258 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper('%', 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2384 "interpretor.tab.c"
+#line 2391 "interpretor.tab.c"
     break;
 
   case 95:
-#line 252 "interpretor.y"
+#line 259 "interpretor.y"
                                {(yyval.nodPtr) = nodOper(NEG, 1, (yyvsp[0].nodPtr));}
-#line 2390 "interpretor.tab.c"
+#line 2397 "interpretor.tab.c"
     break;
 
   case 96:
-#line 253 "interpretor.y"
+#line 260 "interpretor.y"
            {short b = 1; (yyval.nodPtr) = nodCon(constBool, &b);}
-#line 2396 "interpretor.tab.c"
+#line 2403 "interpretor.tab.c"
     break;
 
   case 97:
-#line 254 "interpretor.y"
+#line 261 "interpretor.y"
             {short b = 0; (yyval.nodPtr) = nodCon(constBool, &b);}
-#line 2402 "interpretor.tab.c"
+#line 2409 "interpretor.tab.c"
     break;
 
   case 98:
-#line 255 "interpretor.y"
+#line 262 "interpretor.y"
                                {(yyval.nodPtr) = nodOper(LT, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2408 "interpretor.tab.c"
+#line 2415 "interpretor.tab.c"
     break;
 
   case 99:
-#line 256 "interpretor.y"
+#line 263 "interpretor.y"
                                {(yyval.nodPtr) = nodOper(GT, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2414 "interpretor.tab.c"
+#line 2421 "interpretor.tab.c"
     break;
 
   case 100:
-#line 257 "interpretor.y"
+#line 264 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper(LTE, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2420 "interpretor.tab.c"
+#line 2427 "interpretor.tab.c"
     break;
 
   case 101:
-#line 258 "interpretor.y"
+#line 265 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper(GTE, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2426 "interpretor.tab.c"
+#line 2433 "interpretor.tab.c"
     break;
 
   case 102:
-#line 259 "interpretor.y"
+#line 266 "interpretor.y"
                                      {(yyval.nodPtr) = nodOper(EQUALITY, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2432 "interpretor.tab.c"
+#line 2439 "interpretor.tab.c"
     break;
 
   case 103:
-#line 260 "interpretor.y"
+#line 267 "interpretor.y"
                                       {(yyval.nodPtr) = nodOper(INEQUALITY, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2438 "interpretor.tab.c"
+#line 2445 "interpretor.tab.c"
     break;
 
   case 104:
-#line 261 "interpretor.y"
+#line 268 "interpretor.y"
                                 {(yyval.nodPtr) = nodOper(AND, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2444 "interpretor.tab.c"
+#line 2451 "interpretor.tab.c"
     break;
 
   case 105:
-#line 262 "interpretor.y"
+#line 269 "interpretor.y"
                                {(yyval.nodPtr) = nodOper(OR, 2, (yyvsp[-2].nodPtr), (yyvsp[0].nodPtr));}
-#line 2450 "interpretor.tab.c"
+#line 2457 "interpretor.tab.c"
     break;
 
   case 106:
-#line 263 "interpretor.y"
+#line 270 "interpretor.y"
                      {(yyval.nodPtr) = nodOper('!', 1, (yyvsp[0].nodPtr));}
-#line 2456 "interpretor.tab.c"
+#line 2463 "interpretor.tab.c"
     break;
 
   case 107:
-#line 264 "interpretor.y"
+#line 271 "interpretor.y"
                  {(yyval.nodPtr) = nodCon(constChar, &(yyvsp[0].charVal));}
-#line 2462 "interpretor.tab.c"
+#line 2469 "interpretor.tab.c"
     break;
 
   case 108:
-#line 265 "interpretor.y"
+#line 272 "interpretor.y"
                 {(yyval.nodPtr) = nodCon(constStr, &(yyvsp[0].strVal));}
-#line 2468 "interpretor.tab.c"
+#line 2475 "interpretor.tab.c"
     break;
 
 
-#line 2472 "interpretor.tab.c"
+#line 2479 "interpretor.tab.c"
 
         default: break;
       }
@@ -2712,7 +2719,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 268 "interpretor.y"
+#line 275 "interpretor.y"
 
 int check = 1;
 
@@ -2866,7 +2873,7 @@ int interpret(nodeType *p)
     case constStr:
         return *p->con.strVal;
     case typeId:
-        return sym[p->id.i];
+        return symbol[p->id.i].val.intVal;
     case typeOper:
         switch (p->opr.oper)
         {
@@ -2900,28 +2907,48 @@ int interpret(nodeType *p)
             return 0;
         case ARR:
             if(p->opr.nops == 3){
-                if(p->opr.op[0]->con.typeVal==INT)
-                    return sym[p->opr.op[1]->id.i] = 0;
-                else if(p->opr.op[0]->con.typeVal==FLOAT)
-                    return sym[p->opr.op[1]->id.i] = 0.0;
-                else if(p->opr.op[0]->con.typeVal==CHAR)
-                    return sym[p->opr.op[1]->id.i] = '\0';
-                else if(p->opr.op[0]->con.typeVal==STRING)
-                    return sym[p->opr.op[1]->id.i] = '\0';
-                else if(p->opr.op[0]->con.typeVal==BOOL)
-                    return sym[p->opr.op[1]->id.i] = 0;
+                if(p->opr.op[0]->con.typeVal==INT){
+                    symbol[p->opr.op[1]->id.i].arr.arrInt = malloc(p->opr.op[2]->con.intVal*sizeof(int));
+                    return 0;
+                    }
+                else if(p->opr.op[0]->con.typeVal==FLOAT){
+                    symbol[p->opr.op[1]->id.i].arr.arrFloat = malloc(p->opr.op[2]->con.intVal*sizeof(float));
+                    return 0;
+                }
+                else if(p->opr.op[0]->con.typeVal==CHAR){
+                    symbol[p->opr.op[1]->id.i].arr.arrChar = malloc(p->opr.op[2]->con.intVal*sizeof(char));;
+                    return 0;
+                }
+                else if(p->opr.op[0]->con.typeVal==STRING){
+                    symbol[p->opr.op[1]->id.i].arr.arrStr = malloc(p->opr.op[2]->con.intVal*sizeof(char*));
+                    return 0;
+                }
+                else if(p->opr.op[0]->con.typeVal==BOOL){
+                    symbol[p->opr.op[1]->id.i].arr.arrBool = malloc(p->opr.op[2]->con.intVal*sizeof(short));
+                    return 0;
+                }
             }
             else{
-                if(p->opr.op[0]->con.typeVal==INT)
-                    return sym[p->opr.op[1]->id.i] = p->opr.op[3]->arr.arrInt[0];
-                else if(p->opr.op[0]->con.typeVal==FLOAT)
-                    return sym[p->opr.op[1]->id.i] = p->opr.op[3]->arr.arrFloat[0];
-                else if(p->opr.op[0]->con.typeVal==CHAR)
-                    return sym[p->opr.op[1]->id.i] = p->opr.op[3]->arr.arrChar[0];
-                else if(p->opr.op[0]->con.typeVal==STRING)
-                    return sym[p->opr.op[1]->id.i] = *p->opr.op[3]->arr.arrStr[0];
-                else if(p->opr.op[0]->con.typeVal==BOOL)
-                    return sym[p->opr.op[1]->id.i] = p->opr.op[3]->arr.arrBool[0];
+                if(p->opr.op[0]->con.typeVal==INT){
+                    symbol[p->opr.op[1]->id.i].arr.arrInt = p->opr.op[3]->arr.arrInt;
+                    return 0;
+                    }
+                else if(p->opr.op[0]->con.typeVal==FLOAT){
+                    symbol[p->opr.op[1]->id.i].arr.arrFloat = p->opr.op[3]->arr.arrFloat;
+                    return 0;
+                }
+                else if(p->opr.op[0]->con.typeVal==CHAR){
+                    symbol[p->opr.op[1]->id.i].arr.arrChar = p->opr.op[3]->arr.arrChar;
+                    return 0;
+                }
+                else if(p->opr.op[0]->con.typeVal==STRING){
+                    symbol[p->opr.op[1]->id.i].arr.arrStr = p->opr.op[3]->arr.arrStr;
+                    return 0;
+                }
+                else if(p->opr.op[0]->con.typeVal==BOOL){
+                    symbol[p->opr.op[1]->id.i].arr.arrBool = p->opr.op[3]->arr.arrBool;
+                    return 0;
+                }
             }
         case VAR:
             if(p->opr.nops == 2){
@@ -2993,18 +3020,51 @@ int yyerror(const char *s)
 
 int main(int argc, char **argv)
 {   
-    printf("\n");
+    char symStr[1000] = "";
     if (argc > 0)
         yyin = fopen(argv[1], "r");
     yyparse();
     if (check == 1)
     {
-        printf("\n");
-        /*for (int i = 0; i < 30; i++)
+        sprintf(symStr, "name\t\tvalue\t\tscope\t\ttype\t\tbase type\n");
+        for (int i = 0; i < lastIndex; i++)
         {
-            printf("%d " , sym[i]);
-        }*/
-        printf("%s = %d", symbol[0].name, symbol[0].val.charVal);
+            char temp[100];
+            sprintf(temp, "%s\t\t", symbol[i].name);
+            strcat(symStr, temp);
+            if (symbol[i].type == FUN)
+                sprintf(temp, "-\t\t");
+            else if (symbol[i].type == VAR)
+            {
+                if (symbol[i].baseType == INT)
+                    sprintf(temp, "%d\t\t", symbol[i].val.intVal);
+                else if (symbol[i].baseType == FLOAT)
+                    sprintf(temp, "%f\t\t", symbol[i].val.floatVal);
+                else if (symbol[i].baseType == CHAR)
+                    sprintf(temp, "%c\t\t", symbol[i].val.charVal);
+                else if (symbol[i].baseType == STRING)
+                    sprintf(temp, "%s\t\t", symbol[i].val.strVal);
+                else if (symbol[i].baseType == BOOL)
+                    sprintf(temp, "%s\t\t", (symbol[i].val.boolVal)?"true":"false");
+            }
+            else if (symbol[i].type == ARR)
+            {
+                if (symbol[i].baseType == INT)
+                    sprintf(temp, "first - %d\t\t", *symbol[i].arr.arrInt);
+                else if (symbol[i].baseType == FLOAT)
+                    sprintf(temp, "first - %f\t\t", *symbol[i].arr.arrFloat);
+                else if (symbol[i].baseType == CHAR)
+                    sprintf(temp, "first - %c\t\t", *symbol[i].arr.arrChar);
+                else if (symbol[i].baseType == STRING)
+                    sprintf(temp, "first - %s\t\t", *symbol[i].arr.arrStr);
+                else if (symbol[i].baseType == BOOL)
+                    sprintf(temp, "first - %s\t\t", (*symbol[i].arr.arrBool)?"true":"false");
+            }
+            strcat(symStr, temp);
+            strcat(symStr, "\n");
+        }
         printf("\n");
+        printf("%s", symStr);
     }
+
 }

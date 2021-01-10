@@ -77,7 +77,7 @@ typedef struct nodeTypeTag
     };
 } nodeType;
 
-struct symbolTable
+static struct symbolTable
 {
     char *name;
     int type;     //VAR = 262, ARR = 274, FUN = 261,
@@ -114,21 +114,12 @@ static int addSymbol(char *name, int varType, int baseType, int scope)
         }
     }
 
-    if (varType == 262)
-    {
-        symbol[lastIndex].name = name;
-        symbol[lastIndex].type = varType;
-        symbol[lastIndex].baseType = baseType;
-        symbol[lastIndex].scope = scope;
-        lastIndex++;
-    }
-    if (varType == 272)
-    {
-        symbol[lastIndex].name = name;
-        symbol[lastIndex].type = varType;
-        symbol[lastIndex].baseType = baseType;
-        symbol[lastIndex].scope = scope;
-    }
+    symbol[lastIndex].name = name;
+    symbol[lastIndex].type = varType;
+    symbol[lastIndex].baseType = baseType;
+    symbol[lastIndex].scope = scope;
+    lastIndex++;
+    return 1;
 }
 extern int localScope;
 extern int sym[30];
