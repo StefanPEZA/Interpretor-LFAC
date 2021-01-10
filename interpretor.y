@@ -12,29 +12,35 @@
     /* prototipurile functiilor */
     nodeType *nodOper(int oper, int nops, ...);
         /* nod operator in arbore */
-    nodeType *nodId(char* i);
+    nodeType *nodId(char* i, int newId);
         /* nod frunza identificator */
     nodeType *nodCon(int type, void* value);
         /* nod frunza constanta */
-    nodeType *nodArr(int type, int size, void* value);
+    nodeType *nodArr(int type, int size);
     void freeNode(nodeType *p);
         /* eliberare memorie */
     int interpret(nodeType *p);
+    void evalError(const char*, int nre);
         /* functia de interpretare */
-    int arrayInt[696969];
-    short arrayBool[696969];
-    char arrayChar[696969];
-    char* arrayStr[696969];
-    float arrayFloat[696969];
+    int arrayInt[1000];
+    short arrayBool[1000];
+    char arrayChar[1000];
+    char* arrayStr[1000];
+    float arrayFloat[1000];
+    char strExpr[1000] = "";
+    int nreval = 1;
     int indx=0;
+    int lastIndex = 0;
     int yylex();
     int yyerror(const char *s);
-    int sym[100];
+    int sym[30];
+
+    int localScope = 0;
 
 %}
 
 %union {
-    short boolVal : 1;
+    short boolVal;
     int intVal;
     float floatVal;
     char charVal;
@@ -56,7 +62,7 @@
 
 %type <nodPtr> stmts stmt main_function expression fun_body code_block var_assignment var_declaration array_declaration
  array_assignment const_declaration call_function container_assignment container_function if_statement 
- while_statement  for_statement code_block_list array_list
+ while_statement  for_statement code_block_list array_list eval_function
 
 %type <Types> types
 
@@ -87,7 +93,9 @@ stmt : var_declaration ';' {}
     | main_function {}
     ;
 
-main_function : VOID MAIN '(' ')' '{' fun_body '}' {$$=nodOper(MAIN,1,$6);}
+main_function : VOID MAIN '(' ')' '{' fun_body '}' {
+    localScope = 1;
+    $$=nodOper(MAIN,1,$6);}
     ;
 
 container_declaration : CONTAINER '{' container_body '}' IDENTIFIER ';' {}
@@ -154,38 +162,39 @@ while_statement : WHILE '(' expression ')' '{'  code_block_list '}' {$$ = nodOpe
 for_statement : FOR '(' var_assignment ';'  expression ';' var_assignment ')' '{'  code_block_list  '}' { $$ = nodOper(FOR,4,$3,$5,$7,$10);}
     ;
 
-var_assignment : IDENTIFIER '=' expression {$$ = nodOper('=', 2, nodId($1), $3);}
+var_assignment : IDENTIFIER '=' expression {$$ = nodOper('=', 2, nodId($1, 0), $3);}
     ;
 
-array_declaration : ARR types IDENTIFIER '[' INT_CONST ']' '=' '{' array_list '}' {indx=0;$$=nodOper(ARR, 4,nodCon(typeName,&$2),nodId($3),nodCon(constInt,&$5),$9);}
-    | ARR types IDENTIFIER '[' INT_CONST ']' {$$=nodOper(ARR, 3,nodCon(typeName,&$2),nodId($3),nodCon(constInt,&$5));}
+array_declaration : ARR types IDENTIFIER '[' INT_CONST ']' '=' '{' array_list '}' {
+        $$=nodOper(ARR, 4,nodCon(typeName,&$2),nodId($3, 1),nodCon(constInt,&$5),nodArr($2, indx)); indx=0;}
+    | ARR types IDENTIFIER '[' INT_CONST ']' {$$=nodOper(ARR, 3,nodCon(typeName,&$2),nodId($3, 1),nodCon(constInt,&$5));}
     ;
 
-array_list : array_list_int {$$=nodArr(INT,100,arrayInt);printf("aaaaa");}
-    | array_list_float {$$=nodArr(FLOAT, $<intVal>-3,arrayFloat);}
-    | array_list_char {$$=nodArr(CHAR, $<intVal>-3,arrayChar);}
-    | array_list_string {$$=nodArr(STRING, $<intVal>-3,arrayStr);}
-    | array_list_bool {$$=nodArr(BOOL, $<intVal>-3,arrayBool);}
+array_list : array_list_int {}
+    | array_list_float {}
+    | array_list_char {}
+    | array_list_string {}
+    | array_list_bool {}
     ;
 array_assignment : array_val'=' expression {}  
     ;
 
-array_list_int : array_list_int ',' INT_CONST {arrayInt[indx]=$3; indx++;}
-    | INT_CONST {arrayInt[indx]=$1; }
+array_list_int : array_list_int ',' INT_CONST { arrayInt[indx]=$3; indx++;}
+    | INT_CONST {arrayInt[indx]=$1; indx++;}
     ;
 array_list_float : array_list_float ',' FLOAT_CONST {arrayFloat[indx]=$3; indx++;}
-    | FLOAT_CONST {arrayFloat[indx]=$1; }
+    | FLOAT_CONST {arrayFloat[indx]=$1; indx++;}
     ;    
 array_list_char : array_list_char ',' CHAR_CONST {arrayChar[indx]=$3; indx++;}
-    | CHAR_CONST {arrayChar[indx]=$1; }
+    | CHAR_CONST {arrayChar[indx]=$1; indx++;}
     ;
 array_list_string : array_list_string ',' STR_CONST {arrayStr[indx]=$3; indx++;}
-    | STR_CONST {arrayStr[indx]=$1; } 
+    | STR_CONST {arrayStr[indx]=$1; indx++;} 
     ;
 array_list_bool : array_list_bool ',' TRUE {arrayBool[indx]=1; indx++;}
     | array_list_bool ',' FALSE {arrayBool[indx]=0; indx++;}
-    | TRUE {arrayBool[indx]=1; }
-    | FALSE {arrayBool[indx]=0; }
+    | TRUE {arrayBool[indx]=1; indx++;}
+    | FALSE {arrayBool[indx]=0; indx++;}
     ;
 array_val : IDENTIFIER '[' INT_CONST ']' {}
     ;
@@ -199,8 +208,16 @@ container_assignment : get_container_elem '=' expression {}
 container_function : get_container_elem '(' call_params ')' {}
     ;
 
-var_declaration : VAR types IDENTIFIER {$$ = nodOper(VAR,2,nodCon(typeName,&$2),nodId($3));}
-    | VAR types IDENTIFIER '=' expression {$$ = nodOper(VAR,3,nodCon(typeName,&$2),nodId($3),$5);}
+var_declaration : VAR types IDENTIFIER {
+        if (addSymbol($3, VAR, $2, localScope) == -1){
+            yyerror("Variabila deja declarata - ");
+        }
+        $$ = nodOper(VAR,2,nodCon(typeName,&$2),nodId($3, 1));}
+    | VAR types IDENTIFIER '=' expression {
+        if (addSymbol($3, VAR, $2, localScope) == -1){
+            yyerror("Variabila deja declarata - ");
+        }
+        $$ = nodOper(VAR,3,nodCon(typeName,&$2),nodId($3, 1),$5);}
     ;
 
 const_declaration : CONST types IDENTIFIER '=' expression {}
@@ -208,10 +225,10 @@ const_declaration : CONST types IDENTIFIER '=' expression {}
 
 call_function : CALL IDENTIFIER '(' call_params ')' {}
     | CALL IDENTIFIER '(' ')' {}
-    | CALL eval_function {}
+    | CALL eval_function {$$ = $2; }
     ;
 
-eval_function : EVAL '(' expression ')' {} 
+eval_function : EVAL '(' expression ')' { $$ = nodOper(EVAL, 1, $3); } 
     ;
 
 call_params : call_param {}
@@ -222,11 +239,11 @@ call_param : call_function {}
     | expression {}
     ;
 
-expression:IDENTIFIER {$$ = nodId($1);}
+expression:IDENTIFIER {$$ = nodId($1, 0);}
     | get_container_elem {}
     | array_val {}
     | INT_CONST {$$ = nodCon(constInt, &$1);}
-    | FLOAT_CONST {}
+    | FLOAT_CONST {$$ = nodCon(constFloat, &$1);}
     | '(' expression ')' {$$ = $2;}
     | expression '+' expression {$$ = nodOper('+', 2, $1, $3);}
     | expression '-' expression {$$ = nodOper('-', 2, $1, $3);}
@@ -234,8 +251,8 @@ expression:IDENTIFIER {$$ = nodId($1);}
     | expression '/' expression {$$ = nodOper('/', 2, $1, $3);}
     | expression '%' expression {$$ = nodOper('%', 2, $1, $3);}
     | '-' expression %prec NEG {$$ = nodOper(NEG, 1, $2);}
-    | TRUE {}
-    | FALSE {}
+    | TRUE {short b = 1; $$ = nodCon(constBool, &b);}
+    | FALSE {short b = 0; $$ = nodCon(constBool, &b);}
     | expression LT expression {$$ = nodOper(LT, 2, $1, $3);}
     | expression GT expression {$$ = nodOper(GT, 2, $1, $3);}
     | expression LTE expression {$$ = nodOper(LTE, 2, $1, $3);}
@@ -245,8 +262,8 @@ expression:IDENTIFIER {$$ = nodId($1);}
     | expression AND expression {$$ = nodOper(AND, 2, $1, $3);}
     | expression OR expression {$$ = nodOper(OR, 2, $1, $3);}
     | '!' expression {$$ = nodOper('!', 1, $2);}
-    | CHAR_CONST {}
-    | STR_CONST {}
+    | CHAR_CONST {$$ = nodCon(constChar, &$1);}
+    | STR_CONST {$$ = nodCon(constStr, &$1);}
     ;
 
 %%
@@ -266,29 +283,29 @@ nodeType *nodCon(int type, void* value)
         p->type = constInt;
         p->con.intVal = *((int*)value);
     }
-    if (type == constBool){
+    else if (type == constBool){
         p->type = constBool;
         p->con.boolVal = *((short*)value);
     }
-    if (type == constChar){
+    else if (type == constChar){
         p->type = constChar;
         p->con.charVal = *((char*)value);
     }
-    if (type == constFloat){
+    else if (type == constFloat){
         p->type = constFloat;
         p->con.floatVal = *((float*)value);
     }
-    if (type == constStr){
+    else if (type == constStr){
         p->type = constStr;
         p->con.strVal = *((char**)value);
     }
-    if(type==typeName){
-        p->type =typeName;
-        p->typ.type = *((int*)value);
+    else if(type==typeName){
+        p->type = typeName;
+        p->con.typeVal = *((int*)value);
     }
     return p;
 }
-nodeType *nodId(char* i)
+nodeType *nodId(char* i, int newId)
 {
     nodeType *p;
     size_t nodeSize;
@@ -298,7 +315,7 @@ nodeType *nodId(char* i)
         yyerror("out of memory");
     /* copiere valoare indice */
     p->type = typeId;
-    p->id.i = *i - 'a';
+    p->id.i = getIndex(i, localScope);
     return p;
 }
 
@@ -323,45 +340,50 @@ nodeType *nodOper(int oper, int nops, ...)
     va_end(ap);
     return p;
 }
-nodeType *nodArr(int type, int size, void * value)
+
+nodeType *nodArr(int type, int size)
 {
-    printf("%d",size);
-     nodeType *p;
+    nodeType *p;
     size_t nodeSize;
     /* alocare memorie pentru noul nod */
-    nodeSize = SIZEOF_NODETYPE + sizeof(arrayNodeType);
+    nodeSize = SIZEOF_NODETYPE + sizeof(arrayNodeType) + size*sizeof(int);
     if ((p = malloc(nodeSize)) == NULL)
         yyerror("out of memory");
     /* copiere valoare constanta */
     if (type == INT){
         p->type = arraylist;
         p->arr.arrInt=(int*)malloc(size*sizeof(int));
-        printf("lasagna");
-        for(int i=0; i<size;printf("sss"),i++){
-            printf("%d\n",((int*)value)[i]);
-            p->arr.arrInt[i] = ((int*)value)[i];
-            printf("trololol\n");
+        for(int i=0; i<size;i++){
+            p->arr.arrInt[i] = arrayInt[i];
         }
     }
-    if (type == BOOL){
+    else if (type == BOOL){
         p->type = arraylist;
         p->arr.arrBool=malloc(size*sizeof(short));
-        p->arr.arrBool = ((short*)value);
+        for(int i=0; i<size;i++){
+            p->arr.arrBool[i] = arrayBool[i];
+        }
     }
-    if (type == CHAR){
+    else if (type == CHAR){
         p->type = arraylist;
         p->arr.arrChar=malloc(size*sizeof(char));
-        p->arr.arrChar = ((char*)value);
+        for(int i=0; i<size;i++){
+            p->arr.arrChar[i] = arrayChar[i];
+        }
     }
-    if (type == STRING){
+    else if (type == STRING){
         p->type = arraylist;
         p->arr.arrStr=malloc(size*sizeof(char*));
-        p->arr.arrStr = ((char**)value);
+        for(int i=0; i<size;i++){
+            p->arr.arrStr[i] = arrayStr[i];
+        }
     }
-    if (type == FLOAT){
+    else if (type == FLOAT){
         p->type = arraylist;
         p->arr.arrFloat=malloc(size*sizeof(float));
-        p->arr.arrFloat = ((float*)value);
+        for(int i=0; i<size;i++){
+            p->arr.arrFloat[i] = arrayFloat[i];
+        }
     }
     return p;
 }
@@ -378,8 +400,10 @@ void freeNode(nodeType *p)
     free(p);
 }
 
+
 int interpret(nodeType *p)
 {
+    int result;
     if (!p)
         return 0;
     switch (p->type)
@@ -400,6 +424,17 @@ int interpret(nodeType *p)
         switch (p->opr.oper)
         {
         case MAIN: return interpret(p->opr.op[0]);
+        case EVAL:
+            inorderExpr(p->opr.op[0]);
+            if (strstr(strExpr, "fail"))
+            {
+                evalError("Parametrul nu este de tip int - la eval #", nreval);
+                return 0;
+            }
+            nreval++;
+            result = interpret(p->opr.op[0]);
+            printf("Eval[%s] = %d\n", strExpr, result);
+            return result;
         case ';': interpret(p->opr.op[0]);
             return interpret(p->opr.op[1]);
         case WHILE:
@@ -418,56 +453,89 @@ int interpret(nodeType *p)
             return 0;
         case ARR:
             if(p->opr.nops == 3){
-                if(p->opr.op[0]->typ.type==INT)
+                if(p->opr.op[0]->con.typeVal==INT)
+                    return sym[p->opr.op[1]->id.i] = 0;
+                else if(p->opr.op[0]->con.typeVal==FLOAT)
+                    return sym[p->opr.op[1]->id.i] = 0.0;
+                else if(p->opr.op[0]->con.typeVal==CHAR)
+                    return sym[p->opr.op[1]->id.i] = '\0';
+                else if(p->opr.op[0]->con.typeVal==STRING)
+                    return sym[p->opr.op[1]->id.i] = '\0';
+                else if(p->opr.op[0]->con.typeVal==BOOL)
                     return sym[p->opr.op[1]->id.i] = 0;
             }
-            else
-                if(p->opr.op[0]->typ.type==INT)
-                    return sym[p->opr.op[1]->id.i] = p->arr.arrInt[0];
+            else{
+                if(p->opr.op[0]->con.typeVal==INT)
+                    return sym[p->opr.op[1]->id.i] = p->opr.op[3]->arr.arrInt[0];
+                else if(p->opr.op[0]->con.typeVal==FLOAT)
+                    return sym[p->opr.op[1]->id.i] = p->opr.op[3]->arr.arrFloat[0];
+                else if(p->opr.op[0]->con.typeVal==CHAR)
+                    return sym[p->opr.op[1]->id.i] = p->opr.op[3]->arr.arrChar[0];
+                else if(p->opr.op[0]->con.typeVal==STRING)
+                    return sym[p->opr.op[1]->id.i] = *p->opr.op[3]->arr.arrStr[0];
+                else if(p->opr.op[0]->con.typeVal==BOOL)
+                    return sym[p->opr.op[1]->id.i] = p->opr.op[3]->arr.arrBool[0];
+            }
         case VAR:
             if(p->opr.nops == 2){
-                if(p->opr.op[0]->typ.type==INT)
-                    return sym[p->opr.op[1]->id.i]=0;
+                if(p->opr.op[0]->con.typeVal==INT)
+                    return symbol[p->opr.op[1]->id.i].val.intVal=0;
+                else if(p->opr.op[0]->con.typeVal==FLOAT)
+                    return symbol[p->opr.op[1]->id.i].val.floatVal =0.0;
+                else if(p->opr.op[0]->con.typeVal==CHAR)
+                    return symbol[p->opr.op[1]->id.i].val.charVal = '\0';
+                else if(p->opr.op[0]->con.typeVal==STRING){
+                    symbol[p->opr.op[1]->id.i].val.strVal = (char*)"";
+                    return 0;
+                }
+                else if(p->opr.op[0]->con.typeVal==BOOL)
+                    return symbol[p->opr.op[1]->id.i].val.boolVal = 0;
             }
-            else
-                if(p->opr.op[0]->typ.type==INT)
-                    return sym[p->opr.op[1]->id.i]=interpret(p->opr.op[2]);
+            else{
+                if(p->opr.op[0]->con.typeVal==INT)
+                    return symbol[p->opr.op[1]->id.i].val.intVal=interpret(p->opr.op[2]);
+                else if(p->opr.op[0]->con.typeVal==FLOAT)
+                    return symbol[p->opr.op[1]->id.i].val.floatVal=interpret(p->opr.op[2]);
+                else if(p->opr.op[0]->con.typeVal==CHAR)
+                    return symbol[p->opr.op[1]->id.i].val.charVal=interpret(p->opr.op[2]);
+                else if(p->opr.op[0]->con.typeVal==STRING)
+                    return (symbol[p->opr.op[1]->id.i].val.strVal[0])=interpret(p->opr.op[2]);
+                else if(p->opr.op[0]->con.typeVal==BOOL)
+                    return symbol[p->opr.op[1]->id.i].val.boolVal=interpret(p->opr.op[2]);
+            }
         case '=':
-            return sym[p->opr.op[0]->id.i] =
-                       interpret(p->opr.op[1]);
+            return sym[p->opr.op[0]->id.i] = interpret(p->opr.op[1]);
         case NEG:
             return -interpret(p->opr.op[0]);
         case '+':
-            return interpret(p->opr.op[0]) +
-                   interpret(p->opr.op[1]);
+            return interpret(p->opr.op[0]) + interpret(p->opr.op[1]);
         case '-':
             return interpret(p->opr.op[0]) - interpret(p->opr.op[1]);
         case '*':
             return interpret(p->opr.op[0]) * interpret(p->opr.op[1]);
         case '/':
-            return interpret(p->opr.op[0]) /
-                   interpret(p->opr.op[1]);
+            return interpret(p->opr.op[0]) / interpret(p->opr.op[1]);
+        case '%':
+            return interpret(p->opr.op[0]) % interpret(p->opr.op[1]);
         case LT:
-            return interpret(p->opr.op[0]) <
-                   interpret(p->opr.op[1]);
+            return interpret(p->opr.op[0]) <  interpret(p->opr.op[1]);
         case GT:
-            return interpret(p->opr.op[0]) >
-                   interpret(p->opr.op[1]);
+            return interpret(p->opr.op[0]) > interpret(p->opr.op[1]);
         case GTE:
-            return interpret(p->opr.op[0]) >=
-                   interpret(p->opr.op[1]);
+            return interpret(p->opr.op[0]) >= interpret(p->opr.op[1]);
         case LTE:
-            return interpret(p->opr.op[0]) <=
-                   interpret(p->opr.op[1]);
+            return interpret(p->opr.op[0]) <= interpret(p->opr.op[1]);
         case INEQUALITY:
-            return interpret(p->opr.op[0]) !=
-                   interpret(p->opr.op[1]);
+            return interpret(p->opr.op[0]) !=  interpret(p->opr.op[1]);
         case EQUALITY:
-            return interpret(p->opr.op[0]) ==
-                   interpret(p->opr.op[1]);
+            return interpret(p->opr.op[0]) == interpret(p->opr.op[1]);
         }
     }
     return 0;
+}
+
+void evalError(const char* s, int nre){
+    printf("%s%d\n", s, nre);
 }
 
 int yyerror(const char *s)
@@ -477,17 +545,19 @@ int yyerror(const char *s)
 }
 
 int main(int argc, char **argv)
-{ 
+{   
+    printf("\n");
     if (argc > 0)
         yyin = fopen(argv[1], "r");
     yyparse();
     if (check == 1)
     {
-        printf("Programul este corect sintactic!\n\n");
-
-        for (int i = 0; i < 100; i++)
+        printf("\n");
+        /*for (int i = 0; i < 30; i++)
         {
             printf("%d " , sym[i]);
-        }
+        }*/
+        printf("%s = %c", symbol[2].name, symbol[2].val.charVal);
+        printf("\n");
     }
 }

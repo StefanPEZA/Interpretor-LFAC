@@ -365,20 +365,20 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[127] =
     {   0,
-        0,    0,   49,   47,   45,   46,   19,   47,   19,   47,
-       47,    5,    6,   11,   19,   47,   42,   42,    4,   17,
-        3,   18,   40,   40,   40,   40,   40,   40,    9,   10,
+        0,    0,   49,   47,   45,   46,   20,   47,   20,   47,
+       47,    6,    7,   12,   20,   47,   42,   42,    5,   18,
+        4,   19,   40,   40,   40,   40,   40,   40,   10,   11,
        40,   40,   40,   40,   40,   40,   40,   40,   40,   40,
-        7,   47,    8,   45,    1,    0,   44,   13,    0,   12,
-       41,    0,   42,   16,    2,   15,   40,   40,   40,   40,
-       40,   40,   40,   40,   40,   40,   40,   40,   40,   20,
-       40,   40,   40,   40,   40,   40,   14,   43,   40,   40,
-       40,   40,   40,   40,   40,   40,   40,   40,   40,   22,
-       26,   40,   40,   40,   40,   40,   35,   40,   36,   32,
+        8,   47,    9,   45,    2,    0,   44,   14,    0,   13,
+       41,    0,   42,   17,    3,   16,   40,   40,   40,   40,
+       40,   40,   40,   40,   40,   40,   40,   40,   40,   21,
+       40,   40,   40,   40,   40,   40,   15,   43,   40,   40,
+       40,   40,   40,   40,   40,   40,   40,   40,   40,   23,
+       27,   40,   40,   40,   40,   40,   36,   40,   37,   33,
 
-       34,   30,   28,   40,   40,   21,   40,   40,   39,   40,
-       37,   31,   40,   33,   25,   40,   38,   27,   40,   23,
-       40,   29,   40,   40,   24,    0
+       35,   31,   29,   40,   40,   22,   40,   40,    1,   40,
+       38,   32,   40,   34,   26,   40,   39,   28,   40,   24,
+       40,   30,   40,   40,   25,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -753,7 +753,7 @@ YY_DECL
 		}
 
 	{
-#line 15 "interpretor.l"
+#line 16 "interpretor.l"
 
 #line 759 "lex.yy.c"
 
@@ -814,243 +814,243 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 16 "interpretor.l"
-{nr_word++; return INEQUALITY;}
+#line 17 "interpretor.l"
+{nr_word++;return MAIN;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 17 "interpretor.l"
-{nr_word++; return EQUALITY;}
+#line 18 "interpretor.l"
+{nr_word++; return INEQUALITY;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 18 "interpretor.l"
-{nr_word++; return *yytext;}
+#line 19 "interpretor.l"
+{nr_word++; return EQUALITY;}
 	YY_BREAK
 case 4:
-YY_RULE_SETUP
-#line 19 "interpretor.l"
-{nr_word++; return *yytext;}
-	YY_BREAK
-case 5:
 YY_RULE_SETUP
 #line 20 "interpretor.l"
 {nr_word++; return *yytext;}
 	YY_BREAK
-case 6:
+case 5:
 YY_RULE_SETUP
 #line 21 "interpretor.l"
 {nr_word++; return *yytext;}
 	YY_BREAK
-case 7:
+case 6:
 YY_RULE_SETUP
 #line 22 "interpretor.l"
 {nr_word++; return *yytext;}
 	YY_BREAK
-case 8:
+case 7:
 YY_RULE_SETUP
 #line 23 "interpretor.l"
 {nr_word++; return *yytext;}
 	YY_BREAK
-case 9:
+case 8:
 YY_RULE_SETUP
 #line 24 "interpretor.l"
 {nr_word++; return *yytext;}
 	YY_BREAK
-case 10:
+case 9:
 YY_RULE_SETUP
 #line 25 "interpretor.l"
 {nr_word++; return *yytext;}
 	YY_BREAK
-case 11:
+case 10:
 YY_RULE_SETUP
 #line 26 "interpretor.l"
 {nr_word++; return *yytext;}
 	YY_BREAK
-case 12:
+case 11:
 YY_RULE_SETUP
 #line 27 "interpretor.l"
-{nr_word++; return ACCES;}
+{nr_word++; return *yytext;}
+	YY_BREAK
+case 12:
+YY_RULE_SETUP
+#line 28 "interpretor.l"
+{nr_word++; return *yytext;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 28 "interpretor.l"
-{nr_word++; return AND;}
+#line 29 "interpretor.l"
+{nr_word++; return ACCES;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 29 "interpretor.l"
-{nr_word++; return OR;}
+#line 30 "interpretor.l"
+{nr_word++; return AND;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 30 "interpretor.l"
-{nr_word++; return GTE;}
+#line 31 "interpretor.l"
+{nr_word++; return OR;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 31 "interpretor.l"
-{nr_word++; return LTE;}
+#line 32 "interpretor.l"
+{nr_word++; return GTE;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 32 "interpretor.l"
-{nr_word++; return LT;}
+#line 33 "interpretor.l"
+{nr_word++; return LTE;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 33 "interpretor.l"
-{nr_word++; return GT;}
+#line 34 "interpretor.l"
+{nr_word++; return LT;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 34 "interpretor.l"
-{nr_word++; return *yytext;}
+#line 35 "interpretor.l"
+{nr_word++; return GT;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 35 "interpretor.l"
-{nr_word++;return IF;}
+#line 36 "interpretor.l"
+{nr_word++; return *yytext;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 36 "interpretor.l"
-{nr_word++;return ELSE;}
+#line 37 "interpretor.l"
+{nr_word++;return IF;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 37 "interpretor.l"
-{nr_word++;return FOR;}
+#line 38 "interpretor.l"
+{nr_word++;return ELSE;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 38 "interpretor.l"
-{nr_word++;return WHILE;}
+#line 39 "interpretor.l"
+{nr_word++;return FOR;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 39 "interpretor.l"
-{nr_word++; return CONTAINER;}
+#line 40 "interpretor.l"
+{nr_word++;return WHILE;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 40 "interpretor.l"
-{nr_word++; return CONST;}
+#line 41 "interpretor.l"
+{nr_word++; return CONTAINER;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 41 "interpretor.l"
-{nr_word++; return INT;}
+#line 42 "interpretor.l"
+{nr_word++; return CONST;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 42 "interpretor.l"
-{nr_word++; return FLOAT;}
+#line 43 "interpretor.l"
+{nr_word++; return INT;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 43 "interpretor.l"
-{nr_word++; return CHAR;}
+#line 44 "interpretor.l"
+{nr_word++; return FLOAT;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 44 "interpretor.l"
-{nr_word++; return STRING;}
+#line 45 "interpretor.l"
+{nr_word++; return CHAR;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 45 "interpretor.l"
-{nr_word++;return BOOL;}
+#line 46 "interpretor.l"
+{nr_word++; return STRING;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 46 "interpretor.l"
-{nr_word++;return VOID;}
+#line 47 "interpretor.l"
+{nr_word++;return BOOL;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 47 "interpretor.l"
-{nr_word++;return FUN;}
+#line 48 "interpretor.l"
+{nr_word++;return VOID;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 48 "interpretor.l"
-{nr_word++; return CALL;}
+#line 49 "interpretor.l"
+{nr_word++;return FUN;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 49 "interpretor.l"
-{nr_word++;return VAR;}
+#line 50 "interpretor.l"
+{nr_word++; return CALL;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 50 "interpretor.l"
-{nr_word++;return ARR;}
+#line 51 "interpretor.l"
+{nr_word++;return VAR;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 51 "interpretor.l"
-{nr_word++;return EVAL;}
+#line 52 "interpretor.l"
+{nr_word++;return ARR;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 52 "interpretor.l"
-{nr_word++;yylval.boolVal=1; return TRUE;}
+#line 53 "interpretor.l"
+{nr_word++;return EVAL;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 53 "interpretor.l"
-{nr_word++;yylval.boolVal=0; return FALSE;}
+#line 54 "interpretor.l"
+{nr_word++;yylval.boolVal=(short)1; return TRUE;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 54 "interpretor.l"
-{nr_word++;return MAIN;}
+#line 55 "interpretor.l"
+{nr_word++;yylval.boolVal=(short)0; return FALSE;}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 56 "interpretor.l"
+#line 57 "interpretor.l"
 {nr_word++;yylval.varId=strdup(yytext); return IDENTIFIER;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 57 "interpretor.l"
+#line 58 "interpretor.l"
 {nr_word++;yylval.floatVal=atof(yytext); return FLOAT_CONST;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 58 "interpretor.l"
+#line 59 "interpretor.l"
 {nr_word++;yylval.intVal=atoi(yytext); return INT_CONST;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 59 "interpretor.l"
+#line 60 "interpretor.l"
 {nr_word++;yylval.charVal=yytext[1]; return CHAR_CONST;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 60 "interpretor.l"
+#line 61 "interpretor.l"
 {nr_word++;yylval.strVal=strndup(yytext+1, strlen(yytext)-2); return STR_CONST;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 61 "interpretor.l"
+#line 62 "interpretor.l"
 ;
 	YY_BREAK
 case 46:
 /* rule 46 can match eol */
 YY_RULE_SETUP
-#line 62 "interpretor.l"
+#line 63 "interpretor.l"
 {nr_lines++; nr_word = 0;}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 63 "interpretor.l"
+#line 64 "interpretor.l"
 ;
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 64 "interpretor.l"
+#line 65 "interpretor.l"
 ECHO;
 	YY_BREAK
 #line 1057 "lex.yy.c"
@@ -2058,5 +2058,5 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 64 "interpretor.l"
+#line 65 "interpretor.l"
 

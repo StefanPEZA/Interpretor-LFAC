@@ -150,143 +150,179 @@ Grammar
 
 Terminals, with rules where they appear
 
-$end (0) 0
-'!' (33) 105
-'%' (37) 93
-'(' (40) 10 16 17 43 44 45 46 71 75 76 78 88
-')' (41) 10 16 17 43 44 45 46 71 75 76 78 88
-'*' (42) 91
-'+' (43) 89
-',' (44) 21 56 58 60 62 64 65 80
-'-' (45) 90 94
-'/' (47) 92
-';' (59) 4 5 6 11 14 30 31 32 33 34 35 36 37 46
-'=' (61) 47 48 55 70 73 74
-'[' (91) 48 49 68
-']' (93) 48 49 68
-'{' (123) 10 11 16 17 43 44 45 46 48
-'}' (125) 10 11 16 17 43 44 45 46 48
-error (256)
-CONTAINER (258) 11
-EVAL (259) 78
-CONST (260) 74
-FUN (261) 16 17
-VAR (262) 72 73
-CALL (263) 75 76 77
-IF (264) 43 44
-ELSE (265) 44
-WHILE (266) 45
-FOR (267) 46
-INT (268) 23
-FLOAT (269) 24
-CHAR (270) 25
-STRING (271) 26
-BOOL (272) 27
-VOID (273) 10 19
-ARR (274) 48 49
-MAIN (275) 10
-IDENTIFIER (276) 11 16 17 22 47 48 49 68 69 72 73 74 75 76 83
-INT_CONST (277) 48 49 56 57 68 86
-FLOAT_CONST (278) 58 59 87
-CHAR_CONST (279) 60 61 106
-STR_CONST (280) 62 63 107
-TRUE (281) 64 66 95
-FALSE (282) 65 67 96
-AND (283) 103
-OR (284) 104
-EQUALITY (285) 101
-INEQUALITY (286) 102
-LT (287) 97
-GT (288) 98
-LTE (289) 99
-GTE (290) 100
-NEG (291)
-ACCES (292) 69
-THEN (293)
+    $end (0) 0
+    '!' (33) 105
+    '%' (37) 93
+    '(' (40) 10 16 17 43 44 45 46 71 75 76 78 88
+    ')' (41) 10 16 17 43 44 45 46 71 75 76 78 88
+    '*' (42) 91
+    '+' (43) 89
+    ',' (44) 21 56 58 60 62 64 65 80
+    '-' (45) 90 94
+    '/' (47) 92
+    ';' (59) 4 5 6 11 14 30 31 32 33 34 35 36 37 46
+    '=' (61) 47 48 55 70 73 74
+    '[' (91) 48 49 68
+    ']' (93) 48 49 68
+    '{' (123) 10 11 16 17 43 44 45 46 48
+    '}' (125) 10 11 16 17 43 44 45 46 48
+    error (256)
+    CONTAINER (258) 11
+    EVAL (259) 78
+    CONST (260) 74
+    FUN (261) 16 17
+    VAR (262) 72 73
+    CALL (263) 75 76 77
+    IF (264) 43 44
+    ELSE (265) 44
+    WHILE (266) 45
+    FOR (267) 46
+    INT (268) 23
+    FLOAT (269) 24
+    CHAR (270) 25
+    STRING (271) 26
+    BOOL (272) 27
+    VOID (273) 10 19
+    ARR (274) 48 49
+    MAIN (275) 10
+    IDENTIFIER <varId> (276) 11 16 17 22 47 48 49 68 69 72 73 74 75 76 83
+    INT_CONST <intVal> (277) 48 49 56 57 68 86
+    FLOAT_CONST <floatVal> (278) 58 59 87
+    CHAR_CONST <charVal> (279) 60 61 106
+    STR_CONST <strVal> (280) 62 63 107
+    TRUE <boolVal> (281) 64 66 95
+    FALSE <boolVal> (282) 65 67 96
+    AND (283) 103
+    OR (284) 104
+    EQUALITY (285) 101
+    INEQUALITY (286) 102
+    LT (287) 97
+    GT (288) 98
+    LTE (289) 99
+    GTE (290) 100
+    NEG (291)
+    ACCES (292) 69
+    THEN (293)
 
 
 Nonterminals, with rules where they appear
 
-$accept (54)
-    on left: 0
-start (55)
-    on left: 1, on right: 0
-stmts (56)
-    on left: 2 3, on right: 1 2
-stmt (57)
-    on left: 4 5 6 7 8 9, on right: 2 3
-main_function (58)
-    on left: 10, on right: 9
-container_declaration (59)
-    on left: 11, on right: 8
-container_body (60)
-    on left: 12 13, on right: 11 13
-container_elements (61)
-    on left: 14 15, on right: 12 13
-function_declaration (62)
-    on left: 16 17, on right: 7 15
-return_type (63)
-    on left: 18 19, on right: 16 17
-fun_params (64)
-    on left: 20 21, on right: 16 21
-parameter (65)
-    on left: 22, on right: 20 21
-types (66)
-    on left: 23 24 25 26 27, on right: 18 22 48 49 72 73 74
-fun_body (67)
-    on left: 28 29, on right: 10 16 17 29
-code_block (68)
-    on left: 30 31 32 33 34 35 36 37 38 39 40, on right: 28 29 41 42
-code_block_list (69)
-    on left: 41 42, on right: 42 43 44 45 46
-if_statement (70)
-    on left: 43 44, on right: 38
-while_statement (71)
-    on left: 45, on right: 39
-for_statement (72)
-    on left: 46, on right: 40
-var_assignment (73)
-    on left: 47, on right: 35 46
-array_declaration (74)
-    on left: 48 49, on right: 5 31
-array_list (75)
-    on left: 50 51 52 53 54, on right: 48
-array_assignment (76)
-    on left: 55, on right: 32
-array_list_int (77)
-    on left: 56 57, on right: 50 56
-array_list_float (78)
-    on left: 58 59, on right: 51 58
-array_list_char (79)
-    on left: 60 61, on right: 52 60
-array_list_string (80)
-    on left: 62 63, on right: 53 62
-array_list_bool (81)
-    on left: 64 65 66 67, on right: 54 64 65
-array_val (82)
-    on left: 68, on right: 55 85
-get_container_elem (83)
-    on left: 69, on right: 70 71 84
-container_assignment (84)
-    on left: 70, on right: 36
-container_function (85)
-    on left: 71, on right: 37
-var_declaration (86)
-    on left: 72 73, on right: 4 14 30
-const_declaration (87)
-    on left: 74, on right: 6 33
-call_function (88)
-    on left: 75 76 77, on right: 34 81
-eval_function (89)
-    on left: 78, on right: 77
-call_params (90)
-    on left: 79 80, on right: 71 75 80
-call_param (91)
-    on left: 81 82, on right: 79 80
-expression (92)
-    on left: 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100
-    101 102 103 104 105 106 107, on right: 43 44 45 46 47 55 70 73
-    74 78 82 88 89 90 91 92 93 94 97 98 99 100 101 102 103 104 105
+    $accept (54)
+        on left: 0
+    start (55)
+        on left: 1
+        on right: 0
+    stmts <nodPtr> (56)
+        on left: 2 3
+        on right: 1 2
+    stmt <nodPtr> (57)
+        on left: 4 5 6 7 8 9
+        on right: 2 3
+    main_function <nodPtr> (58)
+        on left: 10
+        on right: 9
+    container_declaration (59)
+        on left: 11
+        on right: 8
+    container_body (60)
+        on left: 12 13
+        on right: 11 13
+    container_elements (61)
+        on left: 14 15
+        on right: 12 13
+    function_declaration (62)
+        on left: 16 17
+        on right: 7 15
+    return_type (63)
+        on left: 18 19
+        on right: 16 17
+    fun_params (64)
+        on left: 20 21
+        on right: 16 21
+    parameter (65)
+        on left: 22
+        on right: 20 21
+    types <Types> (66)
+        on left: 23 24 25 26 27
+        on right: 18 22 48 49 72 73 74
+    fun_body <nodPtr> (67)
+        on left: 28 29
+        on right: 10 16 17 29
+    code_block <nodPtr> (68)
+        on left: 30 31 32 33 34 35 36 37 38 39 40
+        on right: 28 29 41 42
+    code_block_list <nodPtr> (69)
+        on left: 41 42
+        on right: 42 43 44 45 46
+    if_statement <nodPtr> (70)
+        on left: 43 44
+        on right: 38
+    while_statement <nodPtr> (71)
+        on left: 45
+        on right: 39
+    for_statement <nodPtr> (72)
+        on left: 46
+        on right: 40
+    var_assignment <nodPtr> (73)
+        on left: 47
+        on right: 35 46
+    array_declaration <nodPtr> (74)
+        on left: 48 49
+        on right: 5 31
+    array_list <nodPtr> (75)
+        on left: 50 51 52 53 54
+        on right: 48
+    array_assignment <nodPtr> (76)
+        on left: 55
+        on right: 32
+    array_list_int (77)
+        on left: 56 57
+        on right: 50 56
+    array_list_float (78)
+        on left: 58 59
+        on right: 51 58
+    array_list_char (79)
+        on left: 60 61
+        on right: 52 60
+    array_list_string (80)
+        on left: 62 63
+        on right: 53 62
+    array_list_bool (81)
+        on left: 64 65 66 67
+        on right: 54 64 65
+    array_val (82)
+        on left: 68
+        on right: 55 85
+    get_container_elem (83)
+        on left: 69
+        on right: 70 71 84
+    container_assignment <nodPtr> (84)
+        on left: 70
+        on right: 36
+    container_function <nodPtr> (85)
+        on left: 71
+        on right: 37
+    var_declaration <nodPtr> (86)
+        on left: 72 73
+        on right: 4 14 30
+    const_declaration <nodPtr> (87)
+        on left: 74
+        on right: 6 33
+    call_function <nodPtr> (88)
+        on left: 75 76 77
+        on right: 34 81
+    eval_function <nodPtr> (89)
+        on left: 78
+        on right: 77
+    call_params (90)
+        on left: 79 80
+        on right: 71 75 80
+    call_param (91)
+        on left: 81 82
+        on right: 79 80
+    expression <nodPtr> (92)
+        on left: 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107
+        on right: 43 44 45 46 47 55 70 73 74 78 82 88 89 90 91 92 93 94 97 98 99 100 101 102 103 104 105
 
 
 State 0

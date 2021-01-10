@@ -11,8 +11,10 @@ id [a-zA-Z_][0-9a-zA-Z_]*
 float (([1-9][0-9]*)|0)?\.([0-9]+)
 char '.'
 string \".*\"
+
 %option noyywrap
 %%
+main {nr_word++;return MAIN;}
 "!=" {nr_word++; return INEQUALITY;}
 "==" {nr_word++; return EQUALITY;}
 "=" {nr_word++; return *yytext;}
@@ -49,9 +51,8 @@ CALL: {nr_word++; return CALL;}
 VAR: {nr_word++;return VAR;}
 ARR: {nr_word++;return ARR;}
 Eval {nr_word++;return EVAL;}
-true {nr_word++;yylval.boolVal=1; return TRUE;}
-false {nr_word++;yylval.boolVal=0; return FALSE;}
-main {nr_word++;return MAIN;}
+true {nr_word++;yylval.boolVal=(short)1; return TRUE;}
+false {nr_word++;yylval.boolVal=(short)0; return FALSE;}
 
 {id} {nr_word++;yylval.varId=strdup(yytext); return IDENTIFIER;}
 {float} {nr_word++;yylval.floatVal=atof(yytext); return FLOAT_CONST;}

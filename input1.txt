@@ -1,7 +1,8 @@
 VAR: int x=69;
 VAR: bool y=true;
+ARR: bool s[69] = {true, true};
 void main() {
-    ARR: int s[69]={1,6,8,4,9,3};
-    VAR: int a = 36;
+    VAR: char a = 'a';
     VAR: int b;
+    CALL: Eval( (1+2)*(2+1) );
 }
