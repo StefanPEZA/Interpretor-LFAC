@@ -162,12 +162,15 @@ for_statement : FOR '(' var_assignment ';'  expression ';' var_assignment ')' '{
     ;
 
 var_assignment : IDENTIFIER '=' expression {
+    char temp[50];
     int x=getIndex($1,localScope);
     if(symbol[x].isconst==1)
         yyerror("Nu poti schimba valoarea unei constante - ");
     else{
-        if(x==-1)
-            yyerror("Variabila nu este declarata - ");
+        if(x==-1){
+            sprintf(temp, "Variabila %s nu este declarata - ", $1);
+            yyerror(temp);
+        }
         else
             $$ = nodOper('=', 2, nodId($1, 0), $3);
     }
@@ -175,13 +178,17 @@ var_assignment : IDENTIFIER '=' expression {
     ;
 
 array_declaration : ARR types IDENTIFIER '[' INT_CONST ']' '=' '{' array_list '}' {
+        char temp[50];
         if (addSymbol($3, ARR, $2, localScope, 0) == -1){
-            yyerror("Variabila deja declarata - ");
+            sprintf(temp, "Variabila %s este deja declarata - ", $3);
+            yyerror(temp);
         }
         $$=nodOper(ARR, 4,nodCon(typeName,&$2),nodId($3, 1),nodCon(constInt,&$5),nodArr($2, indx)); indx=0;}
     | ARR types IDENTIFIER '[' INT_CONST ']' {
+        char temp[50];
         if (addSymbol($3, ARR, $2, localScope, 0) == -1){
-            yyerror("Variabila deja declarata - ");
+            sprintf(temp, "Variabila %s este deja declarata - ", $3);
+            yyerror(temp);
         }
         $$=nodOper(ARR, 3,nodCon(typeName,&$2),nodId($3, 1),nodCon(constInt,&$5));}
     ;
@@ -210,9 +217,12 @@ array_list_bool : array_list_bool ',' TRUE {arrayBool[indx]=1; indx++;}
     | FALSE {arrayBool[indx]=0; indx++;}
     ;
 array_val : IDENTIFIER '[' INT_CONST ']' {
+    char temp[50];
     int x=getIndex($1,localScope);
-    if(x==-1)
-        yyerror("Variabila nu este declarata - ");
+    if(x==-1){
+        sprintf(temp, "Variabila %s nu este declarata - ", $1);
+        yyerror(temp);
+    }
     else{
         if(symbol[x].type==ARR){
             $$ = nodOper('[',2,nodId($1,0),nodCon(constInt,&$3));
@@ -236,22 +246,27 @@ container_function : get_container_elem '(' call_params ')' {}
     ;
 
 var_declaration : VAR types IDENTIFIER {
+        char temp[50];
         if (addSymbol($3, VAR, $2, localScope, 0) == -1){
-            yyerror("Variabila deja declarata - ");
+            sprintf(temp, "Variabila %s este deja declarata - ", $3);
+            yyerror(temp);
         }
         $$ = nodOper(VAR,2,nodCon(typeName,&$2),nodId($3, 1));}
 
     | VAR types IDENTIFIER '=' expression {
-
+        char temp[50];
         if (addSymbol($3, VAR, $2, localScope, 0) == -1){
-            yyerror("Variabila deja declarata - ");
+            sprintf(temp, "Variabila %s este deja declarata - ", $3);
+            yyerror(temp);
         }
         $$ = nodOper(VAR,3,nodCon(typeName,&$2),nodId($3, 1),$5);}
     ;
 
 const_declaration : CONST types IDENTIFIER '=' expression {
+    char temp[50];
     if (addSymbol($3, VAR, $2, localScope, 1) == -1){
-            yyerror("Variabila deja declarata - ");
+            sprintf(temp, "Variabila %s este deja declarata - ", $3);
+            yyerror(temp);
         }
         $$ = nodOper(VAR,3,nodCon(typeName,&$2),nodId($3, 1),$5);
     }
@@ -672,6 +687,7 @@ int main(int argc, char **argv)
     yyparse();
     if (check == 1)
     {
+        printf("\nTotul este in regula. Se printeaza tabelul de simboluri...\n\n");
         printTable();
     }
 
