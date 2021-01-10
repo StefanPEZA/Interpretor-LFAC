@@ -570,53 +570,62 @@ int yyerror(const char *s)
     check = 0;
 }
 
+void printTable();
 int main(int argc, char **argv)
 {   
-    char symStr[1000] = "";
     if (argc > 0)
         yyin = fopen(argv[1], "r");
     yyparse();
     if (check == 1)
     {
-        sprintf(symStr, "name\t\tvalue\t\tscope\t\ttype\t\tbase type\n");
+        printTable();
+    }
+
+}
+
+void printTable(){
+    char symStr[1000] = "";
+    sprintf(symStr, "name\t\tscope\t\tvalue\t\ttype\t\tbase type\n");
         for (int i = 0; i < lastIndex; i++)
         {
             char temp[100];
             sprintf(temp, "%s\t\t", symbol[i].name);
+            strcat(symStr, temp);
+            sprintf(temp, "%s\t\t", (symbol[i].scope==0)?"global":((symbol[i].scope==1||symbol[i].scope==2)?"local":"in container"));
             strcat(symStr, temp);
             if (symbol[i].type == FUN)
                 sprintf(temp, "-\t\t");
             else if (symbol[i].type == VAR)
             {
                 if (symbol[i].baseType == INT)
-                    sprintf(temp, "%d\t\t", symbol[i].val.intVal);
+                    sprintf(temp, "%d\t\t%s\t%s", symbol[i].val.intVal, "Variable", "INT");
                 else if (symbol[i].baseType == FLOAT)
-                    sprintf(temp, "%f\t\t", symbol[i].val.floatVal);
+                    sprintf(temp, "%f\t\t%s\t%s", symbol[i].val.floatVal, "Variable", "FLOAT");
                 else if (symbol[i].baseType == CHAR)
-                    sprintf(temp, "%c\t\t", symbol[i].val.charVal);
+                    sprintf(temp, "%c\t\t%s\t%s", symbol[i].val.charVal, "Variable", "CHAR");
                 else if (symbol[i].baseType == STRING)
-                    sprintf(temp, "%s\t\t", symbol[i].val.strVal);
+                    sprintf(temp, "%s\t\t%s\t%s", symbol[i].val.strVal, "Variable", "STRING");
                 else if (symbol[i].baseType == BOOL)
-                    sprintf(temp, "%s\t\t", (symbol[i].val.boolVal)?"true":"false");
+                    sprintf(temp, "%s\t\t%s\t%s", (symbol[i].val.boolVal)?"true":"false", "Variable", "BOOL");
             }
             else if (symbol[i].type == ARR)
             {
                 if (symbol[i].baseType == INT)
-                    sprintf(temp, "first - %d\t\t", *symbol[i].arr.arrInt);
+                    sprintf(temp, "first - %d\t%s\t\t%s", *symbol[i].arr.arrInt, "Array", "INT");
                 else if (symbol[i].baseType == FLOAT)
-                    sprintf(temp, "first - %f\t\t", *symbol[i].arr.arrFloat);
+                    sprintf(temp, "first - %f\t%s\t\t%s", *symbol[i].arr.arrFloat, "Array", "FLOAT");
                 else if (symbol[i].baseType == CHAR)
-                    sprintf(temp, "first - %c\t\t", *symbol[i].arr.arrChar);
+                    sprintf(temp, "first - %c\t%s\t\t%s", *symbol[i].arr.arrChar, "Array", "CHAR");
                 else if (symbol[i].baseType == STRING)
-                    sprintf(temp, "first - %s\t\t", *symbol[i].arr.arrStr);
+                    sprintf(temp, "first - %s\t%s\t\t%s", *symbol[i].arr.arrStr, "Array", "STRING");
                 else if (symbol[i].baseType == BOOL)
-                    sprintf(temp, "first - %s\t\t", (*symbol[i].arr.arrBool)?"true":"false");
+                    sprintf(temp, "first - %s\t%s\t\t%s", (*symbol[i].arr.arrBool)?"true":"false", "Array", "BOOL");
             }
             strcat(symStr, temp);
+
+
             strcat(symStr, "\n");
         }
         printf("\n");
         printf("%s", symStr);
-    }
-
 }
