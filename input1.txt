@@ -1,6 +1,6 @@
 VAR: int xnou= 69;
 VAR: bool y=true;
-ARR: bool s[10] = {true, false};
+ARR: bool s[2] = {true, false};
 void main() {
     VAR: int a = 2;
     a = 3;

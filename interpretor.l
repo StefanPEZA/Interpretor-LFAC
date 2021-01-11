@@ -14,7 +14,7 @@ string \".*\"
 
 %option noyywrap
 %%
-main {nr_word++;localScope = 1; return MAIN;}
+main {nr_word++;localScope++; return MAIN;}
 "!=" {nr_word++; return INEQUALITY;}
 "==" {nr_word++; return EQUALITY;}
 "=" {nr_word++; return *yytext;}

@@ -8,6 +8,7 @@ typedef enum
     constBool,
     typeName,
     arraylist,
+    paramList,
     typeId,
     typeOper
 } nodeEnum;
@@ -56,12 +57,13 @@ typedef struct
 
 typedef struct
 {
-    char *name;
     int type;
+    char *name;
 } parameter;
 
 typedef struct
 {
+    int listSize;
     parameter *listParam;        //lista de parametri
     struct nodeTypeTag *code[1]; //codul functiei
 } funcNodeType;
@@ -98,7 +100,7 @@ static int getIndex(char *Var, int locScope)
 {
     for (int i = lastIndex - 1; i >= 0; i--)
     {
-        if (!strcmp(symbol[i].name, Var))
+        if (!strcmp(symbol[i].name, Var) && (symbol[i].scope == locScope || symbol[i].scope == 0))
         {
             return i;
         }

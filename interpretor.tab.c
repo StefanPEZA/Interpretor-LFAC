@@ -3171,15 +3171,15 @@ void printTable(){
     int funIDS[10];
     int idf = 0;
     
-    sprintf(temp, "name\t\t\tscope\t\t\ttype\t\tbase_type\tvalue\n");
+    sprintf(temp, "name\t\t\t| scope\t\t\t| type\t\t| base_type\t\t| value\n");
     strcat(symStr, temp);
-    sprintf(temp, "---------------------------------------------------------------------------------\n");
+    sprintf(temp, "----------------------------------------------------------------------------------------\n");
     strcat(symStr, temp);
     for (int i = 0; i < lastIndex; i++)
     {
-        sprintf(temp, "%-12s\t", symbol[i].name);
+        sprintf(temp, "%-12s\t| ", symbol[i].name);
         strcat(symStr, temp);
-        sprintf(temp, "%-12s\t", (symbol[i].scope==0)?"global":((symbol[i].scope==1||symbol[i].scope==2)?"local":"in-container"));
+        sprintf(temp, "%-12s\t| ", (symbol[i].scope==-1)?"in-container":((symbol[i].scope==0)?"global":"local"));
         strcat(symStr, temp);
         if (symbol[i].type == FUN)
         {
@@ -3189,28 +3189,33 @@ void printTable(){
         else if (symbol[i].type == VAR)
         {
             if (symbol[i].baseType == INT)
-                sprintf(temp, "%-8s\t%-6s\t\t%d", "Variable", "INT", symbol[i].val.intVal);
+                sprintf(temp, "%-8s\t| %-6s\t\t| %d", "Variable", "INT", symbol[i].val.intVal);
             else if (symbol[i].baseType == FLOAT)
-                sprintf(temp, "%-8s\t%-6s\t\t%f", "Variable", "FLOAT", symbol[i].val.floatVal);
+                sprintf(temp, "%-8s\t| %-6s\t\t| %f", "Variable", "FLOAT", symbol[i].val.floatVal);
             else if (symbol[i].baseType == CHAR)
-                sprintf(temp, "%-8s\t%-6s\t\t'%c'", "Variable", "CHAR", symbol[i].val.charVal);
+                sprintf(temp, "%-8s\t| %-6s\t\t| '%c'", "Variable", "CHAR", symbol[i].val.charVal);
             else if (symbol[i].baseType == STRING)
-                sprintf(temp, "%-8s\t%-6s\t\t\"%s\"", "Variable", "STRING", symbol[i].val.strVal);
+                sprintf(temp, "%-8s\t| %-6s\t\t| \"%s\"", "Variable", "STRING", symbol[i].val.strVal);
             else if (symbol[i].baseType == BOOL)
-                sprintf(temp, "%-8s\t%-6s\t\t%s", "Variable", "BOOL", (symbol[i].val.boolVal)?"true":"false");
+                sprintf(temp, "%-8s\t| %-6s\t\t| %s", "Variable", "BOOL", (symbol[i].val.boolVal)?"true":"false");
         }
         else if (symbol[i].type == ARR)
         {
             if (symbol[i].baseType == INT)
-                sprintf(temp, "%-8s\t%-6s\t\t[%d, ...]", "Array", "INT" , *symbol[i].arr.vect.arrInt);
+                sprintf(temp, "%-8s\t| %-6s\t\t| [%d, %d, ...]", "Array", "INT" ,
+                                symbol[i].arr.vect.arrInt[0], symbol[i].arr.vect.arrInt[1]);
             else if (symbol[i].baseType == FLOAT)
-                sprintf(temp, "%-8s\t%-6s\t\t[%f, ...]", "Array", "FLOAT" , *symbol[i].arr.vect.arrFloat);
+                sprintf(temp, "%-8s\t| %-6s\t\t| [%f, %f, ...]", "Array", "FLOAT" , 
+                                symbol[i].arr.vect.arrFloat[0], symbol[i].arr.vect.arrFloat[1]);
             else if (symbol[i].baseType == CHAR)
-                sprintf(temp, "%-8s\t%-6s\t\t[%c, ...]", "Array", "CHAR" , *symbol[i].arr.vect.arrChar);
+                sprintf(temp, "%-8s\t| %-6s\t\t| [%c, %c, ...]", "Array", "CHAR" , 
+                                symbol[i].arr.vect.arrChar[0], symbol[i].arr.vect.arrChar[1]);
             else if (symbol[i].baseType == STRING)
-                sprintf(temp, "%-8s\t%-6s\t\t[%s, ...]", "Array", "STRING", *symbol[i].arr.vect.arrStr);
+                sprintf(temp, "%-8s\t| %-6s\t\t| [%s, %s, ...]", "Array", "STRING", 
+                                symbol[i].arr.vect.arrStr[0], symbol[i].arr.vect.arrStr[1]);
             else if (symbol[i].baseType == BOOL)
-                sprintf(temp, "%-8s\t%-6s\t\t[%s, ...]", "Array", "BOOL", (*symbol[i].arr.vect.arrBool)?"true":"false");
+                sprintf(temp, "%-8s\t| %-6s\t\t| [%s, %s, ...]", "Array", "BOOL", 
+                                (symbol[i].arr.vect.arrBool[0])?"true":"false", (symbol[i].arr.vect.arrBool[1])?"true":"false");
         }
         strcat(symStr, temp);
         strcat(symStr, "\n");
