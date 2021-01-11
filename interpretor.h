@@ -106,7 +106,7 @@ static int getIndex(char *Var, int locScope)
     return -1;
 }
 
-static int addSymbol(char *name, int varType, int baseType, int scope, int iscon)
+static int addSymbol(char *name, int varType, int baseType, int scope, int iscon, int size)
 {
     for (int i = lastIndex - 1; i >= 0; i--)
     {
@@ -121,6 +121,10 @@ static int addSymbol(char *name, int varType, int baseType, int scope, int iscon
     symbol[lastIndex].baseType = baseType;
     symbol[lastIndex].scope = scope;
     symbol[lastIndex].isconst = iscon;
+    if (size >= 0)
+    {
+        symbol[lastIndex].arr.arrSize = size;
+    }
     lastIndex++;
     return 1;
 }

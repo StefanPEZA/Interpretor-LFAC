@@ -84,7 +84,8 @@ extern int yydebug;
     GTE = 290,
     NEG = 291,
     ACCES = 292,
-    THEN = 293
+    THEN = 293,
+    STRCAT = 294
   };
 #endif
 
@@ -92,7 +93,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 42 "interpretor.y"
+#line 43 "interpretor.y"
 
     short boolVal;
     int intVal;
@@ -103,7 +104,7 @@ union YYSTYPE
     int Types;
     nodeType *nodPtr;
 
-#line 107 "interpretor.tab.h"
+#line 108 "interpretor.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

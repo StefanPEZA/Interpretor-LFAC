@@ -21,6 +21,7 @@
         /* eliberare memorie */
     void* interpret(nodeType *p);
     void evalError(const char*, int nre);
+    void printTable();
         /* functia de interpretare */
     int arrayInt[1000];
     short arrayBool[1000];
@@ -77,6 +78,8 @@
 %left '(' ')' ACCES
 %nonassoc THEN
 %nonassoc ELSE
+
+%token STRCAT
 %start start
 %%
 
@@ -164,13 +167,13 @@ for_statement : FOR '(' var_assignment ';'  expression ';' var_assignment ')' '{
 var_assignment : IDENTIFIER '=' expression {
     char temp[50];
     int x=getIndex($1,localScope);
-    if(symbol[x].isconst==1)
-        yyerror("Nu poti schimba valoarea unei constante - ");
+    if(x==-1){
+        sprintf(temp, "Variabila %s nu este declarata - ", $1);
+        yyerror(temp);
+    }
     else{
-        if(x==-1){
-            sprintf(temp, "Variabila %s nu este declarata - ", $1);
-            yyerror(temp);
-        }
+        if(symbol[x].isconst==1)
+            yyerror("Nu poti schimba valoarea unei constante - ");
         else
             $$ = nodOper('=', 2, nodId($1, 0), $3);
     }
@@ -179,25 +182,25 @@ var_assignment : IDENTIFIER '=' expression {
 
 array_declaration : ARR types IDENTIFIER '[' INT_CONST ']' '=' '{' array_list '}' {
         char temp[50];
-        if (addSymbol($3, ARR, $2, localScope, 0) == -1){
+        if (addSymbol($3, ARR, $2, localScope, 0, $5) == -1){
             sprintf(temp, "Variabila %s este deja declarata - ", $3);
             yyerror(temp);
         }
         $$=nodOper(ARR, 4,nodCon(typeName,&$2),nodId($3, 1),nodCon(constInt,&$5),nodArr($2, indx)); indx=0;}
     | ARR types IDENTIFIER '[' INT_CONST ']' {
         char temp[50];
-        if (addSymbol($3, ARR, $2, localScope, 0) == -1){
+        if (addSymbol($3, ARR, $2, localScope, 0, $5) == -1){
             sprintf(temp, "Variabila %s este deja declarata - ", $3);
             yyerror(temp);
         }
         $$=nodOper(ARR, 3,nodCon(typeName,&$2),nodId($3, 1),nodCon(constInt,&$5));}
     ;
 
-array_list : array_list_int {}
-    | array_list_float {}
-    | array_list_char {}
-    | array_list_string {}
-    | array_list_bool {}
+array_list : array_list_int {if ($<Types>-6 != INT) yyerror("Tipul valorilor din vector nu coincide cu tipul declarat - ");}
+    | array_list_float {if ($<Types>-6 != FLOAT) yyerror("Tipul valorilor din vector nu coincide cu tipul declarat - ");}
+    | array_list_char {if ($<Types>-6 != CHAR) yyerror("Tipul valorilor din vector nu coincide cu tipul declarat - ");}
+    | array_list_string {if ($<Types>-6 != STRING) yyerror("Tipul valorilor din vector nu coincide cu tipul declarat - ");}
+    | array_list_bool {if ($<Types>-6 != BOOL) yyerror("Tipul valorilor din vector nu coincide cu tipul declarat - ");}
     ;
 array_list_int : array_list_int ',' INT_CONST { arrayInt[indx]=$3; indx++;}
     | INT_CONST {arrayInt[indx]=$1; indx++;}
@@ -224,11 +227,16 @@ array_val : IDENTIFIER '[' INT_CONST ']' {
         yyerror(temp);
     }
     else{
-        if(symbol[x].type==ARR){
-            $$ = nodOper('[',2,nodId($1,0),nodCon(constInt,&$3));
+        if ( $3 < 0 || $3 >= symbol[x].arr.arrSize)
+        {
+            yyerror("Index invalid (out of range) - ");
+        }else{
+            if(symbol[x].type==ARR){
+                $$ = nodOper('[',2,nodId($1,0),nodCon(constInt,&$3));
+            }
+            else
+                yyerror("Nu este vector - ");
         }
-        else
-            yyerror("Nu este vector - ");
     }
 }
     ;
@@ -247,7 +255,7 @@ container_function : get_container_elem '(' call_params ')' {}
 
 var_declaration : VAR types IDENTIFIER {
         char temp[50];
-        if (addSymbol($3, VAR, $2, localScope, 0) == -1){
+        if (addSymbol($3, VAR, $2, localScope, 0, -1) == -1){
             sprintf(temp, "Variabila %s este deja declarata - ", $3);
             yyerror(temp);
         }
@@ -255,7 +263,7 @@ var_declaration : VAR types IDENTIFIER {
 
     | VAR types IDENTIFIER '=' expression {
         char temp[50];
-        if (addSymbol($3, VAR, $2, localScope, 0) == -1){
+        if (addSymbol($3, VAR, $2, localScope, 0, -1) == -1){
             sprintf(temp, "Variabila %s este deja declarata - ", $3);
             yyerror(temp);
         }
@@ -264,7 +272,7 @@ var_declaration : VAR types IDENTIFIER {
 
 const_declaration : CONST types IDENTIFIER '=' expression {
     char temp[50];
-    if (addSymbol($3, VAR, $2, localScope, 1) == -1){
+    if (addSymbol($3, VAR, $2, localScope, 1, -1) == -1){
             sprintf(temp, "Variabila %s este deja declarata - ", $3);
             yyerror(temp);
         }
@@ -313,6 +321,7 @@ expression:IDENTIFIER {$$ = nodId($1, 0);}
     | '!' expression {$$ = nodOper('!', 1, $2);}
     | CHAR_CONST {$$ = nodCon(constChar, &$1);}
     | STR_CONST {$$ = nodCon(constStr, &$1);}
+    | STRCAT '(' expression ',' expression ')' {$$ = nodOper(STRCAT, 2, $3 ,$5);}
     ;
 
 %%
@@ -473,196 +482,195 @@ void* interpret(nodeType *p)
     case typeOper:
         switch (p->opr.oper)
         {
-        case MAIN: return interpret(p->opr.op[0]);
-        case EVAL:
-            if(check == 1){
-                inorderExpr(p->opr.op[0]);
-                if (strstr(strExpr, "fail"))
-                {
-                    evalError("Parametrul nu este de tip int - la eval #", nreval);
-                    return 0;
-                }
-                nreval++;
-                result = (int*)interpret(p->opr.op[0]);
-                printf("Eval[%s] = %d\n", strExpr, *result);
-            }
-            return 0;
-        case ';': interpret(p->opr.op[0]);
-            return interpret(p->opr.op[1]);
-        case WHILE:
-            while (interpret(p->opr.op[0]))
-                interpret(p->opr.op[1]);
-            return 0;
-        case IF:
-            if (*(short*)interpret(p->opr.op[0]))
-                interpret(p->opr.op[1]);
-            else if (p->opr.nops > 2)
-                interpret(p->opr.op[2]);
-            return 0;
-        case FOR:
-            for(interpret(p->opr.op[0]);*(short*)interpret(p->opr.op[1]);interpret(p->opr.op[2]))
-                interpret(p->opr.op[3]);
-            return 0;
-        case ARR:
-            if(p->opr.nops == 3){
-                if(p->opr.op[0]->con.typeVal==INT){
-                    symbol[p->opr.op[1]->id.i].arr.vect.arrInt = malloc(p->opr.op[2]->con.intVal*sizeof(int));
-                    return 0;
+            case MAIN: return interpret(p->opr.op[0]);
+            case EVAL:
+                if(check == 1){
+                    inorderExpr(p->opr.op[0]);
+                    if (strstr(strExpr, "fail"))
+                    {
+                        evalError("Parametrul nu este de tip int - la eval #", nreval);
+                        return 0;
                     }
-                else if(p->opr.op[0]->con.typeVal==FLOAT){
-                    symbol[p->opr.op[1]->id.i].arr.vect.arrFloat = malloc(p->opr.op[2]->con.intVal*sizeof(float));
-                    return 0;
+                    nreval++;
+                    result = (int*)interpret(p->opr.op[0]);
+                    printf("Eval[%s] = %d\n", strExpr, *result);
                 }
-                else if(p->opr.op[0]->con.typeVal==CHAR){
-                    symbol[p->opr.op[1]->id.i].arr.vect.arrChar = malloc(p->opr.op[2]->con.intVal*sizeof(char));;
-                    return 0;
-                }
-                else if(p->opr.op[0]->con.typeVal==STRING){
-                    symbol[p->opr.op[1]->id.i].arr.vect.arrStr = malloc(p->opr.op[2]->con.intVal*sizeof(char*));
-                    return 0;
-                }
-                else if(p->opr.op[0]->con.typeVal==BOOL){
-                    symbol[p->opr.op[1]->id.i].arr.vect.arrBool = malloc(p->opr.op[2]->con.intVal*sizeof(short));
-                    return 0;
-                }
-            }
-            else{
-                if(p->opr.op[0]->con.typeVal==INT){
-                    symbol[p->opr.op[1]->id.i].arr.vect.arrInt = p->opr.op[3]->arr.vect.arrInt;
-                    return 0;
+                return 0;
+            case ';': interpret(p->opr.op[0]);
+                return interpret(p->opr.op[1]);
+            case WHILE:
+                while (interpret(p->opr.op[0]))
+                    interpret(p->opr.op[1]);
+                return 0;
+            case IF:
+                if (*(short*)interpret(p->opr.op[0]))
+                    interpret(p->opr.op[1]);
+                else if (p->opr.nops > 2)
+                    interpret(p->opr.op[2]);
+                return 0;
+            case FOR:
+                for(interpret(p->opr.op[0]);*(short*)interpret(p->opr.op[1]);interpret(p->opr.op[2]))
+                    interpret(p->opr.op[3]);
+                return 0;
+            case ARR:
+                if(p->opr.nops == 3){
+                    if(p->opr.op[0]->con.typeVal==INT){
+                        symbol[p->opr.op[1]->id.i].arr.vect.arrInt = malloc(p->opr.op[2]->con.intVal*sizeof(int));
+                        return 0;
+                        }
+                    else if(p->opr.op[0]->con.typeVal==FLOAT){
+                        symbol[p->opr.op[1]->id.i].arr.vect.arrFloat = malloc(p->opr.op[2]->con.intVal*sizeof(float));
+                        return 0;
                     }
-                else if(p->opr.op[0]->con.typeVal==FLOAT){
-                    symbol[p->opr.op[1]->id.i].arr.vect.arrFloat = p->opr.op[3]->arr.vect.arrFloat;
-                    return 0;
+                    else if(p->opr.op[0]->con.typeVal==CHAR){
+                        symbol[p->opr.op[1]->id.i].arr.vect.arrChar = malloc(p->opr.op[2]->con.intVal*sizeof(char));;
+                        return 0;
+                    }
+                    else if(p->opr.op[0]->con.typeVal==STRING){
+                        symbol[p->opr.op[1]->id.i].arr.vect.arrStr = malloc(p->opr.op[2]->con.intVal*sizeof(char*)+1);
+                        return 0;
+                    }
+                    else if(p->opr.op[0]->con.typeVal==BOOL){
+                        symbol[p->opr.op[1]->id.i].arr.vect.arrBool = malloc(p->opr.op[2]->con.intVal*sizeof(short));
+                        return 0;
+                    }
                 }
-                else if(p->opr.op[0]->con.typeVal==CHAR){
-                    symbol[p->opr.op[1]->id.i].arr.vect.arrChar = p->opr.op[3]->arr.vect.arrChar;
-                    return 0;
+                else{
+                    if(p->opr.op[0]->con.typeVal==INT){
+                        symbol[p->opr.op[1]->id.i].arr.vect.arrInt = p->opr.op[3]->arr.vect.arrInt;
+                        return 0;
+                        }
+                    else if(p->opr.op[0]->con.typeVal==FLOAT){
+                        symbol[p->opr.op[1]->id.i].arr.vect.arrFloat = p->opr.op[3]->arr.vect.arrFloat;
+                        return 0;
+                    }
+                    else if(p->opr.op[0]->con.typeVal==CHAR){
+                        symbol[p->opr.op[1]->id.i].arr.vect.arrChar = p->opr.op[3]->arr.vect.arrChar;
+                        return 0;
+                    }
+                    else if(p->opr.op[0]->con.typeVal==STRING){
+                        symbol[p->opr.op[1]->id.i].arr.vect.arrStr = p->opr.op[3]->arr.vect.arrStr;
+                        return 0;
+                    }
+                    else if(p->opr.op[0]->con.typeVal==BOOL){
+                        symbol[p->opr.op[1]->id.i].arr.vect.arrBool = p->opr.op[3]->arr.vect.arrBool;
+                        return 0;
+                    }
                 }
-                else if(p->opr.op[0]->con.typeVal==STRING){
-                    symbol[p->opr.op[1]->id.i].arr.vect.arrStr = p->opr.op[3]->arr.vect.arrStr;
-                    return 0;
+            case '[':
+                if(symbol[p->opr.op[0]->id.i].baseType==INT)
+                    return &(symbol[p->opr.op[0]->id.i].arr.vect.arrInt[p->opr.op[1]->con.intVal]);
+                else if(symbol[p->opr.op[0]->id.i].baseType==FLOAT){
+                    return &symbol[p->opr.op[0]->id.i].arr.vect.arrFloat[p->opr.op[1]->con.intVal];
                 }
-                else if(p->opr.op[0]->con.typeVal==BOOL){
-                    symbol[p->opr.op[1]->id.i].arr.vect.arrBool = p->opr.op[3]->arr.vect.arrBool;
-                    return 0;
+                else if(symbol[p->opr.op[0]->id.i].baseType==CHAR){
+                    return &symbol[p->opr.op[0]->id.i].arr.vect.arrChar[p->opr.op[1]->con.intVal];
                 }
-            }
-        case '[':
-            if(symbol[p->opr.op[0]->id.i].baseType==INT)
-                return &(symbol[p->opr.op[0]->id.i].arr.vect.arrInt[p->opr.op[1]->con.intVal]);
-            else if(symbol[p->opr.op[0]->id.i].baseType==FLOAT){
-                return &symbol[p->opr.op[1]->id.i].arr.vect.arrFloat[p->opr.op[1]->con.intVal];
-            }
-            else if(symbol[p->opr.op[0]->id.i].baseType==CHAR){
-                return &symbol[p->opr.op[1]->id.i].arr.vect.arrChar[p->opr.op[1]->con.intVal];
-            }
-            else if(symbol[p->opr.op[0]->id.i].baseType==STRING){
-                return &symbol[p->opr.op[1]->id.i].arr.vect.arrStr[p->opr.op[1]->con.intVal];
-            }
-            else if(symbol[p->opr.op[0]->id.i].baseType==BOOL){
-                return &(symbol[p->opr.op[0]->id.i].arr.vect.arrBool[p->opr.op[1]->con.intVal]);
-            }
-        case VAR:
+                else if(symbol[p->opr.op[0]->id.i].baseType==STRING){
+                    return &symbol[p->opr.op[0]->id.i].arr.vect.arrStr[p->opr.op[1]->con.intVal];
+                }
+                else if(symbol[p->opr.op[0]->id.i].baseType==BOOL){
+                    return &(symbol[p->opr.op[0]->id.i].arr.vect.arrBool[p->opr.op[1]->con.intVal]);
+                }
+            case VAR:
+                if(p->opr.nops == 2){
+                    if(p->opr.op[0]->con.typeVal==INT)
+                        symbol[p->opr.op[1]->id.i].val.intVal=0;
+                    else if(p->opr.op[0]->con.typeVal==FLOAT)
+                        symbol[p->opr.op[1]->id.i].val.floatVal =0.0;
+                    else if(p->opr.op[0]->con.typeVal==CHAR)
+                        symbol[p->opr.op[1]->id.i].val.charVal = '\0';
+                    else if(p->opr.op[0]->con.typeVal==STRING)
+                        symbol[p->opr.op[1]->id.i].val.strVal = (char*)"";
+                    else if(p->opr.op[0]->con.typeVal==BOOL)
+                        symbol[p->opr.op[1]->id.i].val.boolVal = 0;
+                }
+                else{
+                    if(p->opr.op[0]->con.typeVal==INT)
+                        symbol[p->opr.op[1]->id.i].val.intVal=*(int*)interpret(p->opr.op[2]);
+                    else if(p->opr.op[0]->con.typeVal==FLOAT)
+                        symbol[p->opr.op[1]->id.i].val.floatVal=*(float*)interpret(p->opr.op[2]);
+                    else if(p->opr.op[0]->con.typeVal==CHAR)
+                        symbol[p->opr.op[1]->id.i].val.charVal=*(char*)interpret(p->opr.op[2]);
+                    else if(p->opr.op[0]->con.typeVal==STRING)
+                        symbol[p->opr.op[1]->id.i].val.strVal=*(char**)interpret(p->opr.op[2]);
+                    else if(p->opr.op[0]->con.typeVal==BOOL)
+                        symbol[p->opr.op[1]->id.i].val.boolVal=*(short*)interpret(p->opr.op[2]);
+                }
+                return 0;
+            case '=':
             if(p->opr.nops == 2){
-                if(p->opr.op[0]->con.typeVal==INT)
-                    symbol[p->opr.op[1]->id.i].val.intVal=0;
-                else if(p->opr.op[0]->con.typeVal==FLOAT)
-                    symbol[p->opr.op[1]->id.i].val.floatVal =0.0;
-                else if(p->opr.op[0]->con.typeVal==CHAR)
-                    symbol[p->opr.op[1]->id.i].val.charVal = '\0';
-                else if(p->opr.op[0]->con.typeVal==STRING)
-                    symbol[p->opr.op[1]->id.i].val.strVal = (char*)"";
-                else if(p->opr.op[0]->con.typeVal==BOOL)
-                    symbol[p->opr.op[1]->id.i].val.boolVal = 0;
+                if(symbol[p->opr.op[0]->id.i].baseType==INT)
+                    symbol[p->opr.op[0]->id.i].val.intVal = *(int*)interpret(p->opr.op[1]);
+                else if(symbol[p->opr.op[0]->id.i].baseType==FLOAT)
+                    symbol[p->opr.op[0]->id.i].val.floatVal = *(float*)interpret(p->opr.op[1]);
+                else if(symbol[p->opr.op[0]->id.i].baseType==CHAR)
+                    symbol[p->opr.op[0]->id.i].val.charVal = *(char*)interpret(p->opr.op[1]);
+                else if(symbol[p->opr.op[0]->id.i].baseType==STRING)
+                    symbol[p->opr.op[0]->id.i].val.strVal = *(char**)interpret(p->opr.op[1]);
+                else if(symbol[p->opr.op[0]->id.i].baseType==BOOL)
+                    symbol[p->opr.op[0]->id.i].val.boolVal = *(short*)interpret(p->opr.op[1]);
             }
-            else{
-                if(p->opr.op[0]->con.typeVal==INT)
-                    symbol[p->opr.op[1]->id.i].val.intVal=*(int*)interpret(p->opr.op[2]);
-                else if(p->opr.op[0]->con.typeVal==FLOAT)
-                    symbol[p->opr.op[1]->id.i].val.floatVal=*(float*)interpret(p->opr.op[2]);
-                else if(p->opr.op[0]->con.typeVal==CHAR)
-                    symbol[p->opr.op[1]->id.i].val.charVal=*(char*)interpret(p->opr.op[2]);
-                else if(p->opr.op[0]->con.typeVal==STRING)
-                    symbol[p->opr.op[1]->id.i].val.strVal=*(char**)interpret(p->opr.op[2]);
-                else if(p->opr.op[0]->con.typeVal==BOOL)
-                    symbol[p->opr.op[1]->id.i].val.boolVal=*(short*)interpret(p->opr.op[2]);
+            else if(p->opr.nops == 3){
+                if(symbol[p->opr.op[0]->opr.op[0]->id.i].baseType==INT)
+                    *(int*)interpret(p->opr.op[0]) = *(int*)interpret(p->opr.op[1]);
+                else if(symbol[p->opr.op[0]->opr.op[0]->id.i].baseType==FLOAT)
+                    *(float*)interpret(p->opr.op[0]) = *(float*)interpret(p->opr.op[1]);
+                else if(symbol[p->opr.op[0]->id.i].baseType==CHAR)
+                    *(char*)interpret(p->opr.op[0]) = *(char*)interpret(p->opr.op[1]);
+                else if(symbol[p->opr.op[0]->id.i].baseType==STRING)
+                    *(char**)interpret(p->opr.op[0]) = *(char**)interpret(p->opr.op[1]);
+                else if(symbol[p->opr.op[0]->id.i].baseType==BOOL)
+                    *(short*)interpret(p->opr.op[0]) = *(short*)interpret(p->opr.op[1]);
             }
             return 0;
-        case '=':
-        if(p->opr.nops == 2){
-            if(symbol[p->opr.op[0]->id.i].baseType==INT)
-                symbol[p->opr.op[0]->id.i].val.intVal = *(int*)interpret(p->opr.op[1]);
-            else if(symbol[p->opr.op[0]->id.i].baseType==FLOAT)
-                symbol[p->opr.op[0]->id.i].val.floatVal = *(float*)interpret(p->opr.op[1]);
-            else if(symbol[p->opr.op[0]->id.i].baseType==CHAR)
-                symbol[p->opr.op[0]->id.i].val.charVal = *(char*)interpret(p->opr.op[1]);
-            else if(symbol[p->opr.op[0]->id.i].baseType==STRING)
-                symbol[p->opr.op[0]->id.i].val.strVal = *(char**)interpret(p->opr.op[1]);
-            else if(symbol[p->opr.op[0]->id.i].baseType==BOOL)
-                symbol[p->opr.op[0]->id.i].val.boolVal = *(short*)interpret(p->opr.op[1]);
-        }
-        else if(p->opr.nops == 3){
-            if(symbol[p->opr.op[0]->opr.op[0]->id.i].baseType==INT)
-                *(int*)interpret(p->opr.op[0]) = *(int*)interpret(p->opr.op[1]);
-            else if(symbol[p->opr.op[0]->opr.op[0]->id.i].baseType==FLOAT)
-                *(float*)interpret(p->opr.op[0]) = *(float*)interpret(p->opr.op[1]);
-            else if(symbol[p->opr.op[0]->id.i].baseType==CHAR)
-                *(char*)interpret(p->opr.op[0]) = *(char*)interpret(p->opr.op[1]);
-            else if(symbol[p->opr.op[0]->id.i].baseType==STRING)
-                *(char**)interpret(p->opr.op[0]) = *(char**)interpret(p->opr.op[1]);
-            else if(symbol[p->opr.op[0]->id.i].baseType==BOOL)
-                *(short*)interpret(p->opr.op[0]) = *(short*)interpret(p->opr.op[1]);
-        }
-        return 0;
-        case NEG:{
-            *result =-*(int*)interpret(p->opr.op[0]);
-            return result;
-        }
-        case '+':{
-            *result= (*(int*)interpret(p->opr.op[0]) + *(int*)interpret(p->opr.op[1]));
-            return result;
-        }
-        case '-':{
-            *result = *(int*)interpret(p->opr.op[0]) - *(int*)interpret(p->opr.op[1]);
-            return result;
-        }
-        case '*':{
-            *result = *(int*)interpret(p->opr.op[0]) * *(int*)interpret(p->opr.op[1]);
-            return result;
-        }
-        case '/':{
-            *result =*(int*)interpret(p->opr.op[0]) / *(int*)interpret(p->opr.op[1]);
-            return result;
-        }
-        case '%':{
-            *result = *(int*)interpret(p->opr.op[0]) % *(int*)interpret(p->opr.op[1]);
-            return result;
-        }
-        case LT:{
-            *result = *(int*)interpret(p->opr.op[0]) < *(int*)interpret(p->opr.op[1]);
-            return result;
-        }
-        case GT:{
-            *result= *(int*)interpret(p->opr.op[0]) > *(int*)interpret(p->opr.op[1]);
-            return result;
-        }
-        case GTE:{
-            *result= *(int*)interpret(p->opr.op[0]) >= *(int*)interpret(p->opr.op[1]);
-            return result;
-        }
-        case LTE:{
-            *result = *(int*)interpret(p->opr.op[0]) <= *(int*)interpret(p->opr.op[1]);
-            return result;
-        }
-        case INEQUALITY:{
-            *result = *(int*)interpret(p->opr.op[0]) != *(int*)interpret(p->opr.op[1]);
-            return result;
-        }
-        case EQUALITY:{
-            *result = *(int*)interpret(p->opr.op[0]) == *(int*)interpret(p->opr.op[1]);
-            return result;
-        }
+            case NEG:
+                *result =-*(int*)interpret(p->opr.op[0]);
+                return result;
+            case '+':
+                *result= (*(int*)interpret(p->opr.op[0]) + *(int*)interpret(p->opr.op[1]));
+                return result;
+            case '-':
+                *result = *(int*)interpret(p->opr.op[0]) - *(int*)interpret(p->opr.op[1]);
+                return result;
+            case '*':
+                *result = *(int*)interpret(p->opr.op[0]) * *(int*)interpret(p->opr.op[1]);
+                return result;
+            case '/':
+                *result =*(int*)interpret(p->opr.op[0]) / *(int*)interpret(p->opr.op[1]);
+                return result;
+            case '%':
+                *result = *(int*)interpret(p->opr.op[0]) % *(int*)interpret(p->opr.op[1]);
+                return result;
+            case LT:
+                *result = *(int*)interpret(p->opr.op[0]) < *(int*)interpret(p->opr.op[1]);
+                return result;
+            case GT:
+                *result= *(int*)interpret(p->opr.op[0]) > *(int*)interpret(p->opr.op[1]);
+                return result;
+            case GTE:
+                *result= *(int*)interpret(p->opr.op[0]) >= *(int*)interpret(p->opr.op[1]);
+                return result;
+            case LTE:
+                *result = *(int*)interpret(p->opr.op[0]) <= *(int*)interpret(p->opr.op[1]);
+                return result;
+            case INEQUALITY:
+                *result = *(int*)interpret(p->opr.op[0]) != *(int*)interpret(p->opr.op[1]);
+                return result;
+            case EQUALITY:
+                *result = *(int*)interpret(p->opr.op[0]) == *(int*)interpret(p->opr.op[1]);
+                return result;
+            case '!':
+                *result = !*(short*)interpret(p->opr.op[0]);
+                return result;
+            case STRCAT:{
+                char* str1 = (char*)interpret(p->opr.op[0]);
+                char* str2 = (char*)interpret(p->opr.op[0]);
+                char** result = (char**)malloc(sizeof(char*));
+                *result = (char*)malloc(strlen(str1)+strlen(str2)+sizeof(int));
+                strcpy(*result, str1); strcat(*result, str2);
+                return result;
+            }
         }
     }
     return 0;
@@ -678,7 +686,6 @@ int yyerror(const char *s)
     check = 0;
 }
 
-void printTable();
 int main(int argc, char **argv)
 {   
     printf("\n");
@@ -754,10 +761,10 @@ void printTable(){
             strcat(symStr, temp);
             sprintf(temp, "%-12s\t", (symbol[i].scope==0)?"global":((symbol[i].scope==1||symbol[i].scope==2)?"local":"in-container"));
 
-
             strcat(symStr, temp);
             strcat(symStr, "\n");
         }
     }
     fprintf(out, "%s", symStr);
+    return;
 }

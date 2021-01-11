@@ -34,6 +34,7 @@ main {nr_word++;localScope = 1; return MAIN;}
 "<" {nr_word++; return LT;}
 ">" {nr_word++; return GT;}
 [-+*/%!] {nr_word++; return *yytext;}
+strcat {nr_word++; return STRCAT;}
 if {nr_word++;return IF;}
 else {nr_word++;return ELSE;}
 for {nr_word++;return FOR;}
